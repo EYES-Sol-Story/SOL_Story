@@ -11,18 +11,18 @@ import jakarta.persistence.Table;
 @Table(name = "transaction_categories")
 public class TransactionCategory {
 
+	// 거래 카테고리 일련번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_no")
     private Long categoryNo;
 
+    // 거래 카테고리 이름
     @Column(name = "category_name", nullable = false, length = 50)
     private String categoryName;
 
-    // 기본 생성자
     public TransactionCategory() {}
 
-    // 매개변수를 받는 생성자
     public TransactionCategory(String categoryName) {
         this.categoryName = categoryName;
     }
