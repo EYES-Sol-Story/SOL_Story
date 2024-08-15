@@ -44,6 +44,8 @@ dependencies {
 	implementation 'org.springframework.session:spring-session-jdbc'
 	// 스프링 애플리케이션에서 커맨드라인 명령어 기반의 인터페이스를 구현하는 데 사용
 	implementation 'org.springframework.shell:spring-shell-starter'
+	// 웹소켓 사용
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	// Oracle 데이터베이스에 연결하기 위해 필요한 JDBC 드라이버 제공 
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 	
