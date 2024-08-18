@@ -1,6 +1,6 @@
 package com.eyes.solstory.domain.challenge.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.eyes.solstory.domain.user.entity.User;
 
@@ -12,33 +12,44 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_challenges")
 public class UserChallenge {
 
-	// 사용자 도전과제 기록 일련번호
+	// 제시된 도전과제 일련번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_challenge_no")
-    private Long userChallengeNo;
+    @Column(name = "assignment_no")
+    private int assignmentNo;
 
-    // 할당된 도전과제 객체
-    @ManyToOne
-    @JoinColumn(name = "challenge_no", nullable = false)
-    private Challenge challenge;
-
-    // 도전과제 객체
+    // 사용자 객체
     @ManyToOne
     @JoinColumn(name = "user_no", nullable = false)
     private User user;
 
-    // 도전과제 완료일자
-    @Temporal(TemporalType.DATE)
-    @Column(name = "completion_date")
-    private Date completionDate;
+    // 도전과제 일련번호
+    @ManyToOne
+    @JoinColumn(name = "challenge_no", nullable = false)
+    private Challenge challenge;
 
-    // Getters and Setters
+    // 도전과제가 사용자에게 할당된 날짜
+    @Column(name = "assigned_date", nullable = false)
+    private LocalDate assignedDate;
+
+    // 사용자가 해당 도전과제를 선택했는지 여부 ('Y'/ 'N')
+    @Column(name = "is_selected", nullable = false, length = 1)
+    private String isSelected;
+
+    // 도전과제 완료일자
+    @Column(name = "complete_date")
+    private LocalDate completeDate;
 }
