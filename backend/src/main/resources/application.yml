@@ -13,7 +13,7 @@ spring:
   # DB:oracle 계정
   datasource: 
     url: jdbc:oracle:thin:@//localhost:1521/xe?ssl=false
-    username: solstroy
+    username: solstory
     password: eyessolstory
     driver-class-name: oracle.jdbc.OracleDriver
   
@@ -34,4 +34,4 @@ logging:
     "[org.springframework.web.socket]": trace
   file:
     name:
-      logs/solstory.log
+      logs/solstory-%d{yyyy-MM-dd}.log
