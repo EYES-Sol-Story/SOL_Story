@@ -11,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -24,31 +23,36 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_stories")
-public class UserStory {
+@Table(name = "user_card_deck")
+public class UserCardDeck {
 
-	// 생성된 사용자 스토리 일련번호
+	// 사용자가 보유한 카드 일련번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_story_no")
-    private Long userStoryNo;
+    @Column(name = "user_card_no")
+    private Long userCardNo;
 
-    // 스토리 단계 객체
+    // 카드 객체
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "step_no", nullable = false)
-    private StoryStep storyStep;
+    @JoinColumn(name = "card_no", nullable = false)
+    private StoryCard storyCard;
 
-    // 사용자 객체
+    // 카드가 사용된 스토리 객체
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_story_no", nullable = true)
+    private UserStory userStory;
+
+    // 사용자 일련번호
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no", nullable = false)
     private User user;
 
-    // 스토리 내용
-    @Lob
-    @Column(name = "story_content", nullable = false)
-    private String storyContent;
+    // 인물 카드 획득일자
+    @Column(name = "acquisition_date", nullable = false)
+    private LocalDate acquisitionDate;
 
-    // 스토리 해금일자
-    @Column(name = "unlock_date", nullable = false)
-    private LocalDate unlockDate;
+    // 사용자가 획득한 인물 카드 중 보유 여부('Y' : 보유중,  'N' : 사용완료)
+    @Column(name = "is_active", nullable = false, length = 5)
+    private String isActive;
+    
 }
