@@ -1,6 +1,6 @@
 package com.eyes.solstory.domain.user.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,8 +10,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -19,7 +27,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_no")
-    private Long userNo;
+    private int userNo;
 
     // 사용자 ID
     @Column(name = "user_id", nullable = false, length = 50)
@@ -36,16 +44,22 @@ public class User {
     // 사용자 이메일
     @Column(name = "email", nullable = false, length = 254)
     private String email;
-
-    // 사용자 휴대폰 번호
-    @Column(name = "phone_number", nullable = false, length = 20)
-    private String phoneNumber;
+    
+    // 사용자 성별(MALE/FEMALE)
+    @Column(name = "gender", nullable = false, length = 254)
+    private String gender;
+    
+    // 사용자 생년월일
+    @Column(name = "birth", nullable = false, length = 254)
+    private LocalDate birth;
 
     // 사용자 가입일자
     @Temporal(TemporalType.DATE)
     @Column(name = "join_date", nullable = false)
-    private Date joinDate;
-    
-    // getter setter
+    private LocalDate joinDate;
+
+    // 캐릭터 이미지 파일 저장된 경로
+    @Column(name = "character_img_path")
+    private String characterImgPath;
 
 }

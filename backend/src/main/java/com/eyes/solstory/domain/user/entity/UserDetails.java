@@ -23,7 +23,7 @@ public class UserDetails {
     private User user;
 
     @Column(name = "attribute_type", nullable = false)
-    private Integer attributeType;
+    private int attributeType;
 
     @Column(name = "attribute_value", nullable = false, length = 50)
     private String attributeValue;
