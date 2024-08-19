@@ -20,18 +20,19 @@ spring:
   # JPA
   jpa:
     hibernate:
-      ddl-auto: create # create, update, none - 애플리케이션 가동시 스키마 관리 타입
+      ddl-auto: none # create, update, none - 애플리케이션 가동시 스키마 관리 타입
     show-sql: true ##sql문 출력
     properties:
       hibernate:
-        "[format:sql]": true
+        "[format:sql]": false
+
+## 아래 설정 사용할 때 까지 해제
+# mybatis : 
+  #  mapper-locations: classpath:mapper/*.xml
 
 # 로깅 수준 지정
-logging:
-  level:
-    "[org.hibernate.SQL]": debug
-    "[org.hibernate.orm.jdbc.bind]": trace
-    "[org.springframework.web.socket]": trace
-  file:
-    name:
-      logs/solstory-%d{yyyy-MM-dd}.log
+# logging:
+#  level:
+#    "[org.hibernate.SQL]": debug
+#    "[org.hibernate.orm.jdbc.bind]": trace
+#    "[org.springframework.web.socket]": trace
