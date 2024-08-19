@@ -20,7 +20,7 @@ spring:
   # JPA
   jpa:
     hibernate:
-      ddl-auto: create # create, update, none - 애플리케이션 가동시 스키마 관리 타입
+      ddl-auto: none # create, update, none - 애플리케이션 가동시 스키마 관리 타입
     show-sql: true ##sql문 출력
     properties:
       hibernate:
