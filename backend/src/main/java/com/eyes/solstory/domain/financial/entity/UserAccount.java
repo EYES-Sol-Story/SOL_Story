@@ -34,7 +34,7 @@ public class UserAccount {
     @Column(name = "account_no", nullable = false, length = 34)
     private String accountNo;
 
-    // 사용자 일련번호 (외래키)
+    // 사용자 객체
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no", nullable = false)
     private User user;

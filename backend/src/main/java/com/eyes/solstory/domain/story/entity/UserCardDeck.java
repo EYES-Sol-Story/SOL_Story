@@ -31,6 +31,11 @@ public class UserCardDeck {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_card_no")
     private Long userCardNo;
+    
+    // 사용자 일련번호
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_no", nullable = false)
+    private User user;
 
     // 카드 객체
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,11 +46,6 @@ public class UserCardDeck {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_story_no", nullable = true)
     private UserStory userStory;
-
-    // 사용자 일련번호
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no", nullable = false)
-    private User user;
 
     // 인물 카드 획득일자
     @Column(name = "acquisition_date", nullable = false)

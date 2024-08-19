@@ -17,9 +17,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "challenge_rewards")
 public class ChallengeReward {
 
+	//사용자 정보 일련번호
+	@Id
+	@Column(name = "detail_no")
+	private int detailNo;
+	
 	// 사용자 번호 (사용자와 1대1 관계로 단순 번호만 필요)
-    @Id
-    @Column(name = "user_no")
+    @Column(name = "user_no", nullable = false)
     private int userNo;
 
     // 사용자가 획득한 총 열쇠 수
