@@ -32,16 +32,16 @@ public class UserStory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_story_no")
     private Long userStoryNo;
+    
+    // 사용자 객체
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_no", nullable = false)
+    private User user;
 
     // 스토리 단계 객체
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "step_no", nullable = false)
     private StoryStep storyStep;
-
-    // 사용자 객체
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no", nullable = false)
-    private User user;
 
     // 스토리 내용
     @Lob
