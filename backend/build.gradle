@@ -32,18 +32,17 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	// 애플리케이션에서 이메일을 쉽게 전송할 수 있도록 지원 (SMTP 설정, 메일 전송 기능 포함)
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	// Quartz 스케줄러를 사용하여 애플리케이션에서 정기적으로 작업을 실행하도록 스케줄링
-	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 	// 사용자 입력 데이터의 유효성을 검사하여 잘못된 데이터를 방지하는 기능 제공
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	// RESTful API 및 웹 애플리케이션을 구축하기 위한 필수적인 기능 제공 (Spring MVC 포함)
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// mybatis 클래스/xml 작성할때다시추가
 	// MyBatis를 사용하여 SQL 쿼리를 XML 또는 애노테이션으로 관리하고, 객체와 매핑하는 기능 제공
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
-	// JDBC를 통해 데이터베이스에 세션 데이터를 저장하고, 분산 환경에서 세션을 공유하는 기능 제공
-	implementation 'org.springframework.session:spring-session-jdbc'
-	// 스프링 애플리케이션에서 커맨드라인 명령어 기반의 인터페이스를 구현하는 데 사용
-	implementation 'org.springframework.shell:spring-shell-starter'
+	// implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+	// 스프링 세션 삭제
+	// 스프링 애플리케이션에서 커맨드라인 명령어 기반의 인터페이스를 구현하는 데 사용 - 사용하면 그때 추가
+	// implementation 'org.springframework.shell:spring-shell-starter'
 	// 웹소켓 사용
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	
@@ -60,7 +59,7 @@ dependencies {
 	// MyBatis와 관련된 기능을 테스트할 수 있는 도구 및 유틸리티 제공
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 	// Spring Shell 명령어 기반의 애플리케이션을 테스트할 수 있는 유틸리티 제공
-	testImplementation 'org.springframework.shell:spring-shell-starter-test'
+	// testImplementation 'org.springframework.shell:spring-shell-starter-test'
 	// JUnit 플랫폼 런처를 통해 테스트 실행 및 리포팅 기능 제공
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
