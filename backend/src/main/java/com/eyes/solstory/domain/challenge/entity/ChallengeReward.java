@@ -19,18 +19,18 @@ public class ChallengeReward {
 
 	//사용자 정보 일련번호
 	@Id
-	@Column(name = "detail_no")
+	@Column(name = "detail_no", precision = 10)
 	private int detailNo;
 	
 	// 사용자 번호 (사용자와 1대1 관계로 단순 번호만 필요)
-    @Column(name = "user_no", nullable = false)
+    @Column(name = "user_no", nullable = false, precision = 10)
     private int userNo;
 
     // 사용자가 획득한 총 열쇠 수
-    @Column(name = "total_keys", nullable = false)
+    @Column(name = "total_keys", nullable = false, precision = 10)
     private int totalKeys;
 
     // 열쇠로 변환되지 않은 포인트(1000 포인트 미만)
-    @Column(name = "remaining_points", nullable = false)
+    @Column(name = "remaining_points", nullable = false, precision = 10)
     private int remainingPoints;
 }

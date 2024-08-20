@@ -6,8 +6,6 @@ import com.eyes.solstory.domain.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,16 +38,15 @@ public class UserAccount {
     private User user;
 
     // 계좌 유형
-    @Enumerated(EnumType.STRING)
-    @Column(name = "account_type", nullable = false)
-    private AccountType accountType;
+    @Column(name = "account_type", precision = 1, nullable = false)
+    private int accountType;
 
     // 계좌 이름
     @Column(name = "account_name", nullable = false, length = 100)
     private String accountName;
 
     // 저축 목표 금액
-    @Column(name = "target_amount")
+    @Column(name = "target_amount", precision = 1)
     private int targetAmount;
 
     // 시작 일자
@@ -61,7 +58,7 @@ public class UserAccount {
     private LocalDate endDate;
 
     // 계좌 활성화 여부(0: 비활성화, 1:활성화)
-    @Column(name = "is_active", nullable = false, length = 1)
+    @Column(name = "is_active", nullable = false, precision = 1)
     private String isActive;
 
 }

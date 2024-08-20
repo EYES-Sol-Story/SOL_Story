@@ -24,7 +24,7 @@ public class UserDetails {
 	// 사용자 정보 일련번호
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "detail_no")
+	@Column(name = "detail_no", precision = 10)
 	private int detailNo;
 	
 	// 사용자 일련번호
@@ -33,7 +33,7 @@ public class UserDetails {
     private User user;
 
 	// 사용자 정보 타입 (1: MBTI, 2:취미, 3:관심사)
-    @Column(name = "attribute_type", nullable = false)
+    @Column(name = "attribute_type", nullable = false, precision = 1)
     private int attributeType;
 
     // 사용자 정보 (MBTI타입, 취미/관심사 카테고리)

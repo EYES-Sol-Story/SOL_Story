@@ -6,8 +6,6 @@ import com.eyes.solstory.domain.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,7 +28,7 @@ public class DailyFinancialSummary {
 	// summary 일련번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "summary_no")
+    @Column(name = "summary_no", precision = 10)
     private int summaryNo;
 
     // 사용자 일련번호
@@ -38,20 +36,19 @@ public class DailyFinancialSummary {
     @JoinColumn(name = "user_no", nullable = false)
     private User user;
 
-    // 산출 날짜
-    @Column(name = "summary_date", nullable = false)
-    private LocalDate summaryDate;
+    // 저축/소비 해당 날짜
+    @Column(name = "financial_date", nullable = false)
+    private LocalDate financialDate;
 
     // 산출 유형(1: 저축 , 2:소비)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "financial_type", nullable = false)
-    private FinancialType financialType;
+    @Column(name = "financial_type", precision = 1, nullable = false)
+    private int financialType;
 
     // 지출 카테고리
     @Column(name = "category", length = 50)
     private String category;
 
     // 총액(저축/지출 카테고리별)
-    @Column(name = "total_amount", nullable = false)
+    @Column(name = "total_amount", precision = 1, nullable = false)
     private int totalAmount;
 }
