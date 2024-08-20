@@ -1,31 +1,26 @@
 package com.eyes.solstory.constants;
 
 public class OpenApiUrls {
+	//// URL 공통
+	static final String BASE_URL = "https//finopenapi.ssafy.io/ssafy/api/v1/edu";
+	
 	//// 입출금 계좌
 	// 예금주 조회
-	static final String INQUIRE_DEMAND_DEPOSIT_ACCOUNT_HOLDER_NAME 
-	= "https//finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireDemandDepositAccountHolderName";
+	static final String INQUIRE_DEMAND_DEPOSIT_ACCOUNT_HOLDER_NAME = "/demandDeposit/inquireDemandDepositAccountHolderName";
 	// 계좌 잔액 조회
-	static final String INQUIRE_DEMAND_DEPOSIT_ACCOUNT_BALANCE
-	= "https//finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireDemandDepositAccountBalance";
+	static final String INQUIRE_DEMAND_DEPOSIT_ACCOUNT_BALANCE = "/demandDeposit/inquireDemandDepositAccountBalance";
 	// 계좌 출금
-	static final String UPDATE_DEMAND_DEPOSIT_ACCOUNT_WITHDRAWAL
-	= "https//finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/updateDemandDepositAccountWithdrawal";
+	static final String UPDATE_DEMAND_DEPOSIT_ACCOUNT_WITHDRAWAL = "/demandDeposit/updateDemandDepositAccountWithdrawal";
 	// 계좌 입금
-	static final String UPDATE_DEMAND_DEPOSIT_ACCOUNT_DEPOSIT
-	= "https//finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/updateDemandDepositAccountDeposit";
+	static final String UPDATE_DEMAND_DEPOSIT_ACCOUNT_DEPOSIT = "/demandDeposit/updateDemandDepositAccountDeposit";
 	// 계좌 이체
-	static final String UPDATE_DEMAND_DEPOSIT_ACCOUNT_TRANSFER
-	= "https//finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/updateDemandDepositAccountTransfer";
+	static final String UPDATE_DEMAND_DEPOSIT_ACCOUNT_TRANSFER = "/demandDeposit/updateDemandDepositAccountTransfer";
 	// 계좌 거래 내역 조회
-	static final String INQUIRE_TRANSACTION_HISTORY_LIST
-	= "https//finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireTransactionHistoryList";
+	static final String INQUIRE_TRANSACTION_HISTORY_LIST = "/demandDeposit/inquireTransactionHistoryList";
 	// 계좌 거래 내역 조회(단건)
-	static final String INQUIRE_TRANSACTION_HISTORY
-	= "https//finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireTransactionHistory";
+	static final String INQUIRE_TRANSACTION_HISTORY = "/demandDeposit/inquireTransactionHistory";
 
 	//// 적금 계좌
 	// 적금 납입 회차 조회
-		static final String INQUIRE_PAYMENT
-		= "https//finopenapi.ssafy.io/ssafy/api/v1/edu/savings/inquirePayment";
+	static final String INQUIRE_PAYMENT = "/savings/inquirePayment";
 }
