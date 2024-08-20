@@ -1,4 +1,4 @@
-package com.eyes.solstory.domain.financial.entitycom.eyes.solstory.domain.financial.service;
+package com.eyes.solstory.domain.financial.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
