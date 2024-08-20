@@ -28,7 +28,7 @@ public class UserChallenge {
 	// 제시된 도전과제 일련번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "assignment_no")
+    @Column(name = "assignment_no", precision = 10)
     private int assignmentNo;
 
     // 사용자 객체

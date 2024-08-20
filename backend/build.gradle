@@ -22,6 +22,10 @@ ext {
 }
 
 dependencies {
+	// 라이브러리 폴더의 롬복.jar 인식시키기
+	//implementation files('libs/lombok.jar')
+    //annotationProcessor files('libs/lombok.jar')
+    
 	// 스프링 캐시 추상화를 사용하여 애플리케이션에서 캐싱을 쉽게 구성하고 관리할 수 있도록 지원
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	// JPA 사용 - 데이터베이스와 객체 간의 매핑을 자동으로 관리 (ORM)
@@ -47,12 +51,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	
 	// 컴파일 시 롬복 사용할 수 있도록 (@Getter, @Setter, @Builder 등)
-	compileOnly 'org.projectlombok:lombok:1.18.34'  
+	compileOnly 'org.projectlombok:lombok'
+	// 롬복 어노테이션 처리기
+	annotationProcessor 'org.projectlombok:lombok'
+
 	// Oracle 데이터베이스에 연결하기 위해 필요한 JDBC 드라이버 제공 
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
-	
-	// 롬복 어노테이션 처리기
-	annotationProcessor 'org.projectlombok:lombok:1.18.34'
 	
 	// Spring 애플리케이션의 통합 테스트 지원
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -75,3 +79,4 @@ tasks.named('test') {
 	// JUnit 5 플랫폼을 사용하여 테스트를 실행하도록 설정
 	useJUnitPlatform()
 }
+

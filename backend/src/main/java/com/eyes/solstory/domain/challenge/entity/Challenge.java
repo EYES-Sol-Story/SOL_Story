@@ -22,7 +22,7 @@ public class Challenge {
 	// 챌린지 일련번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "challenge_no")
+    @Column(name = "challenge_no", precision = 10)
     private int challengeNo;
 
     // 챌린지 이름
@@ -34,11 +34,11 @@ public class Challenge {
     private String challengeDescription;
 
     // 챌린지 과제 완료 시 획득할 포인트(1000point = 1key)
-    @Column(name = "reward_points", nullable = false)
+    @Column(name = "reward_points", nullable = false, precision = 5)
     private int rewardPoints;
 
     // 챌린지 유형(1:저축 , 2:지출)
-    @Column(name = "challenge_type", nullable = false)
+    @Column(name = "challenge_type", nullable = false, precision = 1)
     private int challengeType;
     
 }

@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,45 +27,4 @@ public class Transaction {
 				+ transactionAccountName + "]";
 	}
 	
-
-	public String getTransactionDate() {
-		return transactionDate;
-	}
-
-	public void setTransactionDate(String transactionDate) {
-		this.transactionDate = transactionDate;
-	}
-
-	public String getTransactionAccountNo() {
-		return transactionAccountNo;
-	}
-
-	public void setTransactionAccountNo(String transactionAccountNo) {
-		this.transactionAccountNo = transactionAccountNo;
-	}
-
-	public int getTransactionBalance() {
-		return transactionBalance;
-	}
-
-	public void setTransactionBalance(int transactionBalance) {
-		this.transactionBalance = transactionBalance;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getTransactionAccountName() {
-		return transactionAccountName;
-	}
-
-	public void setTransactionAccountName(String transactionAccountName) {
-		this.transactionAccountName = transactionAccountName;
-	}
-
 }

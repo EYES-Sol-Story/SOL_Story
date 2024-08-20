@@ -30,7 +30,7 @@ public class UserStory {
 	// 생성된 사용자 스토리 일련번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_story_no")
+    @Column(name = "user_story_no", precision = 10)
     private Long userStoryNo;
     
     // 사용자 객체

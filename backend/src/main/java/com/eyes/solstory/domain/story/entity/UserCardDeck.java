@@ -29,8 +29,8 @@ public class UserCardDeck {
 	// 사용자가 보유한 카드 일련번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_card_no")
-    private Long userCardNo;
+    @Column(name = "user_card_no", precision = 10)
+    private int userCardNo;
     
     // 사용자 일련번호
     @ManyToOne(fetch = FetchType.LAZY)
