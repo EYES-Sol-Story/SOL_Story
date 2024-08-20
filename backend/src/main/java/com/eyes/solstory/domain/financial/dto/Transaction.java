@@ -16,13 +16,13 @@ public class Transaction {
 	private String transactionAccountNo; // 입금된 사장님네 계좌번호
 	private int transactionBalance; // 지출금액
 	private String category; // 지출 카테고리
-	private String transactionName; // 지출처 이름
+	private String transactionAccountName; // 지출처 이름
 
 	@Override
 	public String toString() {
 		return "Transaction [transactionDate=" + transactionDate + ", transactionAccountNo=" + transactionAccountNo
 				+ ", transactionBalance=" + transactionBalance + ", category=" + category + ", transactionName="
-				+ transactionName + "]";
+				+ transactionAccountName + "]";
 	}
 	
 
@@ -58,12 +58,12 @@ public class Transaction {
 		this.category = category;
 	}
 
-	public String getTransactionName() {
-		return transactionName;
+	public String getTransactionAccountName() {
+		return transactionAccountName;
 	}
 
-	public void setTransactionName(String transactionName) {
-		this.transactionName = transactionName;
+	public void setTransactionAccountName(String transactionAccountName) {
+		this.transactionAccountName = transactionAccountName;
 	}
 
 }
