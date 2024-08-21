@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,22 +25,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user_card_deck")
+@SequenceGenerator(
+	    name = "card_deck_seq_generator",
+	    sequenceName = "card_deck_seq", // 오라클에 생성한 시퀀스 이름
+	    allocationSize = 1  // 시퀀스 값을 하나씩 증가
+	)
 public class UserCardDeck {
 
 	// 사용자가 보유한 카드 일련번호
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_deck_seq_generator")
     @Column(name = "user_card_no", precision = 10)
     private int userCardNo;
     
-    // 사용자 일련번호
+    // 사용자 객체 - 나이, 성별 등 사용할 수 있으므로 객체로 받아옴
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no", nullable = false)
     private User user;
 
     // 카드 객체
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_no", nullable = false)
+    @JoinColumn(name = "card_no", nullable = false) // wild 카드 설정 시 서버의 카드덱 확장도 겸하여 StoryCard에 row를 추가할 것
     private StoryCard storyCard;
 
     // 카드가 사용된 스토리 객체
@@ -47,11 +53,11 @@ public class UserCardDeck {
     @JoinColumn(name = "user_story_no", nullable = true)
     private UserStory userStory;
 
-    // 인물 카드 획득일자
+    // 카드 획득일자
     @Column(name = "acquisition_date", nullable = false)
     private LocalDate acquisitionDate;
 
-    // 사용자가 획득한 인물 카드 중 보유 여부('Y' : 보유중,  'N' : 사용완료)
+    // 사용자가 획득한 카드 중 보유 여부('Y' : 보유중,  'N' : 사용완료)
     @Column(name = "is_active", nullable = false, length = 5)
     private String isActive;
     

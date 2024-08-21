@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -21,11 +22,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@SequenceGenerator(
+	    name = "user_seq_generator",
+	    sequenceName = "user_seq", // 오라클에 생성한 시퀀스 이름
+	    allocationSize = 1  // 시퀀스 값을 하나씩 증가
+	)
 public class User {
 
 	// 사용자 일련번호
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_generator")
     @Column(name = "user_no", precision = 10)
     private int userNo;
 

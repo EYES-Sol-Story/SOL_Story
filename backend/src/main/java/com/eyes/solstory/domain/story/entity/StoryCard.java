@@ -12,11 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "story_cards")
+@SequenceGenerator(
+	    name = "card_seq_generator",
+	    sequenceName = "card_seq", // 오라클에 생성한 시퀀스 이름
+	    allocationSize = 1  // 시퀀스 값을 하나씩 증가
+	)
 public class StoryCard {
 
 	// 카드 일련번호
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_seq_generator")
     @Column(name = "card_no", precision = 10)
     private int cardNo;
 

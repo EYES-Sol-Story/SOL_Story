@@ -2,7 +2,10 @@ package com.eyes.solstory.domain.challenge.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +18,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "challenge_rewards")
+@SequenceGenerator(
+	    name = "reward_seq_generator",
+	    sequenceName = "reward_seq", // 오라클에 생성한 시퀀스 이름
+	    allocationSize = 1  // 시퀀스 값을 하나씩 증가
+	)
 public class ChallengeReward {
 
 	//사용자 리워드 일련번호
