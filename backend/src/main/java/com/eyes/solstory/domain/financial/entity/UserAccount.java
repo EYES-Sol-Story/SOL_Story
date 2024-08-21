@@ -2,11 +2,16 @@ package com.eyes.solstory.domain.financial.entity;
 
 import java.time.LocalDate;
 
+import com.eyes.solstory.domain.user.entity.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -33,9 +38,10 @@ public class UserAccount {
     @Column(name = "account_no", nullable = false, length = 34)
     private String accountNo;
 
-    // 사용자 일련번호
-    @Column(name = "user_no", nullable = false)
-    private int userNo;
+	// 사용자 객체 - user_key 쓸까봐 변경
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_no", nullable = false)
+    private User userNo;
 
     // 계좌 유형
     @Column(name = "account_type", precision = 1, nullable = false)
