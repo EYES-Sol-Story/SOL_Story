@@ -32,9 +32,8 @@ public class DailyFinancialSummary {
     private int summaryNo;
 
     // 사용자 일련번호
-    @ManyToOne
-    @JoinColumn(name = "user_no", nullable = false)
-    private User user;
+    @Column(name = "user_no", nullable = false)
+    private int userNo;
 
     // 저축/소비 해당 날짜
     @Column(name = "financial_date", nullable = false)
