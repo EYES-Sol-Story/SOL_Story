@@ -52,7 +52,7 @@ public class UserChallenge {
     private LocalDate assignedDate;
 
     // 사용자가 해당 도전과제를 선택했는지 여부 ('Y'/ 'N')
-    @Column(name = "is_selected", nullable = false, length = 1)
+    @Column(name = "is_selected", nullable = false, length = 5)
     private String isSelected;
 
     // 도전과제 완료일자

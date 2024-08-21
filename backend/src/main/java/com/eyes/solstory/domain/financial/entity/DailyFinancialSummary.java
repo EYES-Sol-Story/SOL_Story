@@ -13,12 +13,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-@Entity
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "daily_financial_summary")
 @SequenceGenerator(
 	    name = "summary_seq_generator",
@@ -37,12 +39,12 @@ public class DailyFinancialSummary {
     @Column(name = "user_no", nullable = false)
     private int userNo;
 
-    // 저축/소비 해당 날짜
+    // 지출 날짜 
     @Column(name = "financial_date", nullable = false)
     private LocalDate financialDate;
 
     // 산출 유형(1: 저축 , 2:소비)
-    @Column(name = "financial_type", precision = 1, nullable = false)
+    @Column(name = "financial_type", nullable = false, precision = 1)
     private int financialType;
 
     // 지출 카테고리
@@ -50,6 +52,6 @@ public class DailyFinancialSummary {
     private String category;
 
     // 총액(저축/지출 카테고리별)
-    @Column(name = "total_amount", precision = 15, nullable = false)
+    @Column(name = "total_amount", nullable = false)
     private int totalAmount;
 }
