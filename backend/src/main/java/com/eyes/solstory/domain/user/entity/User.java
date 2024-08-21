@@ -64,8 +64,14 @@ public class User {
     @Column(name = "join_date", nullable = false)
     private LocalDate joinDate;
 
+    // 사용자 API KEY
+    @Column(name = "user_key", nullable = false, length = 125)
+    private String userKey;
+    
     // 캐릭터 이미지 파일 저장된 경로
     @Column(name = "character_img_path")
     private String characterImgPath;
+    
+    // 
 
 }
