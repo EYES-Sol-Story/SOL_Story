@@ -26,6 +26,8 @@ public class SpendingCategoryClassifier {
         keywordToCategoryMap.put("냉면", "외식/식사");
         keywordToCategoryMap.put("샌드위치", "외식/식사");
         keywordToCategoryMap.put("레스토랑", "외식/식사");
+        keywordToCategoryMap.put("버거", "외식/식사");
+        keywordToCategoryMap.put("고기", "외식/식사");
         keywordToCategoryMap.put("카페", "외식/식사");
         keywordToCategoryMap.put("커피", "외식/식사");
         keywordToCategoryMap.put("파스타", "외식/식사");
@@ -36,9 +38,15 @@ public class SpendingCategoryClassifier {
         keywordToCategoryMap.put("고속도로", "주유");
 
         // 4. 교통비 (Transportation)
+        keywordToCategoryMap.put("K-패스", "교통비");
+        keywordToCategoryMap.put("기후동행카드", "교통비");
         keywordToCategoryMap.put("버스", "교통비");
         keywordToCategoryMap.put("지하철", "교통비");
         keywordToCategoryMap.put("택시", "교통비");
+        keywordToCategoryMap.put("기차", "교통비");
+        keywordToCategoryMap.put("KTX", "교통비");
+        keywordToCategoryMap.put("GTX", "교통비");
+        keywordToCategoryMap.put("ITX", "교통비");
         keywordToCategoryMap.put("공항", "교통비");
 
         // 5. 쇼핑 (Shopping - General)
@@ -66,12 +74,15 @@ public class SpendingCategoryClassifier {
         keywordToCategoryMap.put("트래블", "여행/휴가");
         keywordToCategoryMap.put("휴가", "여행/휴가");
         keywordToCategoryMap.put("항공", "여행/휴가");
+        keywordToCategoryMap.put("숙박", "여행/휴가");
+        keywordToCategoryMap.put("호텔", "여행/휴가");
         keywordToCategoryMap.put("여행", "여행/휴가");
         keywordToCategoryMap.put("투어", "여행/휴가");
 
         // 9. 건강/의료비 (Healthcare & Medical)
         keywordToCategoryMap.put("메디컬", "건강/의료비");
         keywordToCategoryMap.put("병원", "건강/의료비");
+        keywordToCategoryMap.put("영양제", "건강/의료비");
         keywordToCategoryMap.put("약국", "건강/의료비");
         keywordToCategoryMap.put("검진", "건강/의료비");
         keywordToCategoryMap.put("의료기기", "건강/의료비");
@@ -93,6 +104,11 @@ public class SpendingCategoryClassifier {
         keywordToCategoryMap.put("영화", "엔터테인먼트");
         keywordToCategoryMap.put("콘서트", "엔터테인먼트");
         keywordToCategoryMap.put("연극", "엔터테인먼트");
+        keywordToCategoryMap.put("OTT", "엔터테인먼트");
+        keywordToCategoryMap.put("넷플릭스", "엔터테인먼트");
+        keywordToCategoryMap.put("티빙", "엔터테인먼트");
+        keywordToCategoryMap.put("디즈니플러스", "엔터테인먼트");
+        keywordToCategoryMap.put("웨이브", "엔터테인먼트");
         keywordToCategoryMap.put("뮤직", "엔터테인먼트");
         keywordToCategoryMap.put("게임", "엔터테인먼트");
         keywordToCategoryMap.put("노래", "엔터테인먼트");
@@ -123,6 +139,7 @@ public class SpendingCategoryClassifier {
         // 16. 가구/인테리어 (Furniture & Home Decor)
         keywordToCategoryMap.put("가구", "가구/인테리어");
         keywordToCategoryMap.put("인테리어", "가구/인테리어");
+        keywordToCategoryMap.put("쇼피", "가구/인테리어");
         keywordToCategoryMap.put("침대", "가구/인테리어");
         keywordToCategoryMap.put("커튼", "가구/인테리어");
         keywordToCategoryMap.put("리빙", "가구/인테리어");
@@ -133,6 +150,7 @@ public class SpendingCategoryClassifier {
         keywordToCategoryMap.put("코스메틱", "미용/화장품");
         keywordToCategoryMap.put("네일아트", "미용/화장품");
         keywordToCategoryMap.put("화장품", "미용/화장품");
+        keywordToCategoryMap.put("올리브영", "미용/화장품");
         keywordToCategoryMap.put("스킨케어", "미용/화장품");
 
         // 18. 보험료 (Insurance Premiums)
@@ -147,6 +165,7 @@ public class SpendingCategoryClassifier {
 
         // 20. 모임/경조사비 (Social Events & Gifts)
         keywordToCategoryMap.put("꽃배달", "모임/경조사비");
+        keywordToCategoryMap.put("화환", "모임/경조사비");
         keywordToCategoryMap.put("선물", "모임/경조사비");
         keywordToCategoryMap.put("모임", "모임/경조사비");
         keywordToCategoryMap.put("경조사", "모임/경조사비");
