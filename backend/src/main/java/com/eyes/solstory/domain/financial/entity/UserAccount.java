@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,11 +25,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user_accounts")
+@SequenceGenerator(
+	    name = "account_seq_generator",
+	    sequenceName = "account_seq", // 오라클에 생성한 시퀀스 이름
+	    allocationSize = 1  // 시퀀스 값을 하나씩 증가
+	)
 public class UserAccount {
 
     // 계좌번호
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq_generator")
     @Column(name = "account_no", nullable = false, length = 34)
     private String accountNo;
 

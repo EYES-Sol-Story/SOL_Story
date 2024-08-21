@@ -12,11 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "story_steps")
+@SequenceGenerator(
+	    name = "step_seq_generator",
+	    sequenceName = "step_seq", // 오라클에 생성한 시퀀스 이름
+	    allocationSize = 1  // 시퀀스 값을 하나씩 증가
+	)
 public class StoryStep {
 
 	// 스토리 단계 일련번호
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "step_seq_generator")
     @Column(name = "step_no", precision = 10)
     private int stepNo;
 
