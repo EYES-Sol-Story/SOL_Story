@@ -21,7 +21,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none # create, update, none - 애플리케이션 가동시 스키마 관리 타입
-    show-sql: true ##sql문 출력
+    show-sql: true # sql문 출력
     properties:
       hibernate:
         "[format:sql]": false
@@ -36,3 +36,6 @@ spring:
 #    "[org.hibernate.SQL]": debug
 #    "[org.hibernate.orm.jdbc.bind]": trace
 #    "[org.springframework.web.socket]": trace
+
+api:
+  key: API-KEY
