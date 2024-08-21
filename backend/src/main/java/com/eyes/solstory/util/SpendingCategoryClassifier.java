@@ -9,11 +9,11 @@ public class SpendingCategoryClassifier {
     static {
         // 카테고리 키워드 맵핑
     	// 식사 (Dining Out) (마트 식비 포함)
-        keywordToCategoryMap.put("마트", "식료품");
-        keywordToCategoryMap.put("식품", "식료품");
-        keywordToCategoryMap.put("채소", "식료품");
-        keywordToCategoryMap.put("생선", "식료품");
-        keywordToCategoryMap.put("신선", "식료품");
+        keywordToCategoryMap.put("마트", "외식/식사");
+        keywordToCategoryMap.put("식품", "외식/식사");
+        keywordToCategoryMap.put("채소", "외식/식사");
+        keywordToCategoryMap.put("생선", "외식/식사");
+        keywordToCategoryMap.put("신선", "외식/식사");
         keywordToCategoryMap.put("식당", "외식/식사");
         keywordToCategoryMap.put("김치", "외식/식사");
         keywordToCategoryMap.put("그릴", "외식/식사");
@@ -28,10 +28,10 @@ public class SpendingCategoryClassifier {
         keywordToCategoryMap.put("마켓컬리", "외식/식사");
         
         // 배달
-        keywordToCategoryMap.put("배달", "외식/식사");
-        keywordToCategoryMap.put("요기요", "외식/식사");
-        keywordToCategoryMap.put("배달의민족", "외식/식사");
-        keywordToCategoryMap.put("쿠팡잇츠", "외식/식사");
+        keywordToCategoryMap.put("배달", "배달");
+        keywordToCategoryMap.put("요기요", "배달");
+        keywordToCategoryMap.put("배달의민족", "배달");
+        keywordToCategoryMap.put("쿠팡잇츠", "배달");
         
         // 카페/디저트
         keywordToCategoryMap.put("카페", "카페/디저트");
