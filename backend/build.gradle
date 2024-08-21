@@ -51,7 +51,9 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok:1.18.34'  
 	// Oracle 데이터베이스에 연결하기 위해 필요한 JDBC 드라이버 제공 
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
-	
+
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
+
 	// 롬복 어노테이션 처리기
 	annotationProcessor 'org.projectlombok:lombok:1.18.34'
 	
