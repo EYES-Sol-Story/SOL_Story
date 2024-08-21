@@ -52,6 +52,6 @@ public class DailyFinancialSummary {
     private String category;
 
     // 총액(저축/지출 카테고리별)
-    @Column(name = "total_amount", nullable = false)
+    @Column(name = "total_amount", precision = 15, nullable = false)
     private int totalAmount;
 }

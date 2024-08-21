@@ -27,9 +27,10 @@ public class ChallengeReward {
 
 	//사용자 리워드 일련번호
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reward_seq_generator")
 	@Column(name = "reward_no", precision = 10)
 	private int rewardNo;
-	
+
 	// 사용자 번호 (사용자와 1대1 관계로 단순 번호만 필요)
     @Column(name = "user_no", nullable = false, precision = 10)
     private int userNo;
