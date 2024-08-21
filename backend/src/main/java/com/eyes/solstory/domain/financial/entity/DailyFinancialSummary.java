@@ -43,7 +43,7 @@ public class DailyFinancialSummary {
     @Column(name = "financial_date", nullable = false)
     private LocalDate financialDate;
 
-    // 산출 유형(1: 저축 , 2:소비)
+    // 산출 유형(1: 저축 , 2:소비, 3:수익)
     @Column(name = "financial_type", nullable = false, precision = 1)
     private int financialType;
 

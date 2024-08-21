@@ -9,8 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,24 +50,23 @@ public class User {
     private String email;
     
     // 사용자 성별(MALE/FEMALE)
-    @Column(name = "gender", nullable = false, length = 254)
+    @Column(name = "gender", nullable = false, length = 10)
     private String gender;
     
     // 사용자 생년월일
-    @Column(name = "birth", nullable = false, length = 254)
+    @Column(name = "birth", nullable = false)
     private LocalDate birth;
 
     // 사용자 가입일자
-    @Temporal(TemporalType.DATE)
     @Column(name = "join_date", nullable = false)
     private LocalDate joinDate;
 
     // 사용자 API KEY
-    @Column(name = "user_key", nullable = false, length = 125)
+    @Column(name = "user_key", length = 125)
     private String userKey;
     
     // 캐릭터 이미지 파일 저장된 경로
-    @Column(name = "character_img_path")
+    @Column(name = "character_img_path", length = 200)
     private String characterImgPath;
     
     // 

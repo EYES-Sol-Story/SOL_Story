@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.eyes.solstory.domain.financial.dto.ActiveAccountDTO;
 import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
 
 @Service
@@ -17,7 +18,7 @@ public class UserAccountService {
         this.userAccountRepository = userAccountRepository;
     }
 
-    public List<Object[]> findActiveAccounts() {
+    public List<ActiveAccountDTO> findActiveAccounts() {
         return userAccountRepository.findActiveAccounts();
     }
 }

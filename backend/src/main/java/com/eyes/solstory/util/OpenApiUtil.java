@@ -101,4 +101,23 @@ public class OpenApiUtil {
 	    headers.setContentType(MediaType.APPLICATION_JSON);
 	    return new HttpEntity<>(jsonRequest, headers);
 	}
+	
+	/**
+     * 특정 날짜에 대한 거래 내역 요청 데이터 생성 //어제
+     * 
+     * @param accountNo 조회할 계좌번호
+     * @param date 조회할 날짜
+     * @param headerMap 요청 헤더
+     * @return 요청 데이터 Map
+     */
+    public static Map<String, Object> createTransactionHistoryRequestData(String accountNo, String date, String transactionType, Map<String, String> headerMap) {
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("Header", headerMap);
+        requestMap.put("accountNo", accountNo);
+        requestMap.put("startDate", date);
+        requestMap.put("endDate", date);
+        requestMap.put("transactionType", transactionType); // 전체 거래
+        requestMap.put("orderByType", "ASC");
+        return requestMap;
+    }
 }
