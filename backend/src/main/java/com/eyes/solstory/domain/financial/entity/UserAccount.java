@@ -35,7 +35,7 @@ public class UserAccount {
 	// 사용자 객체 - user_key 쓸까봐 변경
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no", nullable = false)
-    private User userNo;
+    private User user;
 
     // 계좌 유형
     @Column(name = "account_type", precision = 1, nullable = false)
