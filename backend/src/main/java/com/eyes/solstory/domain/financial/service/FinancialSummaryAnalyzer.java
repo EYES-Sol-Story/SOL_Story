@@ -25,18 +25,38 @@ public class FinancialSummaryAnalyzer {
 	@Autowired
     private FinancialSummaryRepository summaryRepository;
 
+	/**
+	 * 최근 한달 지출 상위 5개 카테고리
+	 * @param userNo
+	 * @return
+	 */
     public List<CategorySpendingSummaryDTO> getTopCategories(int userNo) {
     	return convertToDTO1(summaryRepository.findTopCategoriesByUser(userNo));
     }
     
+    /**
+     * 최근 한달 지출 상위 5개 카테고리의 동일 연령대 평균 지출 금액
+     * @param userNo
+     * @return
+     */
     public Map<String, CategorySpendingSummaryDTO> getTop5CategoriesWithAvg(int userNo) {
         return convertToDTO2(summaryRepository.findTopCategoriesWithAvg(userNo));
     }
     
+    /**
+     * 최근 한달 지출 상위 10개 카테고리의 전월 대비 지출 증감
+     * @param userNo
+     * @return
+     */
     public List<CategorySpendingSummaryDTO> getSpendingTrends(int userNo) {
     	return convertToDTO3(summaryRepository.getSpendingTrends(userNo));
     }
     
+    /**
+     * 최근 7일 전체 카테고리별 지출
+     * @param userNo
+     * @return
+     */
     public List<CategorySpendingSummaryDTO> getLast7DaysSpending(int userNo) {
     	return convertToDTO1(summaryRepository.getLast7DaysSpending(userNo));
     }
@@ -64,6 +84,19 @@ public class FinancialSummaryAnalyzer {
     	return spendingProcessor.fetchTransactionDataForMonth(obj);
     }
     
+    
+    /**
+     * 최근 한달, 전월 대비 소비 증가율이 가장 높은 카테고리 중 가장 지출이 높은 keyword 반환
+     * @param userNo
+     * @return
+     * @throws URISyntaxException
+     */
+    public String getKeywordWithHighestSpendingGrowth(int userNo) throws URISyntaxException {
+    	// 최근 한달, 전월 대비 소비 증가율이 가장 높은 카테고리, 입출금 계좌번호, user_key 받아오기
+    	Object[] obj = summaryRepository.getCategoryWithHighestSpendingGrowth(userNo);
+    	// 최근 30일간 지출처별 지출 내역 요약 정보
+    	return spendingProcessor.getKeywordWithCategoryForMonth(obj);
+    }
     
     
     

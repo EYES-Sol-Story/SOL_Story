@@ -140,6 +140,45 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 				 + "AND   a.account_type = 2"
 			, nativeQuery = true)
 	Object[] getUserMostSpendingCategory(@Param("userNo") int userNo);
+	
+	
+	@Query(value = "WITH "
+				+ "recent_spending_category AS "
+				+ "("
+				+ "    SELECT user_no, category, SUM(total_amount) AS total_amount"
+				+ "    FROM daily_financial_summary"
+				+ "    WHERE financial_type = 2"
+				+ "      AND financial_date >= SYSDATE - 30"
+				+ "    GROUP BY user_no, category"
+				+ "),"
+				+ "before_spending_category AS"
+				+ "("
+				+ "    SELECT user_no, category, SUM(total_amount) AS total_amount"
+				+ "    FROM daily_financial_summary"
+				+ "    WHERE financial_type = 2"
+				+ "      AND financial_date >= SYSDATE - 60"
+				+ "      AND financial_date < SYSDATE - 30"
+				+ "    GROUP BY user_no, category"
+				+ ")"
+				+ ""
+				+ "SELECT u.user_key, a.account_no, t.category"
+				+ "FROM  "
+				+ "("
+				+ "    SELECT r.user_no, r.category,"
+				+ "           CASE WHEN b.total_amount = 0 THEN 999"
+				+ "                ELSE (r.total_amount - b.total_amount) * 100 / b.total_amount "
+				+ "           END AS growth_rate"
+				+ "    FROM recent_spending_category r"
+				+ "    JOIN before_spending_category b ON r.user_no = b.user_no AND r.category = b.category"
+				+ "    ORDER BY growth_rate DESC"
+				+ ") t"
+				+ "JOIN user_accounts a ON t.user_no = a.user_no"
+				+ "JOIN users u ON t.user_no = u.user_no"
+				+ "WHERE a.is_active = 1"
+				+ "  AND a.account_type = 2"
+				+ "  AND ROWNUM = 1"
+			, nativeQuery = true)
+	Object[] getCategoryWithHighestSpendingGrowth(@Param("userNo") int userNo);
 }
 
 

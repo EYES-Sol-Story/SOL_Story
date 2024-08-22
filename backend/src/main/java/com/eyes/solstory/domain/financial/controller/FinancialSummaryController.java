@@ -100,6 +100,19 @@ public class FinancialSummaryController {
     }
     
     /**
+     * 최근 한달, 전월 대비 소비 증가율이 가장 높은 카테고리 중 가장 지출이 높은 keyword
+     * @param userNo
+     * @return
+     * @throws URISyntaxException
+     */
+    @GetMapping("/highest-spending-growth-keyword")
+    public ResponseEntity<String> getKeywordWithHighestSpendingGrowth(@RequestParam("userNo") int userNo) throws URISyntaxException{
+    	String keyword = summaryAnalyzer.getKeywordWithHighestSpendingGrowth(userNo);
+    	return ResponseEntity.ok(keyword);
+    }
+
+    
+    /**
      * 특정 카테고리 (그냥 써둠)
      * @param category
      * @param userNo
