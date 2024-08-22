@@ -71,7 +71,7 @@ public class FinancialSummaryProcessor {
 	 */
 	private void fetchTransactionData(ActiveAccountDTO userAccount, String date) throws URISyntaxException {
     	int userNo = userAccount.getUserNo();
-    	Map<String, List<TransactionDTO>> transactionMap = demandDepositCollector.fetchTransactions(userAccount.getAccountNo(), date);// 거래 내역 받아오기
+    	Map<String, List<TransactionDTO>> transactionMap = demandDepositCollector.fetchTransactions(userAccount, date);// 거래 내역 받아오기
     	categorizeSpending(userNo,  transactionMap.get("spendingList")); // 지출 카테고리 분류
     	categorizeIncome(userNo,  transactionMap.get("incomeList")); // 수입 카테고리
 	}
@@ -84,7 +84,7 @@ public class FinancialSummaryProcessor {
 	 * @throws URISyntaxException
 	 */
 	private void fetchSavingsData(ActiveAccountDTO userAccount, String date) throws URISyntaxException {
-		int amount = savingsCollector.fetchSavings(userAccount.getAccountNo(), date);// 저축 금액 받기
+		int amount = savingsCollector.fetchSavings(userAccount, date);// 저축 금액 받기
 		if(amount != 0) {
 			createSummary(userAccount.getUserNo(), amount);
 		}

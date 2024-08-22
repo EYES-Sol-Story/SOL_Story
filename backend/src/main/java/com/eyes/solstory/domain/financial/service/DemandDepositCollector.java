@@ -2,6 +2,7 @@ package com.eyes.solstory.domain.financial.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.eyes.solstory.constants.OpenApiUrls;
+import com.eyes.solstory.domain.financial.dto.ActiveAccountDTO;
 import com.eyes.solstory.domain.financial.dto.TransactionDTO;
 import com.eyes.solstory.util.OpenApiUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,9 +36,9 @@ public class DemandDepositCollector {
 	 * @return 입출금 거래 내역
 	 * @throws URISyntaxException
 	 */
-	public Map<String, List<TransactionDTO>> fetchTransactions(String accountNo, String date) throws URISyntaxException {
-        Map<String, String> headerMap = OpenApiUtil.createHeaders(OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST);
-        Map<String, Object> requestMap = OpenApiUtil.createTransactionHistoryRequestData(accountNo, date, "A", headerMap);
+	public Map<String, List<TransactionDTO>> fetchTransactions(ActiveAccountDTO userAccount, String date) throws URISyntaxException {
+        Map<String, String> headerMap = OpenApiUtil.createHeaders(userAccount.getUserKey(), OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST);
+        Map<String, Object> requestMap = OpenApiUtil.createTransactionHistoryRequestData(userAccount.getAccountNo(), date, "A", headerMap);
 
         ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST), requestMap);
 
@@ -66,12 +68,10 @@ public class DemandDepositCollector {
         
         if (listNode.isArray()) {
             for (JsonNode item : listNode) {
-                String transactionAccountNo = item.path("transactionAccountNo").asText();
                 int transactionBalance = item.path("transactionBalance").asInt();
                 String transactionSummary = item.path("transactionSummary").asText();
                 String transactionType = item.path("transactionType").asText(); //1입금 2출금
                 TransactionDTO transaction = TransactionDTO.builder()
-                        .transactionAccountNo(transactionAccountNo)
                         .transactionBalance(transactionBalance)
                         .transactionSummary(transactionSummary)
                         .build();
@@ -85,5 +85,52 @@ public class DemandDepositCollector {
         transactionMap.put("incomeList", incomeList);
         
         return transactionMap;
+    }
+    
+    
+    /**
+	 * 한달간의 지출 내역 받아오기
+	 * @param obj obj[0]:user_key, obj[1]:account_no obj[2]:category
+	 * @throws URISyntaxException
+	 */
+	public List<TransactionDTO> fetchTransactionsForMonth(Object[] obj) throws URISyntaxException  {
+		String startDate = LocalDate.now().minusDays(30).format(OpenApiUtil.DATE_FORMATTER); //30일전부터
+		String endDate = LocalDate.now().minusDays(1).format(OpenApiUtil.DATE_FORMATTER); //어제까지
+		
+		Map<String, String> headerMap = OpenApiUtil.createHeaders((String)obj[0], OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST);
+        Map<String, Object> requestMap = OpenApiUtil.createTransactionHistoryRequestDataForMonth((String)obj[1], startDate, endDate, "D", headerMap);
+
+        ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST), requestMap);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        
+        try {
+            JsonNode rootNode = objectMapper.readTree(response.getBody());
+            JsonNode listNode = rootNode.path("REC").path("list");
+            return parseTransactionListForMonth(listNode);
+        } catch (Exception e) {
+        	logger.error("계좌 거래 내역 추출 중 오류 발생");
+            throw new RuntimeException("계좌 거래 내역 추출 중 오류 발생", e);
+        }
+	}
+	
+	/**
+	 * 응답데이터를 parsing하여 지출내역 반환
+	 * @param listNode
+	 * @return
+	 */
+    private List<TransactionDTO> parseTransactionListForMonth(JsonNode listNode) {
+        List<TransactionDTO> transactions = new ArrayList<>();
+        
+        if (listNode.isArray()) {
+            for (JsonNode item : listNode) {
+                TransactionDTO transaction = TransactionDTO.builder()
+                        .transactionBalance(item.path("transactionBalance").asInt()) //금액
+                        .transactionSummary(item.path("transactionSummary").asText()) //지출처
+                        .build();
+                transactions.add(transaction);
+            }
+        }
+        return transactions;
     }
 }

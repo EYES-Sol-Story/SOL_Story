@@ -212,4 +212,19 @@ public class TransactionCategoryClassifier {
         }
         return "기타";  // 해당하는 카테고리가 없을 경우 모두 기타로 분류
     }
+    
+    /**
+     * 해당 지출처 카테고리가 찾고자 하는 카테고리가 맞는지
+     * @param storeName 지출처
+     * @return 해당 카테고리면 true, 아니면 false
+     */
+    public static boolean isCategory(String storeName, String category) {
+    	for (Map.Entry<String, String> entry : keywordToWithdrawalCategory.entrySet()) {
+    		// 카테고리 먼저 찾고 검사하는 가게가 그 카테고리인지 확인 
+            if (category.equals(entry.getValue()) && storeName.contains(entry.getKey())) {
+                return true;
+            }
+        }
+    	return false;
+    }
 }

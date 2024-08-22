@@ -26,10 +26,6 @@ spring:
       hibernate:
         "[format:sql]": false
 
-## 아래 설정 사용할 때 까지 해제
-# mybatis : 
-  #  mapper-locations: classpath:mapper/*.xml
-
 # 로깅 수준 지정
 # logging:
 #  level:

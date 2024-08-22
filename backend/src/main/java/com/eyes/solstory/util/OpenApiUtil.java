@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class OpenApiUtil {
 	
 	public static final String API_KEY = "cb6cca464d504a29a809ced072ba5aec";
-	public static final String USER_KEY = "04e988f2-d086-495a-aa2f-67b0e911782f";
 	
 	public static final DateTimeFormatter DATE_FORMATTER= DateTimeFormatter.ofPattern("yyyyMMdd");
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HHmmss");
@@ -33,10 +32,10 @@ public class OpenApiUtil {
      * @param apiName Open Api Url 의 엔드포인트
      * @return header
      */
-	public static Map<String, String> createHeaders(String apiName) {
+	public static Map<String, String> createHeaders(String user_key, String apiName) {
 		Random random = new Random();
 		String sysdate = LocalDate.now().format(DATE_FORMATTER);
-        return createHeaders(apiName, sysdate, random);
+        return createHeaders(user_key, apiName, sysdate, random);
     }
 	
 	/**
@@ -46,7 +45,7 @@ public class OpenApiUtil {
      * @param apiName Open Api Url 의 엔드포인트
      * @return header
      */
-	public static Map<String, String> createHeaders(String apiName, String sysdate, Random random) {
+	public static Map<String, String> createHeaders(String user_key, String apiName, String sysdate, Random random) {
         String systime = LocalDateTime.now().format(TIME_FORMATTER);
 		
 		Map<String, String> headerMap = new HashMap<>();
@@ -58,7 +57,7 @@ public class OpenApiUtil {
         headerMap.put("apiServiceCode", apiName);
         headerMap.put("institutionTransactionUniqueNo", sysdate + systime + String.format("%06d", random.nextInt(1000000)));
         headerMap.put("apiKey", API_KEY);
-        headerMap.put("userKey", USER_KEY);
+        headerMap.put("userKey", user_key);
         return headerMap;
     }
 	
@@ -117,6 +116,26 @@ public class OpenApiUtil {
         requestMap.put("startDate", date);
         requestMap.put("endDate", date);
         requestMap.put("transactionType", transactionType); // 전체 거래
+        requestMap.put("orderByType", "ASC");
+        return requestMap;
+    }
+    
+    /**
+     * 특정 기간 거래 내역 요청 데이터 생성 //30일전 ~ 어제
+     * 
+     * @param accountNo 조회할 계좌번호
+     * @param startDate 조회 시작 날짜
+     * @param endDate   조회 마지막 날짜
+     * @param headerMap 요청 헤더
+     * @return 요청 데이터 Map
+     */
+    public static Map<String, Object> createTransactionHistoryRequestDataForMonth(String accountNo, String startDate, String endDate, String transactionType, Map<String, String> headerMap) {
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("Header", headerMap);
+        requestMap.put("accountNo", accountNo);
+        requestMap.put("startDate", startDate);
+        requestMap.put("endDate", endDate);
+        requestMap.put("transactionType", transactionType); // "D" :지출만
         requestMap.put("orderByType", "ASC");
         return requestMap;
     }

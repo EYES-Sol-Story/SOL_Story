@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-@Component
+//@Component
 public class WebClientUtil {
     @Value("${api.key}")
     private String apiKey;
