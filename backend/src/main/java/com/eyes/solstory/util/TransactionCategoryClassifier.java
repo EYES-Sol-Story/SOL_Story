@@ -231,7 +231,7 @@ public class TransactionCategoryClassifier {
     /**
      * 카테고리에 해당하는 지출처의 내 키워드 반환
      * @param storeName 지출처
-     * @return 해당 카테고리면 true, 아니면 false
+     * @return 해당 카테고리면 키워드 반환
      */
     public static String keyword(String storeName, String category) {
     	for (Map.Entry<String, String> entry : keywordToWithdrawalCategory.entrySet()) {

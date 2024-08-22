@@ -59,7 +59,6 @@ public class SpendingSummaryProcessor {
 					StoreSpendingSummaryDTO store = map.get(storeName);
 					store.setVisitCount(store.getVisitCount()+1);
 					store.setTotalAmount(store.getTotalAmount() + amount);
-					map.put(storeName, store);
 				}
 			}
 		}
@@ -91,29 +90,33 @@ public class SpendingSummaryProcessor {
 	 * @return
 	 */
 	private String processSpendingKeywordByCategory(String category, List<TransactionDTO> transactions) {
-		List<StoreSpendingSummaryDTO> visitedStores = new ArrayList<>();
+		List<StoreSpendingSummaryDTO> list = new ArrayList<>();
 		// 지출처, 지출정보
 		Map<String, StoreSpendingSummaryDTO> map = new HashMap<>();
+		// 지출처, 지출정보
 		for(TransactionDTO transaction : transactions) {
-			// 이 지출 내역이 카테고리에 포함 돼
 			String storeName = transaction.getTransactionSummary();
 			int amount = transaction.getTransactionBalance();
-			if(TransactionCategoryClassifier.isCategory(storeName, category)) {
-				if(!map.containsKey(storeName)) {
-					map.put(storeName, new StoreSpendingSummaryDTO(storeName, 1, amount));
+			String keyword = TransactionCategoryClassifier.keyword(storeName, category);
+			// 이 지출 내역이 카테고리에 포함 돼
+			if(keyword != null) {
+				if(!map.containsKey(keyword)) {
+					map.put(keyword, StoreSpendingSummaryDTO.builder()
+										.storeName(keyword) //키워드로 써먹음
+										.totalAmount(amount)
+										.build()); 
 				}else {
-					StoreSpendingSummaryDTO store = map.get(storeName);
-					store.setVisitCount(store.getVisitCount()+1);
-					store.setTotalAmount(store.getTotalAmount() + amount);
-					map.put(storeName, store);
+					StoreSpendingSummaryDTO store = map.get(keyword);
+					store.setTotalAmount(store.getTotalAmount()+amount);
 				}
 			}
 		}
 		
-		visitedStores.addAll(map.values());
+		list.addAll(map.values());
 		// 지출이 큰 순으로 정렬
-		Collections.sort(visitedStores, (store1, store2) -> store2.getTotalAmount() - store1.getTotalAmount());
+		Collections.sort(list, (store1, store2) -> store2.getTotalAmount() - store1.getTotalAmount());
 		
-		return null;
+		StoreSpendingSummaryDTO store = list.get(0);
+		return store.getStoreName(); //키워드
 	}
 }

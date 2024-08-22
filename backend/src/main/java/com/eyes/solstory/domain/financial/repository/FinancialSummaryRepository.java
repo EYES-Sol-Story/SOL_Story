@@ -14,13 +14,13 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 	
 	@Query(value =  "SELECT * FROM (" + 
 					"    SELECT d.category as category, SUM(d.total_amount) as total_amount " +
-		            "    FROM daily_financial_summary d" +
-		            "    WHERE user_no = :userNo AND financial_type = 2" +
-		            "    AND financial_date >= SYSDATE - 30" +
+		            "    FROM daily_financial_summary d " +
+		            "    WHERE user_no = :userNo AND financial_type = 2 " +
+		            "    AND financial_date >= SYSDATE - 30 " +
 		            "    GROUP BY d.category " +
-		            "    ORDER BY SUM(d.total_amount) DESC" + 
+		            "    ORDER BY SUM(d.total_amount) DESC " + 
 		            ") " +
-		            "    WHERE ROWNUM <= 5"
+		            "    WHERE ROWNUM <= 5 "
 		   , nativeQuery = true)
 	List<Object[]> findTopCategoriesByUser(@Param("userNo") int userNo);
 
@@ -65,7 +65,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 	        "                     SELECT category " +
 	        "                     FROM user_top5_spending_category " +
 	        "                   ) " +
-	        "GROUP BY do.category, uag.age_group",
+	        "GROUP BY do.category, uag.age_group ",
 	        nativeQuery = true)
 	List<Object[]> findTopCategoriesWithAvg(@Param("userNo") int userNo);
 	
@@ -100,7 +100,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 		            "        AND b.financial_date >= SYSDATE - 60 " +
 		            "        AND b.financial_date < SYSDATE - 30 " +
 		            "        AND b.category IN (SELECT a.category " +
-		            "                           FROM recent_top10_spending_category a"+
+		            "                           FROM recent_top10_spending_category a "+
 		            "							) " +
 		            "      GROUP BY b.category"+
 		            "	   ) n " +
@@ -111,33 +111,33 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 	
 	
 	@Query(value = "SELECT d.category as category, SUM(d.total_amount) as total_amount " +
-		           "FROM daily_financial_summary d" +
-		           "WHERE user_no = :userNo AND financial_type = 2" +
-		           "AND financial_date >= SYSDATE - 7" +
+		           "FROM daily_financial_summary d " +
+		           "WHERE user_no = :userNo AND financial_type = 2 " +
+		           "AND financial_date >= SYSDATE - 7 " +
 		           "GROUP BY d.category " +
 		           "ORDER BY SUM(d.total_amount) DESC" 
             , nativeQuery = true)
 	List<Object[]> getLast7DaysSpending(@Param("userNo") int userNo);
 	
-	@Query(value = "SELECT u.user_key, a.account_no, dr.category"
-				 + "FROM users u, user_accounts a, ("
-				 + "                                SELECT do.user_no, do.category"
+	@Query(value = "SELECT u.user_key, a.account_no, dr.category "
+				 + "FROM users u, user_accounts a, ( "
+				 + "                                SELECT do.user_no, do.category "
 				 + "                                FROM ("
-				 + "                                        SELECT d.user_no as user_no"
-				 + "                                                ,d.category as category"
-				 + "                                        FROM daily_financial_summary d"
+				 + "                                        SELECT d.user_no as user_no "
+				 + "                                                ,d.category as category "
+				 + "                                        FROM daily_financial_summary d "
 				 + "                                        WHERE user_no = :userNo "
-				 + "                                        AND financial_type = 2"
-				 + "                                        AND financial_date >= SYSDATE - 7"
-				 + "                                        GROUP BY d.user_no, d.category"
-				 + "                                        ORDER BY SUM(d.total_amount) DESC"
-				 + "                                    ) do"
-				 + "                                WHERE ROWNUM = 1"
-				 + "                                ) dr"
-				 + "WHERE u.user_no = dr.user_no"
-				 + "AND   u.user_no = a.user_no"
-				 + "AND   a.is_active = 1"
-				 + "AND   a.account_type = 2"
+				 + "                                        AND financial_type = 2 "
+				 + "                                        AND financial_date >= SYSDATE - 7 "
+				 + "                                        GROUP BY d.user_no, d.category "
+				 + "                                        ORDER BY SUM(d.total_amount) DESC "
+				 + "                                    ) do "
+				 + "                                WHERE ROWNUM = 1 "
+				 + "                                ) dr "
+				 + "WHERE u.user_no = dr.user_no "
+				 + "AND   u.user_no = a.user_no  "
+				 + "AND   a.is_active = 1 "
+				 + "AND   a.account_type = 2 "
 			, nativeQuery = true)
 	Object[] getUserMostSpendingCategory(@Param("userNo") int userNo);
 	
@@ -145,38 +145,38 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 	@Query(value = "WITH "
 				+ "recent_spending_category AS "
 				+ "("
-				+ "    SELECT user_no, category, SUM(total_amount) AS total_amount"
-				+ "    FROM daily_financial_summary"
-				+ "    WHERE financial_type = 2"
-				+ "      AND financial_date >= SYSDATE - 30"
-				+ "    GROUP BY user_no, category"
+				+ "    SELECT user_no, category, SUM(total_amount) AS total_amount "
+				+ "    FROM daily_financial_summary "
+				+ "    WHERE financial_type = 2 "
+				+ "      AND financial_date >= SYSDATE - 30 "
+				+ "    GROUP BY user_no, category "
 				+ "),"
-				+ "before_spending_category AS"
+				+ "before_spending_category AS "
 				+ "("
-				+ "    SELECT user_no, category, SUM(total_amount) AS total_amount"
-				+ "    FROM daily_financial_summary"
-				+ "    WHERE financial_type = 2"
-				+ "      AND financial_date >= SYSDATE - 60"
-				+ "      AND financial_date < SYSDATE - 30"
-				+ "    GROUP BY user_no, category"
+				+ "    SELECT user_no, category, SUM(total_amount) AS total_amount "
+				+ "    FROM daily_financial_summary "
+				+ "    WHERE financial_type = 2 "
+				+ "      AND financial_date >= SYSDATE - 60 "
+				+ "      AND financial_date < SYSDATE - 30 "
+				+ "    GROUP BY user_no, category "
 				+ ")"
 				+ ""
-				+ "SELECT u.user_key, a.account_no, t.category"
+				+ "SELECT u.user_key, a.account_no, t.category "
 				+ "FROM  "
 				+ "("
-				+ "    SELECT r.user_no, r.category,"
-				+ "           CASE WHEN b.total_amount = 0 THEN 999"
+				+ "    SELECT r.user_no, r.category, "
+				+ "           CASE WHEN NVL(b.total_amount, 0) = 0 THEN 999 "
 				+ "                ELSE (r.total_amount - b.total_amount) * 100 / b.total_amount "
-				+ "           END AS growth_rate"
-				+ "    FROM recent_spending_category r"
-				+ "    JOIN before_spending_category b ON r.user_no = b.user_no AND r.category = b.category"
-				+ "    ORDER BY growth_rate DESC"
-				+ ") t"
-				+ "JOIN user_accounts a ON t.user_no = a.user_no"
-				+ "JOIN users u ON t.user_no = u.user_no"
-				+ "WHERE a.is_active = 1"
-				+ "  AND a.account_type = 2"
-				+ "  AND ROWNUM = 1"
+				+ "           END AS growth_rate "
+				+ "    FROM recent_spending_category r "
+				+ "    JOIN before_spending_category b ON r.user_no = b.user_no AND r.category = b.category "
+				+ "    ORDER BY growth_rate DESC "
+				+ ") t "
+				+ "JOIN user_accounts a ON t.user_no = a.user_no "
+				+ "JOIN users u ON t.user_no = u.user_no "
+				+ "WHERE a.is_active = 1 "
+				+ "  AND a.account_type = 2 "
+				+ "  AND ROWNUM = 1 "
 			, nativeQuery = true)
 	Object[] getCategoryWithHighestSpendingGrowth(@Param("userNo") int userNo);
 }

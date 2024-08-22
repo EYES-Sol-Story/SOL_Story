@@ -62,16 +62,6 @@ public class FinancialSummaryAnalyzer {
     }
     
     /**
-     * 카테고리별 지출 내역 요약 (잠금)
-     * @param category
-     * @param userNo
-     * @return
-     */
-    public List<CategorySpendingSummaryDTO> getCategoryDetails(String category, int userNo) {
-    	return null;
-    }
-    
-    /**
      * 최근 7일간 가장 지출이 많은 카테고리의 한달간 지출 내역 요약
      * @param userNo
      * @return

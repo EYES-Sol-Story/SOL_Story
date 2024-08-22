@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +19,7 @@ import com.eyes.solstory.domain.financial.service.FinancialSummaryProcessor;
 
 
 @RestController
-@RequestMapping("/api/financial/summary")
+@RequestMapping("/api/financial")
 public class FinancialSummaryController {
 
     @Autowired
@@ -110,16 +109,5 @@ public class FinancialSummaryController {
     	String keyword = summaryAnalyzer.getKeywordWithHighestSpendingGrowth(userNo);
     	return ResponseEntity.ok(keyword);
     }
-
     
-    /**
-     * 특정 카테고리 (그냥 써둠)
-     * @param category
-     * @param userNo
-     * @return
-     */
-    @GetMapping("/category-details/{category}")
-    public ResponseEntity<String> getCategoryDetails(@PathVariable String category, @RequestParam("userNo") int userNo){
-    	return null;
-    }
 }
