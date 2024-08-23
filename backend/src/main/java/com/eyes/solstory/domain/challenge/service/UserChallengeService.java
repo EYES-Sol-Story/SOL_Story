@@ -15,7 +15,7 @@ public class UserChallengeService {
     private UserChallengeRepository userChallengeRepository;
 
     public UserChallenge getUserChallengesStatus(int userNo) {
-        UserChallenge userChallenge = userChallengeRepository.findByUserNo(userNo);
+        UserChallenge userChallenge = userChallengeRepository.findByUser_UserNo(userNo);
         if(userChallenge == null) {
             throw new UserChallengeNotFoundException("해당하는 챌린지가 없습니다.");
         }

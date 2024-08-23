@@ -7,17 +7,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.eyes.solstory.domain.financial.dto.StoreSpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.dto.TransactionDTO;
 import com.eyes.solstory.util.TransactionCategoryClassifier;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class SpendingSummaryProcessor {
 	
-	@Autowired
 	private DemandDepositCollector demandDepositCollector;
 	
 	/**

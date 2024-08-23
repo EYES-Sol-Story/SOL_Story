@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.eyes.solstory.domain.financial.dto.CategorySpendingAvgDTO;
+import com.eyes.solstory.domain.financial.dto.FindCategorySpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.entity.DailyFinancialSummary;
 
 @Repository
@@ -22,7 +24,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 		            ") " +
 		            "    WHERE ROWNUM <= 5 "
 		   , nativeQuery = true)
-	List<Object[]> findTop5Categories(@Param("userNo") int userNo);
+	List<FindCategorySpendingSummaryDTO> findTop5Categories(@Param("userNo") int userNo);
 
 	// 최근 한달 지출 상위 5개 카테고리의 동일 연령대 평균 지출 금액
 	@Query(value = "WITH " +
@@ -67,7 +69,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 	        "                   ) " +
 	        "GROUP BY do.category, uag.age_group ",
 	        nativeQuery = true)
-	List<Object[]> findTop5CategoriesWithAvg(@Param("userNo") int userNo);
+	List<CategorySpendingAvgDTO> findTop5CategoriesWithAvg(@Param("userNo") int userNo);
 	
 	
 	// 최근 한달 소비 상위 10개 카테고리의 전월 대비 소비 트렌드 (증감 추이 - 증감률)
@@ -257,7 +259,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 				+ "                END "
 				+ "          ) AS spending_total_before "
 				+ "    FROM daily_financial_summary "
-				+ "    WHERE user_no = :user_no "
+				+ "    WHERE user_no = :userNo "
 				+ ") r "
 			, nativeQuery = true)
 	int deriveFinancialScore(@Param("userNo") int userNo);

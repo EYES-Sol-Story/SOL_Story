@@ -6,31 +6,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.eyes.solstory.domain.financial.dto.ActiveAccountDTO;
+import com.eyes.solstory.domain.financial.dto.CategorySpendingAvgDTO;
 import com.eyes.solstory.domain.financial.dto.CategorySpendingSummaryDTO;
+import com.eyes.solstory.domain.financial.dto.FindCategorySpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.dto.StoreSpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.repository.FinancialSummaryRepository;
 import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
 
+import lombok.AllArgsConstructor;
+
 /**
  * 금융 정보 분석
  */
+@SuppressWarnings("unused")
 @Service
+@AllArgsConstructor
 public class FinancialSummaryAnalyzer {
 	
-	@Autowired
 	private SpendingSummaryProcessor spendingProcessor; 
-	
-	@Autowired
 	private SavingsCollector savingsCollector;
-	
-	@Autowired
     private FinancialSummaryRepository summaryRepository;
-	
-	@Autowired
 	private UserAccountRepository accountRepository;
 
 	/**
@@ -38,8 +36,8 @@ public class FinancialSummaryAnalyzer {
 	 * @param userNo
 	 * @return
 	 */
-    public List<CategorySpendingSummaryDTO> getTop5Categories(int userNo) {
-    	return convertToDTO1(summaryRepository.findTop5Categories(userNo));
+    public List<FindCategorySpendingSummaryDTO> getTop5Categories(int userNo) {
+    	return summaryRepository.findTop5Categories(userNo);
     }
     
     /**
@@ -47,8 +45,13 @@ public class FinancialSummaryAnalyzer {
      * @param userNo
      * @return
      */
-    public Map<String, CategorySpendingSummaryDTO> getTop5CategoriesWithAvg(int userNo) {
-        return convertToDTO2(summaryRepository.findTop5CategoriesWithAvg(userNo));
+    public Map<String, CategorySpendingAvgDTO> getTop5CategoriesWithAvg(int userNo) {
+    	List<CategorySpendingAvgDTO> list = summaryRepository.findTop5CategoriesWithAvg(userNo);
+    	Map<String, CategorySpendingAvgDTO> map = new HashMap<>();
+    	for(CategorySpendingAvgDTO others : list) {
+    		map.put(others.getCategory(), others);
+    	}
+        return map;
     }
     
     /**
@@ -83,7 +86,7 @@ public class FinancialSummaryAnalyzer {
     }
     
     
-    /**
+    /** 미사용
      * 최근 한달, 전월 대비 소비 증가율이 가장 높은 카테고리 중 가장 지출이 높은 keyword 반환
      * @param userNo
      * @return

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -19,28 +18,23 @@ import com.eyes.solstory.domain.financial.repository.FinancialSummaryRepository;
 import com.eyes.solstory.util.OpenApiUtil;
 import com.eyes.solstory.util.TransactionCategoryClassifier;
 
+import lombok.AllArgsConstructor;
+
 /**
  * 금융 정보 생성 및 저장
  */
 @Service
+@AllArgsConstructor
 public class FinancialSummaryProcessor {
 	
 	static final DateTimeFormatter DATE_FORMATTER= DateTimeFormatter.ofPattern("yyyyMMdd");
     static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HHmmss");
     
-    @Autowired
     private UserAccountService userAccountService;
-    @Autowired
     private DemandDepositCollector demandDepositCollector;
-    @Autowired
     private SavingsCollector savingsCollector;
-    @Autowired
     private FinancialSummaryRepository summaryRepository;
     
-    public FinancialSummaryProcessor(FinancialSummaryRepository summaryRepository) {
-        this.summaryRepository = summaryRepository;
-    }
-	
 	/**
 	 * 자정마다 모든 활성화 된 계좌의 전날 지출/수익/저축 내역을 받아 summary
 	 * 시스템 시간 고려해서 30초에 실행 

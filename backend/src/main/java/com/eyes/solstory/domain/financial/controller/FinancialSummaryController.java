@@ -4,7 +4,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,18 +12,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eyes.solstory.domain.financial.dto.CategorySpendingSummaryDTO;
+import com.eyes.solstory.domain.financial.dto.FindCategorySpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.dto.StoreSpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.service.FinancialSummaryAnalyzer;
 import com.eyes.solstory.domain.financial.service.FinancialSummaryProcessor;
 
+import lombok.AllArgsConstructor;
+
 
 @RestController
 @RequestMapping("/api/financial")
+@AllArgsConstructor
 public class FinancialSummaryController {
 
-    @Autowired
     private FinancialSummaryProcessor summaryProcessor;
-    @Autowired
     private FinancialSummaryAnalyzer summaryAnalyzer;
 
     /**
@@ -48,7 +49,7 @@ public class FinancialSummaryController {
      * @return
      */
     @GetMapping("/top5-categories-amount")
-    public ResponseEntity<List<CategorySpendingSummaryDTO>> getTop5Categories(@RequestParam("userNo") int userNo) {
+    public ResponseEntity<List<FindCategorySpendingSummaryDTO>> getTop5Categories(@RequestParam("userNo") int userNo) {
         return ResponseEntity.ok(summaryAnalyzer.getTop5Categories(userNo));
     }
     

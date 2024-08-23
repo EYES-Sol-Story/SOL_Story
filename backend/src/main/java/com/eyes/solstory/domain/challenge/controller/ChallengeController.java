@@ -1,5 +1,14 @@
 package com.eyes.solstory.domain.challenge.controller;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.eyes.solstory.domain.challenge.entity.Challenge;
 import com.eyes.solstory.domain.challenge.entity.UserChallenge;
 import com.eyes.solstory.domain.challenge.service.ChallengeService;
@@ -7,16 +16,8 @@ import com.eyes.solstory.domain.challenge.service.UserChallengeService;
 import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
 import com.eyes.solstory.global.exception.UserNotFoundException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/challenge")
