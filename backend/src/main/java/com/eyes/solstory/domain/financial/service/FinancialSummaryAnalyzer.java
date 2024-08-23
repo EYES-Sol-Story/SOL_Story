@@ -96,7 +96,15 @@ public class FinancialSummaryAnalyzer {
     	return spendingProcessor.getKeywordWithCategoryForMonth(resArr);
     }
     
-    
+    /**
+     * 최근 한달, 전월 대비 소비 증가율이 가장 높은 카테고리
+     * @param userNo
+     * @return
+     * @throws URISyntaxException
+     */
+    public String getCategoryWithHighestSpendingGrowth(int userNo) throws URISyntaxException {
+    	return  summaryRepository.findTopCategoryByUserNo(userNo);
+    }
     /**
      * 최근 한달 지출 총액 > DB에서 합산으로 가져옴
      * @param userNo

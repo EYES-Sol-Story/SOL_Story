@@ -105,6 +105,17 @@ public class FinancialSummaryController {
     }
     
     /**
+     * 최근 한달, 전월 대비 소비 증가율이 가장 높은 카테고리
+     * @param userNo
+     * @return
+     * @throws URISyntaxException
+     */
+    @GetMapping("highest-spending-growth-category")
+    public ResponseEntity<String> getCategoryWithHighestSpendingGrowth(@RequestParam("userNo") int userNo) throws URISyntaxException{
+    	return ResponseEntity.ok(summaryAnalyzer.getCategoryWithHighestSpendingGrowth(userNo));
+    }
+    
+    /**
      * 최근 한달 지출 총액
      * @param userNo
      * @return
@@ -114,6 +125,12 @@ public class FinancialSummaryController {
     	return ResponseEntity.ok(summaryAnalyzer.getTotalSpendingForMonth(userNo));
     }
     
+    /**
+     * 저축 계좌 잔액 (총 저축액)
+     * @param userNo
+     * @return
+     * @throws URISyntaxException
+     */
     @GetMapping("/total-savings-amount")
     public ResponseEntity<Integer> getTotalSavingsAmount(@RequestParam("userNo") int userNo) throws URISyntaxException{
     	return ResponseEntity.ok(summaryAnalyzer.getTotalSavingsAmount(userNo));

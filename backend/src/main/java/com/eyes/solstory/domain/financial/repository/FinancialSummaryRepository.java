@@ -180,6 +180,21 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 			, nativeQuery = true)
 	String[] getCategoryWithHighestSpendingGrowth(@Param("userNo") int userNo);
 	
+	@Query(value = "SELECT ot.category"
+				+ " FROM ("
+				+ "         SELECT d.category"
+				+ "         FROM daily_financial_summary d"
+				+ "         WHERE d.user_no = :userNo"
+				+ "         AND   financial_type = 2 --지출"
+				+ "         AND   financial_date >= SYSDATE -30"
+				+ "         GROUP BY d.category"
+				+ "         ORDER BY NVL(SUM(d.total_amount), 0) DESC"
+				+ "      ) ot"
+				+ " WHERE ROWNUM = 1"
+			, nativeQuery = true)
+	String findTopCategoryByUserNo(@Param("userNo") int userNo);
+	
+	
 	@Query(value = "SELECT NVL(SUM(total_amount), 0) AS toal_amount"
 				+ " FROM daily_financial_summary "
 				+ " WHERE financial_date >= SYSDATE - 30 "
