@@ -19,10 +19,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "challenges")
 @SequenceGenerator(
-	    name = "challenge_seq_generator",
-	    sequenceName = "challenge_seq", // 오라클에 생성한 시퀀스 이름
-	    allocationSize = 1  // 시퀀스 값을 하나씩 증가
-	)
+        name = "challenge_seq_generator",
+        sequenceName = "challenge_seq_new", // 새 시퀀스 이름
+        allocationSize = 1
+)
 public class Challenge {
 
 	// 챌린지 일련번호
@@ -31,20 +31,30 @@ public class Challenge {
     @Column(name = "challenge_no", precision = 10)
     private int challengeNo;
 
+    // 챌린지 유형(1:저축 , 2:지출)
+    @Column(name = "challenge_type", nullable = false, precision = 1)
+    private int challengeType;
+
+    @Column(name = "category", nullable = true)
+    private String category;
+
+    //챌린지 기간 (한달: 30, 일주일: 7, 하루: 1)
+    @Column(name = "days", nullable = false)
+    private int days;
+
     // 챌린지 이름
     @Column(name = "challenge_name", nullable = false, length = 255)
     private String challengeName;
 
-    // 챌린지 설명
-    @Column(name = "challenge_description", length = 255)
-    private String challengeDescription;
-
     // 챌린지 과제 완료 시 획득할 포인트(1000point = 1key)
-    @Column(name = "reward_points", nullable = false, precision = 5)
-    private int rewardPoints;
+    @Column(name = "reward_keys", nullable = false, precision = 5)
+    private int rewardKeys;
 
-    // 챌린지 유형(1:저축 , 2:지출)
-    @Column(name = "challenge_type", nullable = false, precision = 1)
-    private int challengeType;
-    
+    public Challenge(int challengeType, String category, int days, String challengeName, int rewardKeys) {
+        this.challengeType = challengeType;
+        this.category = category;
+        this.days = days;
+        this.challengeName = challengeName;
+        this.rewardKeys = rewardKeys;
+    }
 }

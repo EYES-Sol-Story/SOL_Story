@@ -15,6 +15,6 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, String
 	@Query("SELECT a.user.userNo, a.accountNo, a.accountType, u.userKey FROM UserAccount a JOIN a.user u WHERE a.isActive = 1")
     List<ActiveAccountDTO> findActiveAccounts(); //활성화된 계좌번호 조회
 	
-	@Query("SELECT a.accountNo, u.userKey FROM UserAccount a JOIN a.user u WHERE a.userNo = ?1 AND a.isActive = 1 AND a.accountType = 1")
+	@Query("SELECT a.accountNo, u.userKey FROM UserAccount a JOIN a.user u WHERE a.user = ?1 AND a.isActive = 1 AND a.accountType = 1")
     ActiveAccountDTO findActiveSavingsAccounts(int userNo); //활성화된 저축 계좌번호 조회
 }
