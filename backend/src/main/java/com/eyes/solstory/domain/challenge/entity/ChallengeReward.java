@@ -38,8 +38,4 @@ public class ChallengeReward {
     // 사용자가 획득한 총 열쇠 수
     @Column(name = "total_keys", nullable = false, precision = 5)
     private int totalKeys;
-
-    // 열쇠로 변환되지 않은 포인트(1000 포인트 미만)
-    @Column(name = "remaining_points", nullable = false, precision = 3)
-    private int remainingPoints;
 }
