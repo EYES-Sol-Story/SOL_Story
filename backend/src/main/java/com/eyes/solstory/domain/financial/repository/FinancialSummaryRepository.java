@@ -200,10 +200,45 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 				+ " WHERE financial_date >= SYSDATE - 30 "
 				+ " AND user_no = :userNo"
 			, nativeQuery = true)
-	int getTotalSpendingForMonth(@Param("userNo") int userNo);
+	int deriveTotalSpendingForMonth(@Param("userNo") int userNo);
+	
+	@Query(value = "SELECT 50 + (( CASE WHEN r.savings_total_before = 0 THEN 100 "
+				+ "                    ELSE ROUND (100 * (r.savings_total_after - r.savings_total_before) / r.savings_total_before) "
+				+ "               END ) "
+				+ "          +  ( CASE WHEN r.spending_total_before = 0 THEN 100"
+				+ "                    ELSE ROUND (100 * (r.spending_total_after - r.spending_total_before) / r.spending_total_before) "
+				+ "               END ) "
+				+ "             )/4 AS financial_score "
+				+ "FROM( "
+				+ "    SELECT SUM( "
+				+ "                CASE WHEN (financial_type = 1 AND financial_date >= SYSDATE - 30) THEN NVL(total_amount, 0) "
+				+ "                     ELSE 0 "
+				+ "                END "
+				+ "          ) AS savings_total_after "
+				+ "        , SUM( "
+				+ "                CASE WHEN (financial_type = 1 AND financial_date >= SYSDATE - 60 AND financial_date < SYSDATE - 30) THEN NVL(total_amount, 0) "
+				+ "                     ELSE 0 "
+				+ "                END "
+				+ "          ) AS savings_total_before "
+				+ "        , SUM( "
+				+ "                CASE WHEN (financial_type = 2 AND financial_date >= SYSDATE - 30) THEN NVL(total_amount, 0) "
+				+ "                     ELSE 0 "
+				+ "                END "
+				+ "          ) AS spending_total_after "
+				+ "        , SUM( "
+				+ "                CASE WHEN (financial_type = 2 AND financial_date >= SYSDATE - 60 AND financial_date < SYSDATE - 30) THEN NVL(total_amount, 0) "
+				+ "                     ELSE 0 "
+				+ "                END "
+				+ "          ) AS spending_total_before "
+				+ "    FROM daily_financial_summary "
+				+ "    WHERE user_no = :user_no "
+				+ ") r "
+			, nativeQuery = true)
+	int deriveFinancialScore(@Param("userNo") int userNo);
 	
 	
 	/*
+	 * UserAccount에서
 	@Query(value = "SELECT u.user_key, a.account_no "
 			+ "FROM user_accounts a, users u "
 			+ "WHERE a.user_no = u.user_no "

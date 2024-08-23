@@ -111,7 +111,7 @@ public class FinancialSummaryAnalyzer {
      * @return 최근 한달 지출 총액
      */
     public int getTotalSpendingForMonth(int userNo) {
-    	return summaryRepository.getTotalSpendingForMonth(userNo);
+    	return summaryRepository.deriveTotalSpendingForMonth(userNo);
     }
     
     /**
@@ -124,6 +124,15 @@ public class FinancialSummaryAnalyzer {
     	// 저축 계좌 번호, user_key를 받아옴
     	ActiveAccountDTO userAccount = accountRepository.findActiveSavingsAccounts(userNo);
     	return savingsCollector.fetchSavingsTotal(userAccount);
+    }
+    
+    /**
+     * 금융 점수
+     * @param userNo
+     * @return
+     */
+    public int getFinancialScore(int userNo) {
+    	return summaryRepository.deriveFinancialScore(userNo);
     }
     
     
