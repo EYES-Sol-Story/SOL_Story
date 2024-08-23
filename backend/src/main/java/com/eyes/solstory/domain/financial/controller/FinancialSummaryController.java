@@ -136,4 +136,20 @@ public class FinancialSummaryController {
     	return ResponseEntity.ok(summaryAnalyzer.getTotalSavingsAmount(userNo));
     }
     
+    
+    /**
+     * 사용자 금융 상태 분석 점수
+     * 저축 점수 : 기본 100 + 지난 달 대비 이번 달 저축 증감률 (0 ~ 200)  
+     * 지출 점수 : 기본 100 - 지난 달 대비 이번 달 소비 증감률 (0 ~ 200)
+     * >> 분석 점수 : (저축 + 지출)/4 > 0 ~ 100점까지 (소수점 두자리 수까지 반환)
+     * @param userNo
+     * @return
+     */
+    /*
+    @GetMapping("/financial-score")
+    public ResponseEntity<Double> getFinancialScore(@RequestParam("userNo") int userNo) {
+    	return ResponseEntity.ok(summaryAnalyzer.getFinancialScore(userNo));
+    }
+    */
+    
 }
