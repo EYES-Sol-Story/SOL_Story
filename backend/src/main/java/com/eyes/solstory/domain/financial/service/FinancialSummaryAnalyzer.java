@@ -89,6 +89,16 @@ public class FinancialSummaryAnalyzer {
     }
     
     
+    /**
+     * 최근 한달 지출 총액 > DB에서 합산으로 가져옴
+     * @param userNo
+     * @return 최근 한달 지출 총액
+     */
+    public int getTotalSpendingForMonth(int userNo) {
+    	return summaryRepository.getTotalSpendingForMonth(userNo);
+    }
+    
+    
     
     private List<CategorySpendingSummaryDTO> convertToDTO1(List<Object[]> results) {
     	return results.stream()

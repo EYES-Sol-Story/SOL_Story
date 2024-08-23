@@ -49,8 +49,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/top5-categories")
     public ResponseEntity<List<CategorySpendingSummaryDTO>> getTopCategories(@RequestParam("userNo") int userNo) {
-        List<CategorySpendingSummaryDTO> results = summaryAnalyzer.getTopCategories(userNo);
-        return ResponseEntity.ok(results);
+        return ResponseEntity.ok(summaryAnalyzer.getTopCategories(userNo));
     }
     
     /**
@@ -60,8 +59,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/top5-categories-with-avg")
     public ResponseEntity<Map<String, CategorySpendingSummaryDTO>> getTop5CategoriesWithAvg(@RequestParam("userNo") int userNo) {
-    	Map<String, CategorySpendingSummaryDTO> results = summaryAnalyzer.getTop5CategoriesWithAvg(userNo);
-        return ResponseEntity.ok(results);
+        return ResponseEntity.ok(summaryAnalyzer.getTop5CategoriesWithAvg(userNo));
     }
     
     /**
@@ -71,8 +69,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/spending-trends")
     public ResponseEntity<List<CategorySpendingSummaryDTO>> getSpendingTrends(@RequestParam("userNo") int userNo) {
-        List<CategorySpendingSummaryDTO> results = summaryAnalyzer.getSpendingTrends(userNo);
-        return ResponseEntity.ok(results);
+        return ResponseEntity.ok(summaryAnalyzer.getSpendingTrends(userNo));
     }
     
     /**
@@ -82,8 +79,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/last7-days-spending")
     public ResponseEntity<List<CategorySpendingSummaryDTO>> getLast7DaysSpending(@RequestParam("userNo") int userNo) {
-        List<CategorySpendingSummaryDTO> results = summaryAnalyzer.getLast7DaysSpending(userNo);
-        return ResponseEntity.ok(results);
+        return ResponseEntity.ok(summaryAnalyzer.getLast7DaysSpending(userNo));
     }
     
     /**
@@ -94,8 +90,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/category-details/highest")
     public ResponseEntity<List<StoreSpendingSummaryDTO>> getCategoryDetails(@RequestParam("userNo") int userNo) throws URISyntaxException{
-    	List<StoreSpendingSummaryDTO> results = summaryAnalyzer.getCategoryDetails(userNo);
-    	return ResponseEntity.ok(results);
+    	return ResponseEntity.ok(summaryAnalyzer.getCategoryDetails(userNo));
     }
     
     /**
@@ -106,8 +101,12 @@ public class FinancialSummaryController {
      */
     @GetMapping("/highest-spending-growth-keyword")
     public ResponseEntity<String> getKeywordWithHighestSpendingGrowth(@RequestParam("userNo") int userNo) throws URISyntaxException{
-    	String keyword = summaryAnalyzer.getKeywordWithHighestSpendingGrowth(userNo);
-    	return ResponseEntity.ok(keyword);
+    	return ResponseEntity.ok(summaryAnalyzer.getKeywordWithHighestSpendingGrowth(userNo));
+    }
+    
+    @GetMapping("/total-spengin")
+    public ResponseEntity<Integer> getTotalSpendingForMonth(@RequestParam("userNo") int userNo){
+    	return ResponseEntity.ok(summaryAnalyzer.getTotalSpendingForMonth(userNo));
     }
     
 }

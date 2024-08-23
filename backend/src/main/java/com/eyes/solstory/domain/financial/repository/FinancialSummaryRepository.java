@@ -37,7 +37,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 	        "               WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) + 1 BETWEEN 40 AND 49 THEN '40대' " +
 	        "               ELSE '50대이상' " +
 	        "           END AS age_group " +
-	        "    FROM Users " +
+	        "    FROM users " +
 	        "), " +
 	        "-- 사용자 최근 30일 지출 상위 5개 카테고리 " +
 	        "user_top5_spending_category AS ( " +
@@ -179,6 +179,13 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 				+ "  AND ROWNUM = 1 "
 			, nativeQuery = true)
 	Object[] getCategoryWithHighestSpendingGrowth(@Param("userNo") int userNo);
+	
+	@Query(value = "SELECT NVL(SUM(total_amount), 0) AS toal_amount"
+				+ " FROM daily_financial_summary "
+				+ " WHERE financial_date >= SYSDATE - 30 "
+				+ " AND user_no = :userNo"
+			, nativeQuery = true)
+	int getTotalSpendingForMonth(@Param("userNo") int userNo);
 }
 
 
