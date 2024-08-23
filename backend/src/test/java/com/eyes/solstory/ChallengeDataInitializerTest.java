@@ -21,7 +21,7 @@ public class ChallengeDataInitializerTest {
     @Test
     public void testInitializeChallengeData() {
         // 데이터 초기화 확인
-        List<Challenge> challenges = challengeDataInitializer.getChallenges();
+        List<Challenge> challenges = challengeDataInitializer.getSavingChallenges();
 
         assertNotNull(challenges, "Challenges 리스트는 null이 아니어야 합니다.");
         assertEquals(1, challenges.get(0).getChallengeType(), "첫 번째 챌린지의 타입은 1이어야 합니다.");
