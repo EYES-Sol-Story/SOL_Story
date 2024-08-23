@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.eyes.solstory.domain.financial.dto.ActiveAccountDTO;
 import com.eyes.solstory.domain.financial.dto.CategorySpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.dto.StoreSpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.repository.FinancialSummaryRepository;
+import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
 
 /**
  * 금융 정보 분석
@@ -23,7 +25,13 @@ public class FinancialSummaryAnalyzer {
 	private SpendingSummaryProcessor spendingProcessor; 
 	
 	@Autowired
+	private SavingsCollector savingsCollector;
+	
+	@Autowired
     private FinancialSummaryRepository summaryRepository;
+	
+	@Autowired
+	private UserAccountRepository accountRepository;
 
 	/**
 	 * 최근 한달 지출 상위 5개 카테고리
@@ -69,9 +77,9 @@ public class FinancialSummaryAnalyzer {
      */
     public List<StoreSpendingSummaryDTO> getCategoryDetails(int userNo) throws URISyntaxException {
     	// 최근 7일간 가장 지출이 많은 카테고리와, 입출금 계좌번호, user_key 받아오기
-    	Object[] obj = summaryRepository.getUserMostSpendingCategory(userNo);
+    	String[] arr = summaryRepository.getUserMostSpendingCategory(userNo);
     	// 최근 30일간 지출처별 지출 내역 요약 정보
-    	return spendingProcessor.fetchTransactionDataForMonth(obj);
+    	return spendingProcessor.fetchTransactionDataForMonth(arr);
     }
     
     
@@ -83,9 +91,9 @@ public class FinancialSummaryAnalyzer {
      */
     public String getKeywordWithHighestSpendingGrowth(int userNo) throws URISyntaxException {
     	// 최근 한달, 전월 대비 소비 증가율이 가장 높은 카테고리, 입출금 계좌번호, user_key 받아오기
-    	Object[] obj = summaryRepository.getCategoryWithHighestSpendingGrowth(userNo);
+    	String[] resArr = summaryRepository.getCategoryWithHighestSpendingGrowth(userNo);
     	// 최근 30일간 지출처별 지출 내역 요약 정보
-    	return spendingProcessor.getKeywordWithCategoryForMonth(obj);
+    	return spendingProcessor.getKeywordWithCategoryForMonth(resArr);
     }
     
     
@@ -98,6 +106,17 @@ public class FinancialSummaryAnalyzer {
     	return summaryRepository.getTotalSpendingForMonth(userNo);
     }
     
+    /**
+     * 여태까지 저축 총액 (계좌 잔액으로)
+     * @param userNo
+     * @return
+     * @throws URISyntaxException 
+     */
+    public int getTotalSavingsAmount(int userNo) throws URISyntaxException {
+    	// 저축 계좌 번호, user_key를 받아옴
+    	ActiveAccountDTO userAccount = accountRepository.findActiveSavingsAccounts(userNo);
+    	return savingsCollector.fetchSavingsTotal(userAccount);
+    }
     
     
     private List<CategorySpendingSummaryDTO> convertToDTO1(List<Object[]> results) {

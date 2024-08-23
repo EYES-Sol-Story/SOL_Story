@@ -104,9 +104,19 @@ public class FinancialSummaryController {
     	return ResponseEntity.ok(summaryAnalyzer.getKeywordWithHighestSpendingGrowth(userNo));
     }
     
-    @GetMapping("/total-spengin")
+    /**
+     * 최근 한달 지출 총액
+     * @param userNo
+     * @return
+     */
+    @GetMapping("/total-spending")
     public ResponseEntity<Integer> getTotalSpendingForMonth(@RequestParam("userNo") int userNo){
     	return ResponseEntity.ok(summaryAnalyzer.getTotalSpendingForMonth(userNo));
+    }
+    
+    @GetMapping("/total-savings-amount")
+    public ResponseEntity<Integer> getTotalSavingsAmount(@RequestParam("userNo") int userNo) throws URISyntaxException{
+    	return ResponseEntity.ok(summaryAnalyzer.getTotalSavingsAmount(userNo));
     }
     
 }

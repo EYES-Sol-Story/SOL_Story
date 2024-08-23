@@ -139,4 +139,12 @@ public class OpenApiUtil {
         requestMap.put("orderByType", "ASC");
         return requestMap;
     }
+    
+    
+    public static Map<String, Object> createAccountBalanceRequestData(String accountNo, Map<String, String> headerMap){
+    	Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("Header", headerMap);
+        requestMap.put("accountNo", accountNo);
+        return requestMap;
+    }
 }

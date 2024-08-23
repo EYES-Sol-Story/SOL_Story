@@ -22,14 +22,14 @@ public class SpendingSummaryProcessor {
 	
 	/**
 	 * // 특정 카테고리의 지출처별 가게별 방문 정보 반환
-	 * @param obj obj[0]:user_key, obj[1]:account_no obj[2]:category
+	 * @param arr arr[0]:user_key, arr[1]:account_no arr[2]:category
 	 * @return 
 	 * @throws URISyntaxException
 	 */
-	public List<StoreSpendingSummaryDTO> fetchTransactionDataForMonth(Object[] obj) throws URISyntaxException {
-		// 한달 간의 저축 내역을 받아옴
-		List<TransactionDTO> transactions = demandDepositCollector.fetchTransactionsForMonth(obj);
-		return processSpendingStoreByCategory((String)obj[2], transactions);
+	public List<StoreSpendingSummaryDTO> fetchTransactionDataForMonth(String[] arr) throws URISyntaxException {
+		// 한달 간의 지출 내역을 받아옴
+		List<TransactionDTO> transactions = demandDepositCollector.fetchTransactionsForMonth(arr);
+		return processSpendingStoreByCategory(arr[2], transactions);
 	}
 	
 	/*private String category; // 지출 카테고리
@@ -73,14 +73,14 @@ public class SpendingSummaryProcessor {
 	/**
 	 * 키워드별 소비 정리
 	 * // 특정 카테고리의 가장 지출이 많은 키워드 반환
-	 * @param obj obj[0]:user_key, obj[1]:account_no obj[2]:category
+	 * @param arr arr[0]:user_key, arr[1]:account_no arr[2]:category
 	 * @return 
 	 * @throws URISyntaxException
 	 */
-	public String getKeywordWithCategoryForMonth(Object[] obj) throws URISyntaxException {
+	public String getKeywordWithCategoryForMonth(String[] arr) throws URISyntaxException {
 		// 한달 간의 저축 내역을 받아옴
-		List<TransactionDTO> transactions = demandDepositCollector.fetchTransactionsForMonth(obj);
-		return processSpendingKeywordByCategory((String)obj[2], transactions);
+		List<TransactionDTO> transactions = demandDepositCollector.fetchTransactionsForMonth(arr);
+		return processSpendingKeywordByCategory(arr[2], transactions);
 	}
 	
 	/**

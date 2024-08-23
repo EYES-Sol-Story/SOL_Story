@@ -90,15 +90,15 @@ public class DemandDepositCollector {
     
     /**
 	 * 한달간의 지출 내역 받아오기
-	 * @param obj obj[0]:user_key, obj[1]:account_no obj[2]:category
+	 * @param arr arr[0]:user_key, arr[1]:account_no arr[2]:category
 	 * @throws URISyntaxException
 	 */
-	public List<TransactionDTO> fetchTransactionsForMonth(Object[] obj) throws URISyntaxException  {
+	public List<TransactionDTO> fetchTransactionsForMonth(String[] arr) throws URISyntaxException  {
 		String startDate = LocalDate.now().minusDays(30).format(OpenApiUtil.DATE_FORMATTER); //30일전부터
 		String endDate = LocalDate.now().minusDays(1).format(OpenApiUtil.DATE_FORMATTER); //어제까지
 		
-		Map<String, String> headerMap = OpenApiUtil.createHeaders((String)obj[0], OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST);
-        Map<String, Object> requestMap = OpenApiUtil.createTransactionHistoryRequestDataForMonth((String)obj[1], startDate, endDate, "D", headerMap);
+		Map<String, String> headerMap = OpenApiUtil.createHeaders(arr[0], OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST);
+        Map<String, Object> requestMap = OpenApiUtil.createTransactionHistoryRequestDataForMonth(arr[1], startDate, endDate, "D", headerMap);
 
         ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST), requestMap);
 

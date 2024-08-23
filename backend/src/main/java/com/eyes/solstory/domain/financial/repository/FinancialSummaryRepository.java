@@ -139,7 +139,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 				 + "AND   a.is_active = 1 "
 				 + "AND   a.account_type = 2 "
 			, nativeQuery = true)
-	Object[] getUserMostSpendingCategory(@Param("userNo") int userNo);
+	String[] getUserMostSpendingCategory(@Param("userNo") int userNo);
 	
 	
 	@Query(value = "WITH "
@@ -178,7 +178,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 				+ "  AND a.account_type = 2 "
 				+ "  AND ROWNUM = 1 "
 			, nativeQuery = true)
-	Object[] getCategoryWithHighestSpendingGrowth(@Param("userNo") int userNo);
+	String[] getCategoryWithHighestSpendingGrowth(@Param("userNo") int userNo);
 	
 	@Query(value = "SELECT NVL(SUM(total_amount), 0) AS toal_amount"
 				+ " FROM daily_financial_summary "
@@ -186,6 +186,18 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 				+ " AND user_no = :userNo"
 			, nativeQuery = true)
 	int getTotalSpendingForMonth(@Param("userNo") int userNo);
+	
+	
+	/*
+	@Query(value = "SELECT u.user_key, a.account_no "
+			+ "FROM user_accounts a, users u "
+			+ "WHERE a.user_no = u.user_no "
+			+ "AND u.user_no = :userNo "
+			+ "AND is_active = 1 "
+			+ "AND account_type = 1 -- 저축계좌"
+			, nativeQuery = true)
+	String[] getTotalSavingsAmount(@Param("userNo") int userNo);
+	*/
 }
 
 

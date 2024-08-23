@@ -24,11 +24,11 @@ public class SavingsCollector {
 	private static final Logger logger = LoggerFactory.getLogger(FinancialSummaryProcessor.class);	
 
 	/**
-	 * 해당 계좌의 저축 내역 불러오기
+	 * 해당 계좌의 저축 내역 불러오기 -- 저축 용도로 개설한 입출금 계좌 사용
 	 * 
 	 * @param accountNo 조회할 계좌번호
 	 * @param date 조회할 날짜
-	 * @return 입출금 거래 내역
+	 * @return 입금 총액(저축)
 	 * @throws URISyntaxException
 	 */
 	public int fetchSavings(ActiveAccountDTO userAccount, String date) throws URISyntaxException {
@@ -51,7 +51,7 @@ public class SavingsCollector {
     }
 	
 	 /**
-	 * 응답데이터 parsing 
+	 * 응답데이터 parsing - 저축계좌에 입금한 총액 구해서 반환
 	 * @param listNode
 	 * @return
 	 */
@@ -63,6 +63,32 @@ public class SavingsCollector {
             }
         }
         return savings;
+    }
+    
+    
+    /**
+     * 저축 계좌 잔액 반환
+     * 저축 용도로만 사용되기 때문에 잔액 = 그동안 저축한 총액
+     * @param account
+     * @return 
+     * @throws URISyntaxException 
+     */
+    public int fetchSavingsTotal(ActiveAccountDTO userAccount) throws URISyntaxException {
+    	//계좌 잔액 조회
+    	Map<String, String> headerMap = OpenApiUtil.createHeaders(userAccount.getUserKey(), OpenApiUrls.INQUIRE_DEMAND_DEPOSIT_ACCOUNT_BALANCE);
+        Map<String, Object> requestMap = OpenApiUtil.createAccountBalanceRequestData(userAccount.getAccountNo(), headerMap);
+
+        ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_DEMAND_DEPOSIT_ACCOUNT_BALANCE), requestMap);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        
+        try {
+            JsonNode rootNode = objectMapper.readTree(response.getBody());
+            return rootNode.path("REC").path("accountBalance").asInt();
+        } catch (Exception e) {
+        	logger.error("저축 내역 추출 중 오류 발생");
+            throw new RuntimeException("저축 내역 추출 중 오류 발생", e);
+        }
     }
 
 }
