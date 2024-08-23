@@ -46,7 +46,7 @@ public class Challenge {
     @Column(name = "challenge_name", nullable = false, length = 255)
     private String challengeName;
 
-    // 챌린지 과제 완료 시 획득할 포인트(1000point = 1key)
+    // 챌린지 과제 완료 시 획득할 포인트
     @Column(name = "reward_keys", nullable = false, precision = 5)
     private int rewardKeys;
 
