@@ -38,8 +38,8 @@ public class FinancialSummaryAnalyzer {
 	 * @param userNo
 	 * @return
 	 */
-    public List<CategorySpendingSummaryDTO> getTopCategories(int userNo) {
-    	return convertToDTO1(summaryRepository.findTopCategoriesByUser(userNo));
+    public List<CategorySpendingSummaryDTO> getTop5Categories(int userNo) {
+    	return convertToDTO1(summaryRepository.findTop5Categories(userNo));
     }
     
     /**
@@ -48,7 +48,7 @@ public class FinancialSummaryAnalyzer {
      * @return
      */
     public Map<String, CategorySpendingSummaryDTO> getTop5CategoriesWithAvg(int userNo) {
-        return convertToDTO2(summaryRepository.findTopCategoriesWithAvg(userNo));
+        return convertToDTO2(summaryRepository.findTop5CategoriesWithAvg(userNo));
     }
     
     /**
@@ -77,7 +77,7 @@ public class FinancialSummaryAnalyzer {
      */
     public List<StoreSpendingSummaryDTO> getCategoryDetails(int userNo) throws URISyntaxException {
     	// 최근 7일간 가장 지출이 많은 카테고리와, 입출금 계좌번호, user_key 받아오기
-    	String[] arr = summaryRepository.getUserMostSpendingCategory(userNo);
+    	String[] arr = summaryRepository.getMostSpendingCategory(userNo);
     	// 최근 30일간 지출처별 지출 내역 요약 정보
     	return spendingProcessor.fetchTransactionDataForMonth(arr);
     }
@@ -103,7 +103,7 @@ public class FinancialSummaryAnalyzer {
      * @throws URISyntaxException
      */
     public String getCategoryWithHighestSpendingGrowth(int userNo) throws URISyntaxException {
-    	return  summaryRepository.findTopCategoryByUserNo(userNo);
+    	return  summaryRepository.findTopCategory(userNo);
     }
     /**
      * 최근 한달 지출 총액 > DB에서 합산으로 가져옴
@@ -136,6 +136,18 @@ public class FinancialSummaryAnalyzer {
     }
     
     
+    
+    /**
+     * 최근 한달 지출 상위 3개 카테고리
+     * @param userNo
+     * @return
+     */
+    public String[] getTop3Categories(int userNo) {
+    	return summaryRepository.findTop3Categories(userNo);
+    }
+    
+    
+    /////////////////////////////// 컨버터 //////////////////////////////////////
     private List<CategorySpendingSummaryDTO> convertToDTO1(List<Object[]> results) {
     	return results.stream()
     			.map(row -> {

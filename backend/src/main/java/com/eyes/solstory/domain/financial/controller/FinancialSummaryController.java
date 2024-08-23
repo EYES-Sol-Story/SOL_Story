@@ -47,9 +47,9 @@ public class FinancialSummaryController {
      * @param userNo
      * @return
      */
-    @GetMapping("/top5-categories")
-    public ResponseEntity<List<CategorySpendingSummaryDTO>> getTopCategories(@RequestParam("userNo") int userNo) {
-        return ResponseEntity.ok(summaryAnalyzer.getTopCategories(userNo));
+    @GetMapping("/top5-categories-amount")
+    public ResponseEntity<List<CategorySpendingSummaryDTO>> getTop5Categories(@RequestParam("userNo") int userNo) {
+        return ResponseEntity.ok(summaryAnalyzer.getTop5Categories(userNo));
     }
     
     /**
@@ -88,7 +88,7 @@ public class FinancialSummaryController {
      * @return
      * @throws URISyntaxException
      */
-    @GetMapping("/category-details/highest")
+    @GetMapping("/highest-spending-details")
     public ResponseEntity<List<StoreSpendingSummaryDTO>> getCategoryDetails(@RequestParam("userNo") int userNo) throws URISyntaxException{
     	return ResponseEntity.ok(summaryAnalyzer.getCategoryDetails(userNo));
     }
@@ -149,6 +149,17 @@ public class FinancialSummaryController {
     @GetMapping("/financial-score")
     public ResponseEntity<Integer> getFinancialScore(@RequestParam("userNo") int userNo) {
     	return ResponseEntity.ok(summaryAnalyzer.getFinancialScore(userNo));
+    }
+    
+    
+    /**
+     * 최근 한달 지출 상위 3개 카테고리
+     * @param userNo
+     * @return
+     */
+    @GetMapping("/top3-categories")
+    public ResponseEntity<String[]> ggetTop3Categories(@RequestParam("userNo") int userNo){
+    	return ResponseEntity.ok(summaryAnalyzer.getTop3Categories(userNo));
     }
     
 }

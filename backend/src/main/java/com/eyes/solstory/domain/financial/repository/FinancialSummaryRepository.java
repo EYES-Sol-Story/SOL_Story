@@ -22,20 +22,20 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 		            ") " +
 		            "    WHERE ROWNUM <= 5 "
 		   , nativeQuery = true)
-	List<Object[]> findTopCategoriesByUser(@Param("userNo") int userNo);
+	List<Object[]> findTop5Categories(@Param("userNo") int userNo);
 
-	
+	// 최근 한달 지출 상위 5개 카테고리의 동일 연령대 평균 지출 금액
 	@Query(value = "WITH " +
 	        "-- 전체 사용자 연령대 " +
 	        "user_age_group AS ( " +
 	        "    SELECT user_no, " +
 	        "           CASE " +
-	        "               WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) + 1 BETWEEN 0 AND 9 THEN '0대' " +
+	        "               WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) + 1 BETWEEN 0 AND 9 THEN '10대 미만' " +
 	        "               WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) + 1 BETWEEN 10 AND 19 THEN '10대' " +
 	        "               WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) + 1 BETWEEN 20 AND 29 THEN '20대' " +
 	        "               WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) + 1 BETWEEN 30 AND 39 THEN '30대' " +
 	        "               WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth) + 1 BETWEEN 40 AND 49 THEN '40대' " +
-	        "               ELSE '50대이상' " +
+	        "               ELSE '50대 이상' " +
 	        "           END AS age_group " +
 	        "    FROM users " +
 	        "), " +
@@ -67,8 +67,10 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 	        "                   ) " +
 	        "GROUP BY do.category, uag.age_group ",
 	        nativeQuery = true)
-	List<Object[]> findTopCategoriesWithAvg(@Param("userNo") int userNo);
+	List<Object[]> findTop5CategoriesWithAvg(@Param("userNo") int userNo);
 	
+	
+	// 최근 한달 소비 상위 10개 카테고리의 전월 대비 소비 트렌드 (증감 추이 - 증감률)
 	@Query(value = "WITH recent_top10_spending_category AS (" +
 					"SELECT *" +
 					"FROM (" +
@@ -110,6 +112,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 	List<Object[]> getSpendingTrends(@Param("userNo") int userNo);
 	
 	
+	// 최근 7일 카테고리별 소비금액
 	@Query(value = "SELECT d.category as category, SUM(d.total_amount) as total_amount " +
 		           "FROM daily_financial_summary d " +
 		           "WHERE user_no = :userNo AND financial_type = 2 " +
@@ -119,6 +122,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
             , nativeQuery = true)
 	List<Object[]> getLast7DaysSpending(@Param("userNo") int userNo);
 	
+	// 최근 7일 소비 카테고리
 	@Query(value = "SELECT u.user_key, a.account_no, dr.category "
 				 + "FROM users u, user_accounts a, ( "
 				 + "                                SELECT do.user_no, do.category "
@@ -139,9 +143,10 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 				 + "AND   a.is_active = 1 "
 				 + "AND   a.account_type = 2 "
 			, nativeQuery = true)
-	String[] getUserMostSpendingCategory(@Param("userNo") int userNo);
+	String[] getMostSpendingCategory(@Param("userNo") int userNo);
 	
 	
+	//최근 한달 전월 대비 지출 증감이 가장 큰 카테고리
 	@Query(value = "WITH "
 				+ "recent_spending_category AS "
 				+ "("
@@ -180,6 +185,8 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 			, nativeQuery = true)
 	String[] getCategoryWithHighestSpendingGrowth(@Param("userNo") int userNo);
 	
+	
+	// 최근 한달 지출이 가장 많은 카테고리 (1위)
 	@Query(value = "SELECT ot.category"
 				+ " FROM ("
 				+ "         SELECT d.category"
@@ -192,9 +199,26 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 				+ "      ) ot"
 				+ " WHERE ROWNUM = 1"
 			, nativeQuery = true)
-	String findTopCategoryByUserNo(@Param("userNo") int userNo);
+	String findTopCategory(@Param("userNo") int userNo);
+	
+	// 최근 한달 지출 상위 3개 카테고리 
+		@Query(value = "SELECT ot.category"
+					+ " FROM ("
+					+ "         SELECT d.category"
+					+ "         FROM daily_financial_summary d"
+					+ "         WHERE d.user_no = :userNo"
+					+ "         AND   financial_type = 2 --지출"
+					+ "         AND   financial_date >= SYSDATE -30"
+					+ "         GROUP BY d.category"
+					+ "         ORDER BY NVL(SUM(d.total_amount), 0) DESC"
+					+ "      ) ot"
+					+ " WHERE ROWNUM = 1"
+				, nativeQuery = true)
+		String[] findTop3Categories(@Param("userNo") int userNo);
 	
 	
+	
+	// 최근 한달 총 소비 금액
 	@Query(value = "SELECT NVL(SUM(total_amount), 0) AS toal_amount"
 				+ " FROM daily_financial_summary "
 				+ " WHERE financial_date >= SYSDATE - 30 "
@@ -202,6 +226,8 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 			, nativeQuery = true)
 	int deriveTotalSpendingForMonth(@Param("userNo") int userNo);
 	
+	
+	// 금융점수
 	@Query(value = "SELECT 50 + (( CASE WHEN r.savings_total_before = 0 THEN 100 "
 				+ "                    ELSE ROUND (100 * (r.savings_total_after - r.savings_total_before) / r.savings_total_before) "
 				+ "               END ) "
@@ -237,7 +263,8 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 	int deriveFinancialScore(@Param("userNo") int userNo);
 	
 	
-	/*
+	
+	/* for 지출 총액
 	 * UserAccount에서
 	@Query(value = "SELECT u.user_key, a.account_no "
 			+ "FROM user_accounts a, users u "
