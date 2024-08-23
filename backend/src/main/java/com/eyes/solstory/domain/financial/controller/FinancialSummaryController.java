@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eyes.solstory.domain.financial.dto.CategorySpendingAvgDTO;
 import com.eyes.solstory.domain.financial.dto.CategorySpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.dto.FindCategorySpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.dto.StoreSpendingSummaryDTO;
@@ -59,7 +60,7 @@ public class FinancialSummaryController {
      * @return
      */
     @GetMapping("/top5-categories-with-avg")
-    public ResponseEntity<Map<String, CategorySpendingSummaryDTO>> getTop5CategoriesWithAvg(@RequestParam("userNo") int userNo) {
+    public ResponseEntity<Map<String, CategorySpendingAvgDTO>> getTop5CategoriesWithAvg(@RequestParam("userNo") int userNo) {
         return ResponseEntity.ok(summaryAnalyzer.getTop5CategoriesWithAvg(userNo));
     }
     
