@@ -47,7 +47,7 @@ public class UserChallengeServiceTest {
                 .completeDate(null)
                 .build();
 
-        when(userChallengeRepository.findByUserNo(userNo)).thenReturn(userChallenge);
+        when(userChallengeRepository.findByUser_UserNo(userNo)).thenReturn(userChallenge);
 
         // when
         LocalDate today = LocalDate.of(2024, 8, 25); // 테스트 시점의 날짜 설정
@@ -63,7 +63,7 @@ public class UserChallengeServiceTest {
     void noChallenge() {
         // given
         int userNo = 1;
-        when(userChallengeRepository.findByUserNo(userNo)).thenReturn(null);
+        when(userChallengeRepository.findByUser_UserNo(userNo)).thenReturn(null);
 
         // when
         LocalDate today = LocalDate.of(2024, 8, 25);
@@ -89,7 +89,7 @@ public class UserChallengeServiceTest {
                 .completeDate(null)
                 .build();
 
-        when(userChallengeRepository.findByUserNo(userNo)).thenReturn(userChallenge);
+        when(userChallengeRepository.findByUser_UserNo(userNo)).thenReturn(userChallenge);
 
         // when
         UserChallenge result = userChallengeService.getUserChallengesStatus(userNo);

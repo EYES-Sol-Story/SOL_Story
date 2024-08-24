@@ -1,4 +1,4 @@
-package com.eyes.solstory.global.bank.dto;
+package com.eyes.solstory.domain.user.dto;
 
 import lombok.Getter;
 import lombok.Setter;

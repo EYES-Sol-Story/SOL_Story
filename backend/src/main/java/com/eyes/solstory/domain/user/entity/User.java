@@ -68,7 +68,8 @@ public class User {
     // 캐릭터 이미지 파일 저장된 경로
     @Column(name = "character_img_path", length = 200)
     private String characterImgPath;
-    
-    // 
 
+    public void updateUserKey(String userKey) {
+        this.userKey = userKey;
+    }
 }
