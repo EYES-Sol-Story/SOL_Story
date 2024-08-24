@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.eyes.solstory.constants.OpenApiUrls;
 import com.eyes.solstory.domain.financial.dto.ActiveAccountDTO;
 import com.eyes.solstory.domain.financial.dto.TransactionDTO;
+import com.eyes.solstory.domain.financial.dto.UserCategoryDTO;
 import com.eyes.solstory.util.OpenApiUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class DemandDepositCollector {
 	
-	private static final Logger logger = LoggerFactory.getLogger(FinancialSummaryProcessor.class);	
+	private static final Logger logger = LoggerFactory.getLogger(DemandDepositCollector.class);	
 	
 	/**
 	 * 해당 계좌의 입출금 거래 내역 불러오기
@@ -90,15 +91,15 @@ public class DemandDepositCollector {
     
     /**
 	 * 한달간의 지출 내역 받아오기
-	 * @param arr arr[0]:user_key, arr[1]:account_no arr[2]:category
+	 * @param categoryDTO
 	 * @throws URISyntaxException
 	 */
-	public List<TransactionDTO> fetchTransactionsForMonth(String[] arr) throws URISyntaxException  {
+	public List<TransactionDTO> fetchTransactionsForMonth(UserCategoryDTO categoryDTO) throws URISyntaxException  {
 		String startDate = LocalDate.now().minusDays(30).format(OpenApiUtil.DATE_FORMATTER); //30일전부터
 		String endDate = LocalDate.now().minusDays(1).format(OpenApiUtil.DATE_FORMATTER); //어제까지
 		
-		Map<String, String> headerMap = OpenApiUtil.createHeaders(arr[0], OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST);
-        Map<String, Object> requestMap = OpenApiUtil.createTransactionHistoryRequestDataForMonth(arr[1], startDate, endDate, "D", headerMap);
+		Map<String, String> headerMap = OpenApiUtil.createHeaders(categoryDTO.getUserKey(), OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST);
+        Map<String, Object> requestMap = OpenApiUtil.createTransactionHistoryRequestDataForMonth(categoryDTO.getAccountNo(), startDate, endDate, "D", headerMap);
 
         ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST), requestMap);
 

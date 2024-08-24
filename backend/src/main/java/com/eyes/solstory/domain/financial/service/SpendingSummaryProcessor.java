@@ -9,8 +9,9 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.eyes.solstory.domain.financial.dto.StoreSpendingSummaryDTO;
+import com.eyes.solstory.domain.financial.dto.StoreSpendingSummary;
 import com.eyes.solstory.domain.financial.dto.TransactionDTO;
+import com.eyes.solstory.domain.financial.dto.UserCategoryDTO;
 import com.eyes.solstory.util.TransactionCategoryClassifier;
 
 import lombok.AllArgsConstructor;
@@ -23,14 +24,14 @@ public class SpendingSummaryProcessor {
 	
 	/**
 	 * // 특정 카테고리의 지출처별 가게별 방문 정보 반환
-	 * @param arr arr[0]:user_key, arr[1]:account_no arr[2]:category
+	 * @param categoryDTO
 	 * @return 
 	 * @throws URISyntaxException
 	 */
-	public List<StoreSpendingSummaryDTO> fetchTransactionDataForMonth(String[] arr) throws URISyntaxException {
+	public List<StoreSpendingSummary> fetchTransactionDataForMonth(UserCategoryDTO categoryDTO) throws URISyntaxException {
 		// 한달 간의 지출 내역을 받아옴
-		List<TransactionDTO> transactions = demandDepositCollector.fetchTransactionsForMonth(arr);
-		return processSpendingStoreByCategory(arr[2], transactions);
+		List<TransactionDTO> transactions = demandDepositCollector.fetchTransactionsForMonth(categoryDTO);
+		return processSpendingStoreByCategory(categoryDTO.getCategory(), transactions);
 	}
 	
 	/*private String category; // 지출 카테고리
@@ -45,19 +46,19 @@ public class SpendingSummaryProcessor {
 	 * @param transactions
 	 * @return
 	 */
-	private List<StoreSpendingSummaryDTO> processSpendingStoreByCategory(String category, List<TransactionDTO> transactions) {
-		List<StoreSpendingSummaryDTO> visitedStores = new ArrayList<>();
+	private List<StoreSpendingSummary> processSpendingStoreByCategory(String category, List<TransactionDTO> transactions) {
+		List<StoreSpendingSummary> visitedStores = new ArrayList<>();
 		// 지출처, 지출정보
-		Map<String, StoreSpendingSummaryDTO> map = new HashMap<>();
+		Map<String, StoreSpendingSummary> map = new HashMap<>();
 		for(TransactionDTO transaction : transactions) {
 			// 이 지출 내역이 카테고리에 포함 돼
 			String storeName = transaction.getTransactionSummary();
 			int amount = transaction.getTransactionBalance();
 			if(TransactionCategoryClassifier.isCategory(storeName, category)) {
 				if(!map.containsKey(storeName)) {
-					map.put(storeName, new StoreSpendingSummaryDTO(storeName, 1, amount));
+					map.put(storeName, new StoreSpendingSummary(storeName, 1, amount));
 				}else {
-					StoreSpendingSummaryDTO store = map.get(storeName);
+					StoreSpendingSummary store = map.get(storeName);
 					store.setVisitCount(store.getVisitCount()+1);
 					store.setTotalAmount(store.getTotalAmount() + amount);
 				}
@@ -74,14 +75,14 @@ public class SpendingSummaryProcessor {
 	/**
 	 * 키워드별 소비 정리
 	 * // 특정 카테고리의 가장 지출이 많은 키워드 반환
-	 * @param arr arr[0]:user_key, arr[1]:account_no arr[2]:category
+	 * @param categoryDTO
 	 * @return 
 	 * @throws URISyntaxException
 	 */
-	public String getKeywordWithCategoryForMonth(String[] arr) throws URISyntaxException {
+	public String getKeywordWithCategoryForMonth(UserCategoryDTO categoryDTO) throws URISyntaxException {
 		// 한달 간의 저축 내역을 받아옴
-		List<TransactionDTO> transactions = demandDepositCollector.fetchTransactionsForMonth(arr);
-		return processSpendingKeywordByCategory(arr[2], transactions);
+		List<TransactionDTO> transactions = demandDepositCollector.fetchTransactionsForMonth(categoryDTO);
+		return processSpendingKeywordByCategory(categoryDTO.getCategory(), transactions);
 	}
 	
 	/**
@@ -91,10 +92,11 @@ public class SpendingSummaryProcessor {
 	 * @return
 	 */
 	private String processSpendingKeywordByCategory(String category, List<TransactionDTO> transactions) {
-		List<StoreSpendingSummaryDTO> list = new ArrayList<>();
+		List<StoreSpendingSummary> list = new ArrayList<>();
 		// 지출처, 지출정보
-		Map<String, StoreSpendingSummaryDTO> map = new HashMap<>();
+		Map<String, StoreSpendingSummary> map = new HashMap<>();
 		// 지출처, 지출정보
+		System.out.println(transactions);
 		for(TransactionDTO transaction : transactions) {
 			String storeName = transaction.getTransactionSummary();
 			int amount = transaction.getTransactionBalance();
@@ -102,12 +104,12 @@ public class SpendingSummaryProcessor {
 			// 이 지출 내역이 카테고리에 포함 돼
 			if(keyword != null) {
 				if(!map.containsKey(keyword)) {
-					map.put(keyword, StoreSpendingSummaryDTO.builder()
+					map.put(keyword, StoreSpendingSummary.builder()
 										.storeName(keyword) //키워드로 써먹음
 										.totalAmount(amount)
 										.build()); 
 				}else {
-					StoreSpendingSummaryDTO store = map.get(keyword);
+					StoreSpendingSummary store = map.get(keyword);
 					store.setTotalAmount(store.getTotalAmount()+amount);
 				}
 			}
@@ -116,8 +118,11 @@ public class SpendingSummaryProcessor {
 		list.addAll(map.values());
 		// 지출이 큰 순으로 정렬
 		Collections.sort(list, (store1, store2) -> store2.getTotalAmount() - store1.getTotalAmount());
+		if(list.isEmpty()) {
+			return null;
+		}
 		
-		StoreSpendingSummaryDTO store = list.get(0);
+		StoreSpendingSummary store = list.get(0);
 		return store.getStoreName(); //키워드
 	}
 }

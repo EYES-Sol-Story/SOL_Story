@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.eyes.solstory.constants.OpenApiUrls;
+import com.eyes.solstory.domain.financial.dto.AccountKeyDTO;
 import com.eyes.solstory.domain.financial.dto.ActiveAccountDTO;
 import com.eyes.solstory.util.OpenApiUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class SavingsCollector {
 
-	private static final Logger logger = LoggerFactory.getLogger(FinancialSummaryProcessor.class);	
+	private static final Logger logger = LoggerFactory.getLogger(SavingsCollector.class);	
 
 	/**
 	 * 해당 계좌의 저축 내역 불러오기 -- 저축 용도로 개설한 입출금 계좌 사용
@@ -73,7 +74,7 @@ public class SavingsCollector {
      * @return 
      * @throws URISyntaxException 
      */
-    public int fetchSavingsTotal(ActiveAccountDTO userAccount) throws URISyntaxException {
+    public int fetchSavingsTotal(AccountKeyDTO userAccount) throws URISyntaxException {
     	//계좌 잔액 조회
     	Map<String, String> headerMap = OpenApiUtil.createHeaders(userAccount.getUserKey(), OpenApiUrls.INQUIRE_DEMAND_DEPOSIT_ACCOUNT_BALANCE);
         Map<String, Object> requestMap = OpenApiUtil.createAccountBalanceRequestData(userAccount.getAccountNo(), headerMap);

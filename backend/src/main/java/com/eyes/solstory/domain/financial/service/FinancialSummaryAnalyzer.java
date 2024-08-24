@@ -4,15 +4,15 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.eyes.solstory.domain.financial.dto.ActiveAccountDTO;
+import com.eyes.solstory.domain.financial.dto.AccountKeyDTO;
 import com.eyes.solstory.domain.financial.dto.CategorySpendingAvgDTO;
 import com.eyes.solstory.domain.financial.dto.CategorySpendingSummaryDTO;
-import com.eyes.solstory.domain.financial.dto.FindCategorySpendingSummaryDTO;
-import com.eyes.solstory.domain.financial.dto.StoreSpendingSummaryDTO;
+import com.eyes.solstory.domain.financial.dto.FinancialTrendDTO;
+import com.eyes.solstory.domain.financial.dto.StoreSpendingSummary;
+import com.eyes.solstory.domain.financial.dto.UserCategoryDTO;
 import com.eyes.solstory.domain.financial.repository.FinancialSummaryRepository;
 import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
 
@@ -36,7 +36,7 @@ public class FinancialSummaryAnalyzer {
 	 * @param userNo
 	 * @return
 	 */
-    public List<FindCategorySpendingSummaryDTO> getTop5Categories(int userNo) {
+    public List<CategorySpendingSummaryDTO> getTop5Categories(int userNo) {
     	return summaryRepository.findTop5Categories(userNo);
     }
     
@@ -59,8 +59,8 @@ public class FinancialSummaryAnalyzer {
      * @param userNo
      * @return
      */
-    public List<CategorySpendingSummaryDTO> getSpendingTrends(int userNo) {
-    	return convertToDTO3(summaryRepository.getSpendingTrends(userNo));
+    public List<FinancialTrendDTO> getSpendingTrends(int userNo) {
+    	return summaryRepository.getSpendingTrends(userNo);
     }
     
     /**
@@ -69,7 +69,7 @@ public class FinancialSummaryAnalyzer {
      * @return
      */
     public List<CategorySpendingSummaryDTO> getLast7DaysSpending(int userNo) {
-    	return convertToDTO1(summaryRepository.getLast7DaysSpending(userNo));
+    	return summaryRepository.getLast7DaysSpending(userNo);
     }
     
     /**
@@ -78,11 +78,11 @@ public class FinancialSummaryAnalyzer {
      * @return
      * @throws URISyntaxException 
      */
-    public List<StoreSpendingSummaryDTO> getCategoryDetails(int userNo) throws URISyntaxException {
+    public List<StoreSpendingSummary> getCategoryDetails(int userNo) throws URISyntaxException {
     	// 최근 7일간 가장 지출이 많은 카테고리와, 입출금 계좌번호, user_key 받아오기
-    	String[] arr = summaryRepository.getMostSpendingCategory(userNo);
+    	UserCategoryDTO categoryDTO = summaryRepository.getMostSpendingCategory(userNo);
     	// 최근 30일간 지출처별 지출 내역 요약 정보
-    	return spendingProcessor.fetchTransactionDataForMonth(arr);
+    	return spendingProcessor.fetchTransactionDataForMonth(categoryDTO);
     }
     
     
@@ -94,9 +94,9 @@ public class FinancialSummaryAnalyzer {
      */
     public String getKeywordWithHighestSpendingGrowth(int userNo) throws URISyntaxException {
     	// 최근 한달, 전월 대비 소비 증가율이 가장 높은 카테고리, 입출금 계좌번호, user_key 받아오기
-    	String[] resArr = summaryRepository.getCategoryWithHighestSpendingGrowth(userNo);
+    	UserCategoryDTO categoryDTO = summaryRepository.getCategoryWithHighestSpendingGrowth(userNo);
     	// 최근 30일간 지출처별 지출 내역 요약 정보
-    	return spendingProcessor.getKeywordWithCategoryForMonth(resArr);
+    	return spendingProcessor.getKeywordWithCategoryForMonth(categoryDTO);
     }
     
     /**
@@ -106,7 +106,7 @@ public class FinancialSummaryAnalyzer {
      * @throws URISyntaxException
      */
     public String getCategoryWithHighestSpendingGrowth(int userNo) throws URISyntaxException {
-    	return  summaryRepository.findTopCategory(userNo);
+    	return  summaryRepository.findTopCategoryForMonth(userNo);
     }
     /**
      * 최근 한달 지출 총액 > DB에서 합산으로 가져옴
@@ -125,7 +125,7 @@ public class FinancialSummaryAnalyzer {
      */
     public int getTotalSavingsAmount(int userNo) throws URISyntaxException {
     	// 저축 계좌 번호, user_key를 받아옴
-    	ActiveAccountDTO userAccount = accountRepository.findActiveSavingsAccounts(userNo);
+    	AccountKeyDTO userAccount = summaryRepository.findActiveSavingsAccounts(userNo);
     	return savingsCollector.fetchSavingsTotal(userAccount);
     }
     
@@ -148,47 +148,4 @@ public class FinancialSummaryAnalyzer {
     public String[] getTop3Categories(int userNo) {
     	return summaryRepository.findTop3Categories(userNo);
     }
-    
-    
-    /////////////////////////////// 컨버터 //////////////////////////////////////
-    private List<CategorySpendingSummaryDTO> convertToDTO1(List<Object[]> results) {
-    	return results.stream()
-    			.map(row -> {
-    				CategorySpendingSummaryDTO dto = CategorySpendingSummaryDTO.builder()
-    						.category((String) row[0]) // category
-    						.totalAmount(((Number) row[1]).intValue())  // totalAmount
-    						.build();
-    				return dto;
-    			})
-    			.collect(Collectors.toList());
-    }
-    
-    private Map<String, CategorySpendingSummaryDTO> convertToDTO2(List<Object[]> results) {
-    	Map<String, CategorySpendingSummaryDTO> map = new HashMap<>();
-    	for(Object[] row : results) {
-    		CategorySpendingSummaryDTO dto = CategorySpendingSummaryDTO.builder()
-    				.category((String) row[0]) //category
-    				.avgAmount(((Number) row[1]).intValue()) //avg_amount
-    				.ageGroup((String) row[2]) //age_group
-    				.build();
-    		map.put((String) row[0], dto);
-    	}
-    	return map;
-    }
-    
-    private List<CategorySpendingSummaryDTO> convertToDTO3(List<Object[]> results) {
-    	return results.stream()
-    			.map(row -> {
-    				CategorySpendingSummaryDTO dto = CategorySpendingSummaryDTO.builder()
-    						.category((String) row[0]) // category
-    						.totalAmount(((Number) row[1]).intValue())  // totalAmount(after)
-    						.totalAmountBefore(((Number) row[2]).intValue())  // 비교군
-    						.difference(((Number) row[3]).intValue())  // 증감액
-    						.percentChange(((Number) row[4]).doubleValue())  // 증감률
-    						.build();
-    				return dto;
-    			})
-    			.collect(Collectors.toList());
-    }
-    
 }

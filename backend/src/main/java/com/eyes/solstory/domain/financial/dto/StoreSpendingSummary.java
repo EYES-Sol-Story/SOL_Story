@@ -11,7 +11,8 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FindCategorySpendingSummaryDTO {
-    private String category;
-    private double totalAmount;
+public class StoreSpendingSummary implements StoreSpendingSummaryDTO {
+	private String storeName;
+    private int visitCount;
+    private int totalAmount;
 }

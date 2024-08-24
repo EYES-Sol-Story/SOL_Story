@@ -4,6 +4,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,22 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eyes.solstory.domain.financial.dto.CategorySpendingAvgDTO;
 import com.eyes.solstory.domain.financial.dto.CategorySpendingSummaryDTO;
-import com.eyes.solstory.domain.financial.dto.FindCategorySpendingSummaryDTO;
-import com.eyes.solstory.domain.financial.dto.StoreSpendingSummaryDTO;
+import com.eyes.solstory.domain.financial.dto.FinancialTrendDTO;
+import com.eyes.solstory.domain.financial.dto.StoreSpendingSummary;
 import com.eyes.solstory.domain.financial.service.FinancialSummaryAnalyzer;
 import com.eyes.solstory.domain.financial.service.FinancialSummaryProcessor;
 
 import lombok.AllArgsConstructor;
-
 
 @RestController
 @RequestMapping("/api/financial")
 @AllArgsConstructor
 public class FinancialSummaryController {
 
-    private FinancialSummaryProcessor summaryProcessor;
-    private FinancialSummaryAnalyzer summaryAnalyzer;
+	private static final Logger logger = LoggerFactory.getLogger(FinancialSummaryController.class);	
 
+	private FinancialSummaryProcessor summaryProcessor;
+    private FinancialSummaryAnalyzer summaryAnalyzer;
+    
     /**
      * 테스트용
      * SummaryService의 fetchAndStoreFinancialData 
@@ -50,7 +53,7 @@ public class FinancialSummaryController {
      * @return
      */
     @GetMapping("/top5-categories-amount")
-    public ResponseEntity<List<FindCategorySpendingSummaryDTO>> getTop5Categories(@RequestParam("userNo") int userNo) {
+    public ResponseEntity<List<CategorySpendingSummaryDTO>> getTop5Categories(@RequestParam("userNo") int userNo) {
         return ResponseEntity.ok(summaryAnalyzer.getTop5Categories(userNo));
     }
     
@@ -70,7 +73,7 @@ public class FinancialSummaryController {
      * @return
      */
     @GetMapping("/spending-trends")
-    public ResponseEntity<List<CategorySpendingSummaryDTO>> getSpendingTrends(@RequestParam("userNo") int userNo) {
+    public ResponseEntity<List<FinancialTrendDTO>> getSpendingTrends(@RequestParam("userNo") int userNo) {
         return ResponseEntity.ok(summaryAnalyzer.getSpendingTrends(userNo));
     }
     
@@ -91,11 +94,11 @@ public class FinancialSummaryController {
      * @throws URISyntaxException
      */
     @GetMapping("/highest-spending-details")
-    public ResponseEntity<List<StoreSpendingSummaryDTO>> getCategoryDetails(@RequestParam("userNo") int userNo) throws URISyntaxException{
+    public ResponseEntity<List<StoreSpendingSummary>> getCategoryDetails(@RequestParam("userNo") int userNo) throws URISyntaxException{
     	return ResponseEntity.ok(summaryAnalyzer.getCategoryDetails(userNo));
     }
     
-    /**
+    /** 미사용 - 
      * 최근 한달, 전월 대비 소비 증가율이 가장 높은 카테고리 중 가장 지출이 높은 keyword
      * @param userNo
      * @return
@@ -135,6 +138,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/total-savings-amount")
     public ResponseEntity<Integer> getTotalSavingsAmount(@RequestParam("userNo") int userNo) throws URISyntaxException{
+    	logger.info("getTotalSavingsAmount(userNo : %s", userNo);
     	return ResponseEntity.ok(summaryAnalyzer.getTotalSavingsAmount(userNo));
     }
     
