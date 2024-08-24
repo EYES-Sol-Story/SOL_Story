@@ -1,24 +1,27 @@
 package com.eyes.solstory.global.bank;
 
-import com.eyes.solstory.global.bank.dto.Header;
-import com.eyes.solstory.domain.user.dto.OneWonVerificationReq;
-import com.eyes.solstory.domain.user.dto.OneWonVerificationRes;
-import com.eyes.solstory.global.bank.dto.SavingsAccountReq;
-import com.eyes.solstory.global.bank.dto.SavingsAccountRes;
-import com.eyes.solstory.global.bank.dto.SearchSavingsAccountReq;
-import com.eyes.solstory.global.bank.dto.SearchSavingsAccountRes;
-import com.eyes.solstory.global.bank.dto.SearchSavingsProductRes;
-import com.eyes.solstory.domain.user.dto.TransferOneWonReq;
-import com.eyes.solstory.domain.user.dto.TransferOneWonRes;
-import com.eyes.solstory.global.bank.dto.UpdateSavingsAccountReq;
-import com.eyes.solstory.global.bank.dto.UpdateSavingsAccountRes;
-import com.eyes.solstory.domain.user.dto.UserRes;
-import com.eyes.solstory.domain.user.dto.UserReq;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.eyes.solstory.domain.user.dto.OneWonVerificationReq;
+import com.eyes.solstory.domain.user.dto.OneWonVerificationRes;
+import com.eyes.solstory.domain.user.dto.TransferOneWonRes;
+import com.eyes.solstory.domain.user.dto.UserReq;
+import com.eyes.solstory.domain.user.dto.UserRes;
+import com.eyes.solstory.global.bank.dto.Header;
+import com.eyes.solstory.global.bank.dto.SavingsAccountReq;
+import com.eyes.solstory.global.bank.dto.SavingsAccountRes;
+import com.eyes.solstory.global.bank.dto.SearchSavingsAccountReq;
+import com.eyes.solstory.global.bank.dto.SearchSavingsAccountRes;
+import com.eyes.solstory.global.bank.dto.SearchSavingsProductRes;
+import com.eyes.solstory.global.bank.dto.UpdateSavingsAccountReq;
+import com.eyes.solstory.global.bank.dto.UpdateSavingsAccountRes;
+
 import reactor.core.publisher.Mono;
 
 @Component
@@ -32,19 +35,24 @@ public class WebClientUtil {
     }
 
     //1원 송금
-    public Mono<ResponseEntity<TransferOneWonRes>> transferOneWon(TransferOneWonReq request) {
+    public Mono<ResponseEntity<TransferOneWonRes>> transferOneWon(Map<String, Object> request) {
+    	System.out.println("정상: "+request.toString());
         String url = "/edu/accountAuth/openAccountAuth";
-        return webClient.post()
+        Mono<ResponseEntity<TransferOneWonRes>> result = webClient.post()
                 .uri(url)
                 .bodyValue(request)
                 .retrieve()
-                .onStatus(
-                        HttpStatus.BAD_REQUEST::equals,
-                        response -> response.bodyToMono(String.class).map(Exception::new))
-                .onStatus(
-                        HttpStatus.INTERNAL_SERVER_ERROR::equals,
-                        clientResponse -> clientResponse.bodyToMono(String.class).map(Exception::new))
+//                .onStatus(
+//                		status -> status.equals(HttpStatus.BAD_REQUEST),
+ //                       response -> response.bodyToMono(String.class).map(Exception::new))
+ //               .onStatus(
+  //                      status -> status.equals(HttpStatus.INTERNAL_SERVER_ERROR),
+   //                     clientResponse -> clientResponse.bodyToMono(String.class).map(Exception::new))
                 .toEntity(TransferOneWonRes.class);
+        
+        System.out.println("get " +webClient.toString());
+        System.out.println(result.toString());
+        return result;
     }
 
     //1원 검증

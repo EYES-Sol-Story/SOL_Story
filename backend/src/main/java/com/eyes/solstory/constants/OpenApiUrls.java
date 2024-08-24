@@ -1,11 +1,14 @@
 package com.eyes.solstory.constants;
 
 public class OpenApiUrls {
+	
 	//// 입출금 URL 공통 
 	public static final String DEMAND_DEPOSIT_URL = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/";
 	//// 적금 URL 공통 
 	public static final String SAVINGS_URL = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/savings/";
 	
+	//// 1원 인증 URL 공통
+	public static final String ACCOUNT_AUTH_URL = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/accountAuth/";
 	
 	//// 입출금 계좌
 	// 예금주 조회
@@ -26,4 +29,8 @@ public class OpenApiUrls {
 	//// 적금 계좌
 	// 적금 납입 회차 조회
 	public static final String INQUIRE_PAYMENT = "inquirePayment";
+	
+	// 1원 인증
+	// 1원 송금
+	public static final String OPEN_ACCOUNTAUTH = "openAccountAuth";
 }

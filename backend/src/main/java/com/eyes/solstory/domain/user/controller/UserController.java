@@ -1,16 +1,20 @@
 package com.eyes.solstory.domain.user.controller;
 
-import com.eyes.solstory.domain.user.dto.OneWonVerificationRes;
-import com.eyes.solstory.domain.user.dto.TransferOneWonRes;
-import com.eyes.solstory.domain.user.dto.UserRes;
-import com.eyes.solstory.domain.user.service.UserService;
-import com.eyes.solstory.global.bank.dto.SavingsAccountRes;
-import lombok.RequiredArgsConstructor;
+import java.net.URISyntaxException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.eyes.solstory.domain.user.dto.OneWonVerificationRes;
+import com.eyes.solstory.domain.user.dto.TransferOneWonRes;
+import com.eyes.solstory.domain.user.dto.UserRes;
+import com.eyes.solstory.domain.user.service.UserService;
+import com.eyes.solstory.global.bank.dto.SavingsAccountRes;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
@@ -21,15 +25,15 @@ public class UserController {
 
     // 사용자 계정 생성
     @PostMapping("/user/account")
-    public ResponseEntity<UserRes> createUserAccount(@RequestParam String userId, @RequestParam String email) {
+    public ResponseEntity<UserRes> createUserAccount(@RequestParam("userId") String userId, @RequestParam("email") String email) {
         return userService.createUserAccount(userId, email);
     }
 
     // 1원 송금
     @PostMapping("/transfer/one_won")
-    public ResponseEntity<TransferOneWonRes> transferOneWon(
+    public ResponseEntity<String> transferOneWon(
             @RequestParam("accountNo") String accountNo,
-            @RequestParam("userId") String userId) {
+            @RequestParam("userId") String userId) throws URISyntaxException {
         System.out.println(accountNo);
         System.out.println(userId);
 
@@ -50,13 +54,11 @@ public class UserController {
     // 적금 계좌 생성
     @PostMapping("/savings/account")
     public ResponseEntity<SavingsAccountRes> createSavingAccount(
-            @RequestParam String transmissionDate,
-            @RequestParam String transmissionTime,
-            @RequestParam String accountTypeUniqueNo,
-            @RequestParam String withdrawalAccountNo,
-            @RequestParam long depositBalance,
-            @RequestParam String userId,
-            @RequestParam int targetAmount) {
-        return userService.createSavingAccount(transmissionDate, transmissionTime, accountTypeUniqueNo, withdrawalAccountNo, depositBalance, userId, targetAmount);
+            @RequestParam("accountTypeUniqueNo") String accountTypeUniqueNo,
+            @RequestParam("withdrawalAccountNo") String withdrawalAccountNo,
+            @RequestParam("depositBalance") long depositBalance,
+            @RequestParam("userId") String userId,
+            @RequestParam("targetAmount") int targetAmount) {
+        return userService.createSavingAccount(accountTypeUniqueNo, withdrawalAccountNo, depositBalance, userId, targetAmount);
     }
 }

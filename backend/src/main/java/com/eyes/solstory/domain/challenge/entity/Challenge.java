@@ -35,11 +35,11 @@ public class Challenge {
     @Column(name = "challenge_type", nullable = false, precision = 1)
     private int challengeType;
 
-    @Column(name = "category", nullable = true)
+    @Column(name = "category", nullable = true, length = 50)
     private String category;
 
     //챌린지 기간 (한달: 30, 일주일: 7, 하루: 1)
-    @Column(name = "days", nullable = false)
+    @Column(name = "days", nullable = false, precision = 2)
     private int days;
 
     // 챌린지 이름

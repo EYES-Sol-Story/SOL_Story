@@ -1,12 +1,24 @@
 package com.eyes.solstory.domain.user.service;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.eyes.solstory.constants.OpenApiUrls;
 import com.eyes.solstory.domain.challenge.entity.ChallengeReward;
 import com.eyes.solstory.domain.challenge.repository.ChallengeRewardRepository;
 import com.eyes.solstory.domain.financial.entity.UserAccount;
 import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
 import com.eyes.solstory.domain.user.dto.OneWonVerificationReq;
 import com.eyes.solstory.domain.user.dto.OneWonVerificationRes;
-import com.eyes.solstory.domain.user.dto.TransferOneWonReq;
 import com.eyes.solstory.domain.user.dto.TransferOneWonRes;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.entity.User;
@@ -14,15 +26,11 @@ import com.eyes.solstory.domain.user.repository.UserRepository;
 import com.eyes.solstory.global.bank.WebClientUtil;
 import com.eyes.solstory.global.bank.dto.SavingsAccountReq;
 import com.eyes.solstory.global.bank.dto.SavingsAccountRes;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import com.eyes.solstory.util.OpenApiUtil;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.time.LocalDate;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +44,7 @@ public class UserService {
     private final UserAccountRepository userAccountRepository;
     private final ChallengeRewardRepository challengeRewardRepository;
 
-    //사용자 계정 생성
+    //사용자 계정 - 계 생성
     public ResponseEntity<UserRes> createUserAccount(String userId, String email) {
         ResponseEntity<UserRes> response = webClientUtil.creatUserAccount(email)
                 .onErrorMap(e -> new RuntimeException("사용자 계정 생성 중 오류 발생", e))
@@ -61,21 +69,23 @@ public class UserService {
     }
 
     // 1원 송금
-    public ResponseEntity<TransferOneWonRes> transferOneWon(
-            String accountNo, String email) {
+    public ResponseEntity<String> transferOneWon(
+            String accountNo, String email) throws URISyntaxException {
         LocalDateTime now = LocalDateTime.now();
         System.out.println(email);
         User user = userRepository.findUserByEmail(email);
         System.out.println(user.getUserId());
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(null);
-        }
+
         System.out.println("1111");
+        
+        String transmissionDate = LocalDate.now().format(OpenApiUtil.DATE_FORMATTER);
+        String transmissionTime = LocalDateTime.now().format(OpenApiUtil.TIME_FORMATTER);;
+        
+        /*
         TransferOneWonReq.Header header = TransferOneWonReq.Header.builder()
                 .apiName("openAccountAuth")
-                .transmissionDate(now.toLocalDate().format(DateTimeFormatter.ofPattern("YYYYMMDD")))
-                .transmissionTime(now.toLocalTime().format(DateTimeFormatter.ofPattern("HHMMSS")))
+                .transmissionDate(transmissionDate)
+                .transmissionTime(transmissionTime)
                 .institutionCode("00100")
                 .fintechAppNo("001")
                 .apiServiceCode("openAccountAuth")
@@ -83,20 +93,44 @@ public class UserService {
                 .apiKey(apiKey)
                 .userKey(user.getUserKey())
                 .build();
+*/
+        Map<String, String> header = OpenApiUtil.createHeaders("04e988f2-d086-495a-aa2f-67b0e911782", OpenApiUrls.OPEN_ACCOUNTAUTH);
         System.out.println("2222");
-        TransferOneWonReq request = TransferOneWonReq.builder()
-                .header(header)
-                .accountNo(accountNo)
-                .authText("SSAFY")
-                .build();
+        
+        Map<String, Object> request = new HashMap<>();
+        request.put("Header", header);
+        request.put("accountNo", accountNo);
+        request.put("authText", "SSAFY");
+        
+        //TransferOneWonReq request = TransferOneWonReq.builder()
+        //        .header(header)
+        //        .accountNo(accountNo)
+        //        .authText("SSAFY")
+        //        .build();
         System.out.println("333333");
-        ResponseEntity<TransferOneWonRes> response = webClientUtil.transferOneWon(request)
-                .onErrorMap(e -> new RuntimeException("1원 송금 요청 중 오류 발생", e))
-                .block();
+        
+        ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.ACCOUNT_AUTH_URL + OpenApiUrls.OPEN_ACCOUNTAUTH), request);
+        ObjectMapper objectMapper = new ObjectMapper();
+        
+        //System.out.println(objectMapper.toString());
+        //ResponseEntity<TransferOneWonRes> response = webClientUtil.transferOneWon(request)
+        //        .onErrorMap(e -> new RuntimeException("1원 송금 요청 중 오류 발생", e))
+        //        .block();
         System.out.println("44444");
-        if (response == null || response.getStatusCode() != HttpStatus.OK) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+        //if (response == null || response.getStatusCode() != HttpStatus.OK) {
+         //   return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          //          .body(null);
+        //}
+        
+        
+        try {
+            JsonNode rootNode = objectMapper.readTree(response.getBody());
+            String transactionUniqueNo = rootNode.path("REC").path("transactionUniqueNo").asText();
+            System.out.println("transactionUniqueNo :"+transactionUniqueNo);
+            String accountNo2 = rootNode.path("REC").path("accountNo").asText();
+            System.out.println("accountNo :"+accountNo2);
+        } catch (Exception e) {
+            throw new RuntimeException("err", e);
         }
         return ResponseEntity.ok(response.getBody());
     }
@@ -141,14 +175,19 @@ public class UserService {
     }
 
     // 적금 계좌 생성
-    public ResponseEntity<SavingsAccountRes> createSavingAccount(String transmissionDate, String transmissionTime,
-            String accountTypeUniqueNo, String withdrawalAccountNo, long depositBalance, String userId, int targetAmount) {
+    public ResponseEntity<SavingsAccountRes> createSavingAccount(String accountTypeUniqueNo, String withdrawalAccountNo, 
+    		long depositBalance, String userId, int targetAmount) {
+    	System.out.println("서비스 진입");
         User user = userRepository.findUserByUserId(userId);
+        System.out.println("여기: "+user.getUserKey());
         if (user == null) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(null);
         }
+        String transmissionDate = LocalDate.now().format(OpenApiUtil.DATE_FORMATTER);
+        String transmissionTime = LocalDateTime.now().format(OpenApiUtil.TIME_FORMATTER);
+        
         SavingsAccountReq.Header header = SavingsAccountReq.Header.builder()
                 .apiName("createAccount")
                 .transmissionDate(transmissionDate)

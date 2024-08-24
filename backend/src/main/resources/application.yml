@@ -24,7 +24,7 @@ spring:
     show-sql: true # sql문 출력
     properties:
       hibernate:
-        "[format:sql]": false
+        "[format:sql]": true
 
 # 로깅 수준 지정
 # logging:
@@ -34,4 +34,4 @@ spring:
 #    "[org.springframework.web.socket]": trace
 
 api:
-  key: API-KEY
+  key: 'cb6cca464d504a29a809ced072ba5aec'
