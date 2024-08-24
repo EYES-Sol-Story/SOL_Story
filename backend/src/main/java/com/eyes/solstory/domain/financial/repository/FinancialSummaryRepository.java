@@ -230,10 +230,10 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 	
 	
 	// 금융점수
-	@Query(value = "SELECT 50 + (( CASE WHEN r.savings_total_before = 0 THEN 100 "
+	@Query(value = "SELECT 50 + (( CASE WHEN r.savings_total_before = 0 THEN 0 "
 				+ "                    ELSE ROUND (100 * (r.savings_total_after - r.savings_total_before) / r.savings_total_before) "
 				+ "               END ) "
-				+ "          +  ( CASE WHEN r.spending_total_before = 0 THEN 100"
+				+ "          +  ( CASE WHEN r.spending_total_before = 0 THEN 0"
 				+ "                    ELSE ROUND (100 * (r.spending_total_after - r.spending_total_before) / r.spending_total_before) "
 				+ "               END ) "
 				+ "             )/4 AS financial_score "

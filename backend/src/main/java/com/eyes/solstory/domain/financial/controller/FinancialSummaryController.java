@@ -138,7 +138,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/total-savings-amount")
     public ResponseEntity<Integer> getTotalSavingsAmount(@RequestParam("userNo") int userNo) throws URISyntaxException{
-    	logger.info("getTotalSavingsAmount(userNo : %s", userNo);
+    	logger.info("getTotalSavingsAmount(userNo : "+ userNo+")");
     	return ResponseEntity.ok(summaryAnalyzer.getTotalSavingsAmount(userNo));
     }
     
