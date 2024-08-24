@@ -41,10 +41,12 @@ public class ChallengeService {
         LocalDate today = LocalDate.now();
 
         for (Challenge challenge : challenges) {
+            LocalDate completeDate = today.plusDays(challenge.getDays());
             UserChallenge userChallenge = UserChallenge.builder()
                     .user(user)
                     .challenge(challenge)
                     .assignedDate(today)
+                    .completeDate(completeDate)
                     .build();
 
             userChallengeRepository.save(userChallenge);

@@ -1,5 +1,7 @@
 package com.eyes.solstory.domain.user.service;
 
+import com.eyes.solstory.domain.challenge.entity.ChallengeReward;
+import com.eyes.solstory.domain.challenge.repository.ChallengeRewardRepository;
 import com.eyes.solstory.domain.financial.entity.UserAccount;
 import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
 import com.eyes.solstory.domain.user.dto.OneWonVerificationReq;
@@ -12,6 +14,8 @@ import com.eyes.solstory.domain.user.repository.UserRepository;
 import com.eyes.solstory.global.bank.WebClientUtil;
 import com.eyes.solstory.global.bank.dto.SavingsAccountReq;
 import com.eyes.solstory.global.bank.dto.SavingsAccountRes;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -30,14 +34,15 @@ public class UserService {
     private final WebClientUtil webClientUtil;
     private final UserRepository userRepository;
     private final UserAccountRepository userAccountRepository;
+    private final ChallengeRewardRepository challengeRewardRepository;
 
     //사용자 계정 생성
-    public ResponseEntity<UserRes> createUserAccount(String userId) {
-        ResponseEntity<UserRes> response = webClientUtil.creatUserAccount(userId)
+    public ResponseEntity<UserRes> createUserAccount(String userId, String email) {
+        ResponseEntity<UserRes> response = webClientUtil.creatUserAccount(email)
                 .onErrorMap(e -> new RuntimeException("사용자 계정 생성 중 오류 발생", e))
                 .block();
 
-        User user = userRepository.findUserByUserId(userId);
+        User user = userRepository.findUserByEmail(email);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(null);
@@ -56,18 +61,21 @@ public class UserService {
     }
 
     // 1원 송금
-    public ResponseEntity<TransferOneWonRes> transferOneWon(String transmissionDate, String transmissionTime,
-            String accountNo, String userId) {
-        User user = userRepository.findUserByUserId(userId);
+    public ResponseEntity<TransferOneWonRes> transferOneWon(
+            String accountNo, String email) {
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(email);
+        User user = userRepository.findUserByEmail(email);
+        System.out.println(user.getUserId());
         if (user == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(null);
         }
-
+        System.out.println("1111");
         TransferOneWonReq.Header header = TransferOneWonReq.Header.builder()
                 .apiName("openAccountAuth")
-                .transmissionDate(transmissionDate)
-                .transmissionTime(transmissionTime)
+                .transmissionDate(now.toLocalDate().format(DateTimeFormatter.ofPattern("YYYYMMDD")))
+                .transmissionTime(now.toLocalTime().format(DateTimeFormatter.ofPattern("HHMMSS")))
                 .institutionCode("00100")
                 .fintechAppNo("001")
                 .apiServiceCode("openAccountAuth")
@@ -75,17 +83,17 @@ public class UserService {
                 .apiKey(apiKey)
                 .userKey(user.getUserKey())
                 .build();
-
+        System.out.println("2222");
         TransferOneWonReq request = TransferOneWonReq.builder()
                 .header(header)
                 .accountNo(accountNo)
                 .authText("SSAFY")
                 .build();
-
+        System.out.println("333333");
         ResponseEntity<TransferOneWonRes> response = webClientUtil.transferOneWon(request)
                 .onErrorMap(e -> new RuntimeException("1원 송금 요청 중 오류 발생", e))
                 .block();
-
+        System.out.println("44444");
         if (response == null || response.getStatusCode() != HttpStatus.OK) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
@@ -181,6 +189,9 @@ public class UserService {
                 .build();
 
         userAccountRepository.save(userAccount);
+        ChallengeReward challengeReward = ChallengeReward.builder().userNo(user.getUserNo()).keys(0).build();
+        challengeRewardRepository.save(challengeReward);
+
         return ResponseEntity.ok(response.getBody());
     }
 }

@@ -36,6 +36,10 @@ public class ChallengeReward {
     private int userNo;
 
     // 사용자가 획득한 총 열쇠 수
-    @Column(name = "total_keys", nullable = false, precision = 5)
-    private int totalKeys;
+    @Column(name = "keys", nullable = false, precision = 5)
+    private int keys;
+
+	public void updateKeys(int keys) {
+		this.keys = keys;
+	}
 }
