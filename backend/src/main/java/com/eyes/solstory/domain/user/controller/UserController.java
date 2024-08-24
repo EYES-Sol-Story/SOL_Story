@@ -5,7 +5,7 @@ import com.eyes.solstory.domain.user.dto.TransferOneWonRes;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.service.UserService;
 import com.eyes.solstory.global.bank.dto.SavingsAccountRes;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,25 +14,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
     // 사용자 계정 생성
     @PostMapping("/user/account")
-    public ResponseEntity<UserRes> createUserAccount(@RequestParam String userId) {
-        return userService.createUserAccount(userId);
+    public ResponseEntity<UserRes> createUserAccount(@RequestParam String userId, @RequestParam String email) {
+        return userService.createUserAccount(userId, email);
     }
 
     // 1원 송금
     @PostMapping("/transfer/one_won")
     public ResponseEntity<TransferOneWonRes> transferOneWon(
-            @RequestParam String transmissionDate,
-            @RequestParam String transmissionTime,
-            @RequestParam String accountNo,
-            @RequestParam String userId) {
-        return userService.transferOneWon(transmissionDate, transmissionTime, accountNo, userId);
+            @RequestParam("accountNo") String accountNo,
+            @RequestParam("userId") String userId) {
+        System.out.println(accountNo);
+        System.out.println(userId);
+
+        return userService.transferOneWon(accountNo, userId);
     }
 
     // 1원 검증

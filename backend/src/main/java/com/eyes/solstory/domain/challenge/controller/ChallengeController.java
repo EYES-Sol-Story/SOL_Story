@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +30,7 @@ public class ChallengeController {
     private UserRepository userRepository;
 
     @GetMapping("/list")
-    public List<UserChallenge> getChallengeList(@RequestParam String userId) {
+    public ResponseEntity<List<UserChallenge>> getChallengeList(@RequestParam String userId) {
         User user = userRepository.findUserByUserId(userId);
         if (user == null) {
             throw new UserNotFoundException("잘못된 사용자 입니다.");
@@ -44,13 +45,15 @@ public class ChallengeController {
         allChallenges.addAll(spendingChallenges);
 
         List<UserChallenge> userChallenges = challengeService.assignChallengesToUser(user, allChallenges);
-        return userChallenges;
+        return ResponseEntity.ok(userChallenges);
     }
 
+    //챌린지 조회
     @GetMapping("/status")
-    public UserChallenge getChallengeStatus(@RequestParam("userNo") int userNo,
+    public ResponseEntity<UserChallenge> getChallengeStatus(@RequestParam("userNo") int userNo,
             @RequestParam("startDate") String startDate) {
         LocalDate start = LocalDate.parse(startDate);
-        return userChallengeService.getUserChallengesStatus(userNo);
+        UserChallenge userChallenge = userChallengeService.getUserChallengesStatus(userNo);
+        return ResponseEntity.ok(userChallenge);
     }
 }
