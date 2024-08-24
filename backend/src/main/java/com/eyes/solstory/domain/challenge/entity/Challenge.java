@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "challenges")
 @SequenceGenerator(
         name = "challenge_seq_generator",
-        sequenceName = "challenge_seq_new", // 새 시퀀스 이름
+        sequenceName = "challenge_seq", // 새 시퀀스 이름
         allocationSize = 1
 )
 public class Challenge {

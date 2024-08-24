@@ -1,31 +1,37 @@
 package com.eyes.solstory.domain.challenge.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.eyes.solstory.domain.challenge.entity.Challenge;
 import com.eyes.solstory.domain.challenge.entity.ChallengeReward;
 import com.eyes.solstory.domain.challenge.entity.UserChallenge;
 import com.eyes.solstory.domain.challenge.repository.ChallengeRewardRepository;
 import com.eyes.solstory.domain.challenge.repository.UserChallengeRepository;
 import com.eyes.solstory.domain.financial.repository.FinancialSummaryRepository;
-import com.eyes.solstory.global.bank.WebClientUtil;
 import com.eyes.solstory.global.exception.UserChallengeNotFoundException;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-
+	
 @Service
 @RequiredArgsConstructor
 public class UserChallengeService {
 
+	@Autowired
     private UserChallengeRepository userChallengeRepository;
+	@Autowired
     private ChallengeRewardRepository challengeRewardRepository;
+	@Autowired
     private FinancialSummaryRepository financialSummaryRepository;
+    
 
     // 매일 자정에 전달이 만료일인 챌린지 달성 여부 확인
     public void checkAndRewardExpiredChallenges() {
         LocalDate yesterday = LocalDate.now().minusDays(1);
-        List<UserChallenge> expiredChallenges = userChallengeRepository.findAllByUserCompleteDate(yesterday);
+        List<UserChallenge> expiredChallenges = userChallengeRepository.findAllByCompleteDate(yesterday);
 
         for (UserChallenge userChallenge : expiredChallenges) {
             boolean isCompleted = checkChallengeCompletion(userChallenge);

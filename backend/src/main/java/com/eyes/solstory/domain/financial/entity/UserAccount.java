@@ -43,7 +43,7 @@ public class UserAccount {
     private String accountName;
 
     // 저축 목표 금액
-    @Column(name = "target_amount", precision = 15)
+    @Column(name = "target_amount", precision = 10)
     private int targetAmount;
 
     // 시작 일자

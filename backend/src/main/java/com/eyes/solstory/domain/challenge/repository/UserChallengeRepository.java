@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserChallengeRepository extends JpaRepository<UserChallenge, Integer> {
     UserChallenge findByUser_UserNo(int userNo);
-    List<UserChallenge> findAllByUserCompleteDate(LocalDate completeDate);
+    List<UserChallenge> findAllByCompleteDate(LocalDate completeDate);
 }
 
