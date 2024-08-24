@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.eyes.solstory.domain.user.dto.OneWonVerificationRes;
-import com.eyes.solstory.domain.user.dto.TransferOneWonRes;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.service.UserService;
 import com.eyes.solstory.global.bank.dto.SavingsAccountRes;
@@ -42,13 +40,11 @@ public class UserController {
 
     // 1원 검증
     @PostMapping("/verify/one_won")
-    public ResponseEntity<OneWonVerificationRes> verifyOneWon(
-            @RequestParam String transmissionDate,
-            @RequestParam String transmissionTime,
-            @RequestParam String accountNo,
-            @RequestParam String authCode,
-            @RequestParam String userId) {
-        return userService.verifyOneWon(transmissionDate, transmissionTime, accountNo, authCode, userId);
+    public ResponseEntity<String> verifyOneWon(
+            @RequestParam("accountNo") String accountNo,
+            @RequestParam("authCode") String authCode,
+            @RequestParam("userId") String userId) throws URISyntaxException {
+        return userService.verifyOneWon(accountNo, authCode, userId);
     }
 
     // 적금 계좌 생성

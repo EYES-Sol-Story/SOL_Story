@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,7 @@ import com.eyes.solstory.domain.challenge.entity.ChallengeReward;
 import com.eyes.solstory.domain.challenge.repository.ChallengeRewardRepository;
 import com.eyes.solstory.domain.financial.entity.UserAccount;
 import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
-import com.eyes.solstory.domain.user.dto.OneWonVerificationReq;
-import com.eyes.solstory.domain.user.dto.OneWonVerificationRes;
-import com.eyes.solstory.domain.user.dto.TransferOneWonRes;
+import com.eyes.solstory.domain.financial.service.DemandDepositCollector;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
@@ -79,7 +78,7 @@ public class UserService {
         System.out.println("1111");
         
         String transmissionDate = LocalDate.now().format(OpenApiUtil.DATE_FORMATTER);
-        String transmissionTime = LocalDateTime.now().format(OpenApiUtil.TIME_FORMATTER);;
+        String transmissionTime = LocalDateTime.now().format(OpenApiUtil.TIME_FORMATTER);
         
         /*
         TransferOneWonReq.Header header = TransferOneWonReq.Header.builder()
@@ -94,7 +93,7 @@ public class UserService {
                 .userKey(user.getUserKey())
                 .build();
 */
-        Map<String, String> header = OpenApiUtil.createHeaders("04e988f2-d086-495a-aa2f-67b0e911782", OpenApiUrls.OPEN_ACCOUNTAUTH);
+        Map<String, String> header = OpenApiUtil.createHeaders("04e988f2-d086-495a-aa2f-67b0e911782f", OpenApiUrls.OPEN_ACCOUNT_AUTH);
         System.out.println("2222");
         
         Map<String, Object> request = new HashMap<>();
@@ -109,7 +108,7 @@ public class UserService {
         //        .build();
         System.out.println("333333");
         
-        ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.ACCOUNT_AUTH_URL + OpenApiUrls.OPEN_ACCOUNTAUTH), request);
+        ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.ACCOUNT_AUTH_URL + OpenApiUrls.OPEN_ACCOUNT_AUTH), request);
         ObjectMapper objectMapper = new ObjectMapper();
         
         //System.out.println(objectMapper.toString());
@@ -122,54 +121,58 @@ public class UserService {
           //          .body(null);
         //}
         
-        
+        String transactionUniqueNo = "";
         try {
             JsonNode rootNode = objectMapper.readTree(response.getBody());
-            String transactionUniqueNo = rootNode.path("REC").path("transactionUniqueNo").asText();
+            transactionUniqueNo = rootNode.path("REC").path("transactionUniqueNo").asText();
             System.out.println("transactionUniqueNo :"+transactionUniqueNo);
-            String accountNo2 = rootNode.path("REC").path("accountNo").asText();
-            System.out.println("accountNo :"+accountNo2);
         } catch (Exception e) {
             throw new RuntimeException("err", e);
         }
+        
+        header = OpenApiUtil.createHeaders("04e988f2-d086-495a-aa2f-67b0e911782f", OpenApiUrls.INQUIRE_TRANSACTION_HISTORY);
+        System.out.println("2222");
+        
+        request = new HashMap<>();
+        request.put("Header", header);
+        request.put("accountNo", accountNo);
+        request.put("transactionUniqueNo", transactionUniqueNo);
+        
+        response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_TRANSACTION_HISTORY), request);
+        
+        try {
+            JsonNode rootNode = objectMapper.readTree(response.getBody());
+            String summary = rootNode.path("REC").path("transactionSummary").asText();
+            int code = Integer.parseInt(summary.substring(6));
+            System.out.println("summary :"+code);
+        } catch (Exception e) {
+            throw new RuntimeException("err", e);
+        }
+        
+        
         return ResponseEntity.ok(response.getBody());
     }
 
+    @Autowired
+    DemandDepositCollector demandDepositCollector;
     // 1원 검증
-    public ResponseEntity<OneWonVerificationRes> verifyOneWon(String transmissionDate, String transmissionTime,
-            String accountNo, String authCode, String userId) {
-        User user = userRepository.findUserByUserId(userId);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(null);
-        }
-
-        OneWonVerificationReq.Header header = OneWonVerificationReq.Header.builder()
-                .apiName("checkAuthCode")
-                .transmissionDate(transmissionDate)
-                .transmissionTime(transmissionTime)
-                .institutionCode("00100")
-                .fintechAppNo("001")
-                .apiServiceCode("checkAuthCode")
-                .institutionTransactionUniqueNo("240723152415461262")
-                .apiKey(apiKey)
-                .userKey(user.getUserKey())
-                .build();
-
-        OneWonVerificationReq request = OneWonVerificationReq.builder()
-                .header(header)
-                .accountNo(accountNo)
-                .authText("SSAFY")
-                .authCode(authCode)
-                .build();
-
-        ResponseEntity<OneWonVerificationRes> response = webClientUtil.authenticateTransferOneWon(request)
-                .onErrorMap(e -> new RuntimeException("1원 검증 요청 중 오류 발생", e))
-                .block();
-
-        if (response == null || response.getStatusCode() != HttpStatus.OK) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+    public ResponseEntity<String> verifyOneWon(String accountNo, String authCode, String email) throws URISyntaxException {
+        User user = userRepository.findUserByEmail(email);
+        Map<String, String> header = OpenApiUtil.createHeaders(user.getUserKey(), OpenApiUrls.CHECK_ACCOUNT_AUTH);
+        
+        Map<String, Object> request = new HashMap<>();
+        request.put("Header", header);
+        request.put("accountNo", accountNo);
+        request.put("authText", "SSAFY");
+        request.put("authCode", authCode);
+        
+        ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.ACCOUNT_AUTH_URL + OpenApiUrls.CHECK_ACCOUNT_AUTH), request);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = objectMapper.readTree(response.getBody());
+            String status = rootNode.path("REC").path("status").asText(); //SUCCESS
+        } catch (Exception e) {
+            throw new RuntimeException("err", e);
         }
         return ResponseEntity.ok(response.getBody());
     }
@@ -177,14 +180,7 @@ public class UserService {
     // 적금 계좌 생성
     public ResponseEntity<SavingsAccountRes> createSavingAccount(String accountTypeUniqueNo, String withdrawalAccountNo, 
     		long depositBalance, String userId, int targetAmount) {
-    	System.out.println("서비스 진입");
         User user = userRepository.findUserByUserId(userId);
-        System.out.println("여기: "+user.getUserKey());
-        if (user == null) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(null);
-        }
         String transmissionDate = LocalDate.now().format(OpenApiUtil.DATE_FORMATTER);
         String transmissionTime = LocalDateTime.now().format(OpenApiUtil.TIME_FORMATTER);
         

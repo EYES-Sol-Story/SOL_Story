@@ -32,5 +32,7 @@ public class OpenApiUrls {
 	
 	// 1원 인증
 	// 1원 송금
-	public static final String OPEN_ACCOUNTAUTH = "openAccountAuth";
+	public static final String OPEN_ACCOUNT_AUTH = "openAccountAuth";
+	// 1원 검증
+	public static final String CHECK_ACCOUNT_AUTH = "checkAuthCode";
 }
