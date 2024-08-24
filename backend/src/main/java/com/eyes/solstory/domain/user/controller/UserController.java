@@ -31,11 +31,8 @@ public class UserController {
     @PostMapping("/transfer/one_won")
     public ResponseEntity<String> transferOneWon(
             @RequestParam("accountNo") String accountNo,
-            @RequestParam("userId") String userId) throws URISyntaxException {
-        System.out.println(accountNo);
-        System.out.println(userId);
-
-        return userService.transferOneWon(accountNo, userId);
+            @RequestParam("email") String email) throws URISyntaxException {
+        return userService.transferOneWon(accountNo, email);
     }
 
     // 1원 검증
@@ -43,8 +40,8 @@ public class UserController {
     public ResponseEntity<String> verifyOneWon(
             @RequestParam("accountNo") String accountNo,
             @RequestParam("authCode") String authCode,
-            @RequestParam("userId") String userId) throws URISyntaxException {
-        return userService.verifyOneWon(accountNo, authCode, userId);
+            @RequestParam("email") String email) throws URISyntaxException {
+        return userService.verifyOneWon(accountNo, authCode, email);
     }
 
     // 적금 계좌 생성
