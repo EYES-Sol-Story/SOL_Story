@@ -20,4 +20,10 @@ public class ChallengeRewardController {
         int keys = challengeRewardService.findChallengeKey(userId);
         return ResponseEntity.ok(keys);
     }
+
+    @GetMapping("/score")
+    public ResponseEntity<Integer> getScore(@RequestParam String userId) {
+        int score = challengeRewardService.calScore(userId);
+        return ResponseEntity.ok(score);
+    }
 }

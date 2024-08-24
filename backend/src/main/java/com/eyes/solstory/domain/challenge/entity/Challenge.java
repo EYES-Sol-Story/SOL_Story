@@ -49,12 +49,15 @@ public class Challenge {
     // 챌린지 과제 완료 시 획득할 포인트
     @Column(name = "reward_keys", nullable = false, precision = 5)
     private int rewardKeys;
+    @Column(name = "target_amount", nullable = false, precision = 5)
+    private int targetAmount;
 
-    public Challenge(int challengeType, String category, int days, String challengeName, int rewardKeys) {
+    public Challenge(int challengeType, String category, int days, String challengeName, int rewardKeys, int targetAmount) {
         this.challengeType = challengeType;
         this.category = category;
         this.days = days;
         this.challengeName = challengeName;
         this.rewardKeys = rewardKeys;
+        this.targetAmount = targetAmount;
     }
 }
