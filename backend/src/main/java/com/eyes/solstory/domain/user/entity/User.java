@@ -67,6 +67,10 @@ public class User {
     @Column(name = "user_key", length = 125)
     private String userKey;
     
+    // MBTI
+    @Column(name = "mbti", length = 15)
+    private String mbti;
+    
     // 캐릭터 이미지 파일 저장된 경로
     @Column(name = "character_img_path", length = 200)
     private String characterImgPath;
