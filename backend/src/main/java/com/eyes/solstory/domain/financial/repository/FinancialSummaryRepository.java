@@ -1,5 +1,6 @@
 package com.eyes.solstory.domain.financial.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +17,7 @@ import com.eyes.solstory.domain.financial.entity.DailyFinancialSummary;
 
 @Repository
 public interface FinancialSummaryRepository extends JpaRepository<DailyFinancialSummary, Integer> {
-	
+
 	@Query(value =  "SELECT * FROM (" + 
 					"    SELECT d.category as category, SUM(d.total_amount) as total_amount " +
 		            "    FROM daily_financial_summary d " +
@@ -274,6 +275,18 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 			+ "AND account_type = 1 -- 저축계좌"
 			, nativeQuery = true)
 	AccountKeyDTO findActiveSavingsAccounts(@Param("userNo") int userNo);
+
+	// 현재 날짜로부터 7일 이내에 같은 카테고리 총액을 구하는 메서드
+	@Query("SELECT SUM(d.totalAmount) FROM DailyFinancialSummary d WHERE d.userNo = :userNo AND d.category = :category AND d.financialDate BETWEEN :startDate AND :endDate")
+	Integer findTotalAmountByCategoryInLast7Days(@Param("userNo") int userNo, @Param("category") String category, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+	// 현재 날짜로부터 30일 이내에 같은 카테고리 총액을 구하는 메서드
+	@Query("SELECT SUM(d.totalAmount) FROM DailyFinancialSummary d WHERE d.userNo = :userNo AND d.category = :category AND d.financialDate BETWEEN :startDate AND :endDate")
+	Integer findTotalAmountByCategoryInLast30Days(@Param("userNo") int userNo, @Param("category") String category, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+	// 현재 날짜로부터 1일 이내에 같은 카테고리 총액을 구하는 메서드
+	@Query("SELECT SUM(d.totalAmount) FROM DailyFinancialSummary d WHERE d.userNo = :userNo AND d.category = :category AND d.financialDate BETWEEN :startDate AND :endDate")
+	Integer findTotalAmountByCategoryInLast1Day(@Param("userNo") int userNo, @Param("category") String category, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }
 
 
