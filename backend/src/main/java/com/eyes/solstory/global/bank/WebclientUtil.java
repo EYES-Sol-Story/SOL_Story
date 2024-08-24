@@ -1,15 +1,19 @@
 package com.eyes.solstory.global.bank;
 
 import com.eyes.solstory.global.bank.dto.Header;
+import com.eyes.solstory.domain.user.dto.OneWonVerificationReq;
+import com.eyes.solstory.domain.user.dto.OneWonVerificationRes;
 import com.eyes.solstory.global.bank.dto.SavingsAccountReq;
 import com.eyes.solstory.global.bank.dto.SavingsAccountRes;
 import com.eyes.solstory.global.bank.dto.SearchSavingsAccountReq;
 import com.eyes.solstory.global.bank.dto.SearchSavingsAccountRes;
 import com.eyes.solstory.global.bank.dto.SearchSavingsProductRes;
+import com.eyes.solstory.domain.user.dto.TransferOneWonReq;
+import com.eyes.solstory.domain.user.dto.TransferOneWonRes;
 import com.eyes.solstory.global.bank.dto.UpdateSavingsAccountReq;
 import com.eyes.solstory.global.bank.dto.UpdateSavingsAccountRes;
-import com.eyes.solstory.global.bank.dto.UserRes;
-import com.eyes.solstory.global.bank.dto.UserReq;
+import com.eyes.solstory.domain.user.dto.UserRes;
+import com.eyes.solstory.domain.user.dto.UserReq;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-//@Component
+@Component
 public class WebClientUtil {
     @Value("${api.key}")
     private String apiKey;
@@ -25,6 +29,39 @@ public class WebClientUtil {
 
     public WebClientUtil(WebClient webClient) {
         this.webClient = webClient;
+    }
+
+    //1원 송금
+    public Mono<ResponseEntity<TransferOneWonRes>> transferOneWon(TransferOneWonReq request) {
+        String url = "/edu/accountAuth/openAccountAuth";
+        return webClient.post()
+                .uri(url)
+                .bodyValue(request)
+                .retrieve()
+                .onStatus(
+                        HttpStatus.BAD_REQUEST::equals,
+                        response -> response.bodyToMono(String.class).map(Exception::new))
+                .onStatus(
+                        HttpStatus.INTERNAL_SERVER_ERROR::equals,
+                        clientResponse -> clientResponse.bodyToMono(String.class).map(Exception::new))
+                .toEntity(TransferOneWonRes.class);
+    }
+
+    //1원 검증
+    public Mono<ResponseEntity<OneWonVerificationRes>> authenticateTransferOneWon(
+            OneWonVerificationReq request) {
+        String url = "/edu/accountAuth/checkAuthCode";
+        return webClient.post()
+                .uri(url)
+                .bodyValue(request)
+                .retrieve()
+                .onStatus(
+                        HttpStatus.BAD_REQUEST::equals,
+                        response -> response.bodyToMono(String.class).map(Exception::new))
+                .onStatus(
+                        HttpStatus.INTERNAL_SERVER_ERROR::equals,
+                        clientResponse -> clientResponse.bodyToMono(String.class).map(Exception::new))
+                .toEntity(OneWonVerificationRes.class);
     }
 
     //사용자 계정 생성
