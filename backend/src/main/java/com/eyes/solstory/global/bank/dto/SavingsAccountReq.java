@@ -1,10 +1,12 @@
 package com.eyes.solstory.global.bank.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
+@Builder
 public class SavingsAccountReq {
     private Header header;
     private String accountTypeUniqueNo;
@@ -12,6 +14,7 @@ public class SavingsAccountReq {
     private String withdrawalAccountNo;
     private long depositBalance;
     @Data
+    @Builder
     public static class Header {
         private String apiName;
         private String transmissionDate;
@@ -34,4 +37,3 @@ public class SavingsAccountReq {
                 '}';
     }
 }
-
