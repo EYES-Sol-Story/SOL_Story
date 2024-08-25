@@ -37,10 +37,10 @@ public class FinancialSummaryProcessor {
     
 	/**
 	 * 자정마다 모든 활성화 된 계좌의 전날 지출/수익/저축 내역을 받아 summary
-	 * 시스템 시간 고려해서 30초에 실행 
+	 * 시스템 시간 고려해서 5분에 실행 
 	 * @throws URISyntaxException
 	 */
-    @Scheduled(cron = "30 0 0 * * *")
+    @Scheduled(cron = "0 5 0 * * *")
 	public void fetchAndStoreFinancialData() throws URISyntaxException {
 	    String yesterday = LocalDate.now().minusDays(1).format(OpenApiUtil.DATE_FORMATTER);//1일전
 	    

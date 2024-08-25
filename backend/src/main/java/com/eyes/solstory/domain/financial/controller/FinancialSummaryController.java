@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +17,6 @@ import com.eyes.solstory.domain.financial.dto.CategorySpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.dto.FinancialTrendDTO;
 import com.eyes.solstory.domain.financial.dto.StoreSpendingSummary;
 import com.eyes.solstory.domain.financial.service.FinancialSummaryAnalyzer;
-import com.eyes.solstory.domain.financial.service.FinancialSummaryProcessor;
 
 import lombok.AllArgsConstructor;
 
@@ -29,24 +27,9 @@ public class FinancialSummaryController {
 
 	private static final Logger logger = LoggerFactory.getLogger(FinancialSummaryController.class);	
 
-	private FinancialSummaryProcessor summaryProcessor;
     private FinancialSummaryAnalyzer summaryAnalyzer;
     
-    /**
-     * 테스트용
-     * SummaryService의 fetchAndStoreFinancialData 
-     */
-    @PostMapping("/test/fetch-and-store")
-    public ResponseEntity<String> testFetchAndStoreFinancialData() {
-        try {
-        	summaryProcessor.fetchAndStoreFinancialData();
-            return ResponseEntity.ok("Financial data fetch and store process completed successfully.");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Error occurred: " + e.getMessage());
-        }
-    }
-    
+ 
     /**
      * 최근 30일 지출 상위 카테고리 5개의 지출 합계
      * @param userNo
@@ -164,7 +147,7 @@ public class FinancialSummaryController {
      * @return
      */
     @GetMapping("/top3-categories")
-    public ResponseEntity<String[]> ggetTop3Categories(@RequestParam("userNo") int userNo){
+    public ResponseEntity<String[]> getTop3Categories(@RequestParam("userNo") int userNo){
     	return ResponseEntity.ok(summaryAnalyzer.getTop3Categories(userNo));
     }
     
