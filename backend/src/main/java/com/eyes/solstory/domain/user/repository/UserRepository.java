@@ -18,11 +18,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	Optional<User> findUserByUserNo(int userNo);
 	
 	@Query("UPDATE User SET mbti = :mbti WHERE userNo = :userNo")
-	User updateUserByMbti(String mbti, int userNo);
+	int updateUserByMbti(String mbti, int userNo);
 	
 	@Query("UPDATE User SET characterImgPath = :imgPath WHERE userNo = :userNo")
-	User updateUserByCharacter(String imgPath, int userNo);
+	int updateUserByCharacter(String imgPath, int userNo);
 	
-	@Query("UPDATE User SET mbti = user.mbti AND characterImgPath = :user.characterImgPath WHERE userNo = :user.userNo")
-	User updateUserInfo(User user);
+	@Query("UPDATE User SET mbti = :mbti,  characterImgPath = :iImgPath WHERE userNo = :userNo")
+	int updateUserInfo(String mbti, String imgPath, int userNo);
 }

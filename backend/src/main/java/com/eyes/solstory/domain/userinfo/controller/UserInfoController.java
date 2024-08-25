@@ -47,8 +47,13 @@ public class UserInfoController {
         return ResponseEntity.ok(savedUser);
     }
     
+    /**
+     * 캐릭터filepath or mbti or 둘 다 update 
+     * @param user
+     * @return update 성공 시 1 반환, 실패 시 0 반환
+     */
     @PostMapping("/users/update/info")
-    public ResponseEntity<User> updateUserInfo(@RequestBody User user) {
+    public ResponseEntity<Integer> updateUserInfo(@RequestBody User user) {
     	return ResponseEntity.ok(userInfoService.updateUserInfo(user));
     }
 

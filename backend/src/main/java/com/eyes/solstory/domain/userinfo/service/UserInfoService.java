@@ -11,7 +11,7 @@ public class UserInfoService {
 	@Autowired
     private UserRepository userRepository;
     
-    public User updateUserInfo(User user) {
+    public int updateUserInfo(User user) {
     	int userNo = user.getUserNo();
     	String mbti = user.getMbti();
     	String imgPath = user.getCharacterImgPath();
@@ -28,6 +28,6 @@ public class UserInfoService {
     		return userRepository.updateUserByMbti(imgPath, userNo);
     	}
     	
-    	return null;
+    	return 0;
     }
 }
