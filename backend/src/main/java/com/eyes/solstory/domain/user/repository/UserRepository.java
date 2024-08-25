@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("UPDATE User SET characterImgPath = :imgPath WHERE userNo = :userNo")
 	int updateUserByCharacter(@Param("imgPath") String imgPath, @Param("userNo") int userNo);
 	
-	@Query("UPDATE User SET mbti = :mbti,  characterImgPath = :imgPath WHERE userNo = :userNo")
+	@Query("UPDATE User SET mbti = :mbti,  characterImgPath = :iImgPath WHERE userNo = :userNo")
 	int updateUserInfo(@Param("mbti") String mbti, @Param("imgPath") String imgPath, @Param("userNo") int userNo);
 	
 	
@@ -40,5 +40,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	
 	//아이디 중복확인
 	@Query("SELECT u.userId FROM User u WHERE u.userId = :userId")
-    String existsByUserId(@Param("userId") String userId);
+    boolean existsByUserId(@Param("userId") String userId);
 }

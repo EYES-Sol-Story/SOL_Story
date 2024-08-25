@@ -120,9 +120,7 @@ public class UserController {
     //아이디 중복확인 - 유저 아이디가 존재하는지 확인
     @GetMapping("/check-userid")
     public ResponseEntity<Boolean> checkUserid(@RequestParam("userid") String userId) {
-        boolean exists = userRepository.existsByUserId(userId) != null ? true : false;
-        
-        return ResponseEntity.ok(exists);
+        return ResponseEntity.ok(userRepository.existsByUserId(userId));
     }
     
 }
