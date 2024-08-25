@@ -13,9 +13,6 @@ import com.eyes.solstory.domain.user.entity.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 	User findUserByUserId(String userId);
 
-	@Query("SELECT u.userNo FROM User u")
-	List<Integer> findAllUserNos();
-
 	User findUserByEmail(String email);
 
 	Optional<User> findUserByUserNo(int userNo);

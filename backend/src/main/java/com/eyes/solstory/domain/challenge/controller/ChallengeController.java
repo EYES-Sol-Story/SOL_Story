@@ -30,12 +30,10 @@ public class ChallengeController {
     private UserRepository userRepository;
 
     @GetMapping("/list")
-    public ResponseEntity<List<UserChallenge>> getChallengeList(@RequestParam String userId) {
-        User user = userRepository.findUserByUserId(userId);
-        if (user == null) {
-            throw new UserNotFoundException("잘못된 사용자 입니다.");
-        }
-
+    public ResponseEntity<List<UserChallenge>> getChallengeList(@RequestParam("email") String email) {
+        System.out.println(email);
+        User user = userRepository.findUserByEmail(email);
+        System.out.println(user);
         //저축 4개 지출 6개의 챌린지 반환
         List<Challenge> savingChallenges = challengeService.getRandomSavingChallenges(4);
         List<Challenge> spendingChallenges = challengeService.getRandomSpendingChallenges(6);
