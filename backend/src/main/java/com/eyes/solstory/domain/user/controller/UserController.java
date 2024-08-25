@@ -3,6 +3,7 @@ package com.eyes.solstory.domain.user.controller;
 import java.net.URISyntaxException;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ public class UserController {
     public ResponseEntity<UserRes> createUserAccount(@RequestParam("userId") String userId, @RequestParam("email") String email) {
         return userService.createUserAccount(userId, email);
     }
+
 
     // 1원 송금
     @PostMapping("/transfer/one_won")
@@ -53,5 +55,11 @@ public class UserController {
             @RequestParam("userId") String userId,
             @RequestParam("targetAmount") int targetAmount) {
         return userService.createSavingAccount(accountTypeUniqueNo, withdrawalAccountNo, depositBalance, userId, targetAmount);
+    }
+
+    //userkey 조회
+    @GetMapping("/userkey")
+    public ResponseEntity<String> searchUserkey(@RequestParam("email") String email) {
+        return userService.searchUserkey(email);
     }
 }

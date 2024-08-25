@@ -229,4 +229,8 @@ public class UserService {
 
         return ResponseEntity.ok(response.getBody());
     }
+
+    public ResponseEntity<String> searchUserkey(String email) {
+        return ResponseEntity.ok(userRepository.findUserByEmail(email).getUserKey());
+    }
 }
