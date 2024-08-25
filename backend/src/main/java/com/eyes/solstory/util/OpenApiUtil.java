@@ -26,7 +26,7 @@ public class OpenApiUtil {
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HHmmss");
     
     /**
-     * OpenApi 사용 시 Header 생성 
+     * OpenApi 사용 시 Header 생성
      * 날짜와 랜덤을 메서드 내에서 생성 
      * 
      * @param apiName Open Api Url 의 엔드포인트

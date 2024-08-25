@@ -19,6 +19,7 @@ import com.eyes.solstory.domain.challenge.repository.ChallengeRewardRepository;
 import com.eyes.solstory.domain.financial.entity.UserAccount;
 import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
 import com.eyes.solstory.domain.financial.service.DemandDepositCollector;
+import com.eyes.solstory.domain.user.dto.UserDto;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
@@ -233,4 +234,35 @@ public class UserService {
     public ResponseEntity<String> searchUserkey(String email) {
         return ResponseEntity.ok(userRepository.findUserByEmail(email).getUserKey());
     }
+    
+    
+    
+    
+    /////////////gabin
+    public void saveUser(UserDto userDto) {
+    	// UserEntity로 변환 후 저장
+    	User user = User.builder()
+    			.userId(userDto.getId())
+    			.password(userDto.getPassword())
+    	        .userName(userDto.getName())
+    	        .email(userDto.getEmail())
+    	        .gender(userDto.getGender())
+    	        .birth(userDto.transDateFormatyyyyMMdd(userDto.getBirthdate())) //변환필요
+    	        .joinDate(LocalDate.now())
+    			.build();
+        // 나머지 매핑 작업
+        userRepository.save(user);
+    }
+    
+    public String findUserIdByEmail(String email) {
+        User user = userRepository.findUserByEmail(email);
+        return user != null ? user.getUserId() : null;
+    }
+    
+    public boolean authenticate(String username, String password) {
+    	System.out.println(username + ", " + password);
+        User user = userRepository.login(username, password);
+        return user != null;
+    
+	}
 }

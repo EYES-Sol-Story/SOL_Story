@@ -17,10 +17,6 @@ repositories {
 	mavenCentral()
 }
 
-ext {
-	set('springShellVersion', "3.3.1")
-}
-
 dependencies {
 	// 스프링 캐시 추상화를 사용하여 애플리케이션에서 캐싱을 쉽게 구성하고 관리할 수 있도록 지원
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
@@ -56,13 +52,6 @@ dependencies {
 	// testImplementation 'org.springframework.shell:spring-shell-starter-test'
 	// JUnit 플랫폼 런처를 통해 테스트 실행 및 리포팅 기능 제공
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-dependencyManagement {
-	imports {
-		// Spring Shell 라이브러리의 버전 관리를 위한 Maven BOM 설정
-		mavenBom "org.springframework.shell:spring-shell-dependencies:${springShellVersion}"
-	}
 }
 
 tasks.named('test') {

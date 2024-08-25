@@ -67,7 +67,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 				+ "                        ) "
 				+ "                    WHERE ROWNUM <= 5 "
 				+ "    ) "
-				+ "GROUP BY do.category, uag.age_group; ",
+				+ "GROUP BY do.category, uag.age_group ",
 	        nativeQuery = true)
 	List<CategorySpendingAvgDTO> findTop5CategoriesWithAvg(@Param("userNo") int userNo);
 	
@@ -91,7 +91,7 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 		            "		r.total_amount AS total_amount, " +
 		            "       n.total_amount_before, " +
 		            "       r.total_amount - n.total_amount_before AS difference, " +
-		            "       CASE WHEN n.total_amount_before = 0 THEN 999 " + // 무한증가
+		            "       CASE WHEN n.total_amount_before = 0 THEN 999 " + 
 		            "            ELSE ROUND(((r.total_amount - n.total_amount_before)/n.total_amount_before) * 100, 2) " +
 		            "       END AS percent_change " +
 		            "FROM recent_top10_spending_category r, " +
