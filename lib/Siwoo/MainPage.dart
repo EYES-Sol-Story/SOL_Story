@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sol_story/Siwoo/UserProfile.dart'; // UserProfile 페이지 import
 import 'package:sol_story/Boyoung/GoalList.dart'; // GoalList 페이지 import
-import 'package:sol_story/Sungjun/Scenario.dart'; // Scenario 페이지 import
+import 'package:sol_story/Sungjun/story_main.dart'; // Scenario 페이지 import
 
 class MainPage extends StatelessWidget {
   @override
@@ -39,7 +39,7 @@ class MainPage extends StatelessWidget {
                 // Scenario 페이지로 이동
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ScenarioPage()),
+                  MaterialPageRoute(builder: (context) => StoryMain()),
                 );
               },
               child: Text('Scenario'),

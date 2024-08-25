@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.1.2  # 최신 버전을 사용하세요
+  shared_preferences: ^2.0.11  # 최신 버전으로 업데이트
+  http: ^1.2.2  # 최신 버전으로 업데이트
 
 
   # The following adds the Cupertino Icons font to your application.
