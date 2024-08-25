@@ -112,7 +112,7 @@ public class UserController {
      * @return
      * 
      * LoginRes (json 형태)
-     * {	"loginRes"  : true,  // false
+     * {	"loginResult"  : true,  // false
      * 		"loginUser" : {  //null
      * 						"userNo" 	: 1,
      * 						"userName"  : "지히"

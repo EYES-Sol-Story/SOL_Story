@@ -34,7 +34,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	String findIdByEmail(@Param("email") String email);
 	
 	//로그인하기 - 로그인할 때, user_no랑 user_name을 메인화면에 전달하기
-	@Query("SELECT * FROM User u WHERE u.userId = :userId AND u.password = :password")
+	@Query("SELECT u.userNo AS userNo, u.userName AS userName FROM User u WHERE u.userId = :userId AND u.password = :password")
 	LoginUser login(@Param("userId") String userId, @Param("password") String password); 
 	
 	//아이디 중복확인
