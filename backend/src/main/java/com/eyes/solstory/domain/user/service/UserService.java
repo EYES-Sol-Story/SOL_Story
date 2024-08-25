@@ -19,6 +19,8 @@ import com.eyes.solstory.domain.challenge.repository.ChallengeRewardRepository;
 import com.eyes.solstory.domain.financial.entity.UserAccount;
 import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
 import com.eyes.solstory.domain.financial.service.DemandDepositCollector;
+import com.eyes.solstory.domain.user.dto.LoginRes;
+import com.eyes.solstory.domain.user.dto.LoginUser;
 import com.eyes.solstory.domain.user.dto.UserDto;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.entity.User;
@@ -259,10 +261,19 @@ public class UserService {
         return user != null ? user.getUserId() : null;
     }
     
-    public boolean authenticate(String username, String password) {
+    public LoginRes authenticate(String username, String password) {
     	System.out.println(username + ", " + password);
-        User user = userRepository.login(username, password);
-        return user != null;
-    
+        
+    	LoginUser user = userRepository.login(username, password);
+        LoginRes result = new LoginRes();
+
+        if(user == null) {
+        	result.setLoginResult(false);
+        }else {
+        	result.setLoginResult(true);
+        	result.setLoginUser(user);
+        }
+        
+        return result;
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eyes.solstory.domain.user.dto.LoginRes;
 import com.eyes.solstory.domain.user.dto.UserDto;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.entity.User;
@@ -105,16 +106,24 @@ public class UserController {
 //    }
     
 
+    /**
+     * 
+     * @param loginRequest
+     * @return
+     * 
+     * LoginRes (json 형태)
+     * {	"loginRes"  : true,  // false
+     * 		"loginUser" : {  //null
+     * 						"userNo" 	: 1,
+     * 						"userName"  : "지히"
+     * 					  }
+     * } 
+     */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+    public ResponseEntity<LoginRes> login(@RequestBody User loginRequest) {
     	System.out.println("들어옴");
     	System.out.println(loginRequest.toString());
-        boolean isAuthenticated = userService.authenticate(loginRequest.getUserId(), loginRequest.getPassword());
-        if (isAuthenticated) {
-            return ResponseEntity.ok().body("{\"success\": true}");
-        } else {
-            return ResponseEntity.ok().body("{\"success\": false}");
-        }
+        return ResponseEntity.ok(userService.authenticate(loginRequest.getUserId(), loginRequest.getPassword()));
     }
     
     //아이디 중복확인 - 유저 아이디가 존재하는지 확인

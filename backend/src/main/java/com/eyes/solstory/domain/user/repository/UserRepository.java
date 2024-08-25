@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.eyes.solstory.domain.user.dto.LoginUser;
 import com.eyes.solstory.domain.user.entity.User;
 
 @Repository
@@ -23,10 +24,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("UPDATE User SET characterImgPath = :imgPath WHERE userNo = :userNo")
 	int updateUserByCharacter(@Param("imgPath") String imgPath, @Param("userNo") int userNo);
 	
-	@Query("UPDATE User SET mbti = :mbti,  characterImgPath = :iImgPath WHERE userNo = :userNo")
+	@Query("UPDATE User SET mbti = :mbti,  characterImgPath = :imgPath WHERE userNo = :userNo")
 	int updateUserInfo(@Param("mbti") String mbti, @Param("imgPath") String imgPath, @Param("userNo") int userNo);
-	
-	
 	
 	//gabin
 	//계정 찾기 - 해당 이메일을 가진 회원이 존재하는지 확인 - 위와 중복으로 제거
@@ -35,8 +34,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	String findIdByEmail(@Param("email") String email);
 	
 	//로그인하기 - 로그인할 때, user_no랑 user_name을 메인화면에 전달하기
-	@Query("SELECT u FROM User u WHERE u.userId = :userId AND u.password = :password")
-	User login(@Param("userId") String userId, @Param("password") String password); 
+	@Query("SELECT * FROM User u WHERE u.userId = :userId AND u.password = :password")
+	LoginUser login(@Param("userId") String userId, @Param("password") String password); 
 	
 	//아이디 중복확인
 	@Query("SELECT u.userId FROM User u WHERE u.userId = :userId")
