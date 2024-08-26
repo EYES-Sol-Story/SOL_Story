@@ -1,7 +1,5 @@
 package com.eyes.solstory.domain.userinfo.controller;
 
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +16,10 @@ import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
 import com.eyes.solstory.domain.userinfo.entity.Hobby;
 import com.eyes.solstory.domain.userinfo.entity.Interest;
+import com.eyes.solstory.domain.userinfo.entity.MBTI;
 import com.eyes.solstory.domain.userinfo.repository.HobbyRepository;
 import com.eyes.solstory.domain.userinfo.repository.InterestRepository;
+import com.eyes.solstory.domain.userinfo.repository.MBTIRepository;
 import com.eyes.solstory.domain.userinfo.service.UserInfoService;
 
 @RestController
@@ -34,19 +34,20 @@ public class UserInfoController {
 
     @Autowired
     private HobbyRepository hobbyRepository;
+
+    @Autowired
+    private MBTIRepository mbtiRepository;
     
     @Autowired
     private UserInfoService userInfoService;
     
-    // update
-
     // User 관련 API
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);
     }
-    
+
     /**
      * 캐릭터filepath or mbti or 둘 다 update 
      * @param user
@@ -54,7 +55,7 @@ public class UserInfoController {
      */
     @PostMapping("/users/update/info")
     public ResponseEntity<Integer> updateUserInfo(@RequestBody User user) {
-    	return ResponseEntity.ok(userInfoService.updateUserInfo(user));
+        return ResponseEntity.ok(userInfoService.updateUserInfo(user));
     }
 
     @GetMapping("/users/{userNo}")
@@ -93,7 +94,7 @@ public class UserInfoController {
         return ResponseEntity.ok(savedHobby);
     }
 
-    @GetMapping("/hobbies/{id}")
+    @GetMapping("/hobbies/{userNo}")
     public ResponseEntity<Hobby> getHobby(@PathVariable("userNo") int userNo) {
         Optional<Hobby> hobby = hobbyRepository.findByUserNo(userNo);
         return hobby.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -102,5 +103,29 @@ public class UserInfoController {
     @GetMapping("/hobbies")
     public List<Hobby> getAllHobbies() {
         return hobbyRepository.findAll();
+    }
+
+    // MBTI 관련 API
+    @PostMapping("/mbti")
+    public ResponseEntity<MBTI> createMBTI(@RequestBody MBTI mbti) {
+        MBTI savedMBTI = mbtiRepository.save(mbti);
+        return ResponseEntity.ok(savedMBTI);
+    }
+
+    @GetMapping("/mbti/{mbti}")
+    public ResponseEntity<List<MBTI>> getUserByMBTI(@PathVariable("mbti") String mbti) {
+        List<MBTI> mbtiUsers = mbtiRepository.findByMbti(mbti);
+        return ResponseEntity.ok(mbtiUsers);
+    }
+
+    @GetMapping("/mbti/user/{userNo}")
+    public ResponseEntity<MBTI> getMBTIByUserNo(@PathVariable("userNo") int userNo) {
+        Optional<MBTI> mbti = mbtiRepository.findByUserNo(userNo);
+        return mbti.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/mbti")
+    public List<MBTI> getAllMBTIUsers() {
+        return mbtiRepository.findAll();
     }
 }
