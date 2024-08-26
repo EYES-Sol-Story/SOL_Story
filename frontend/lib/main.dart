@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'models/key_model.dart';
-import 'models/owned_cards_model.dart';
-import 'models/story_data.dart'; // StoryDataModel 가져오기
-import 'story_main.dart';
+import 'Sungjun/models/key_model.dart';
+import 'Sungjun/models/owned_cards_model.dart';
+import 'Sungjun/models/story_data.dart'; // StoryDataModel 가져오기
+import 'Sungjun/story_main.dart'; // 사용되지 않는 패키지
+import 'package:sol_story/Gabin/Login.dart'; // 필수
 
 void main() {
   runApp(

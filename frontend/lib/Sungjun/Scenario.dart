@@ -5,6 +5,7 @@ import 'story_new.dart';
 import 'story_kard_own.dart';
 import 'story_kard_shop.dart';
 import 'story_own.dart';
+import 'story_main.dart';
 
 class ScenarioPage extends StatefulWidget {
   @override

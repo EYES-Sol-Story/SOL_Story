@@ -30,6 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_preferences: ^2.3.2 # To use loccal storage, newest version
+  fl_chart: ^0.68.0 # To use charts
+  http: ^1.0.0 # To use API
+  provider: ^6.0.5 # Add provider dependency
 
 
   # The following adds the Cupertino Icons font to your application.

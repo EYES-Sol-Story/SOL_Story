@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+
 class SolamaService {
   // 로컬 Sollama 서버 URL
   final String _apiUrl = 'http://10.0.2.2:11434/v1/chat/completions';
