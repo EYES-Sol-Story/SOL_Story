@@ -241,7 +241,7 @@ public class UserService {
     
     
     /////////////gabin
-    public void saveUser(UserDto userDto) {
+    public int saveUser(UserDto userDto) {
     	// UserEntity로 변환 후 저장
     	User user = User.builder()
     			.userId(userDto.getId())
@@ -252,28 +252,36 @@ public class UserService {
     	        .birth(userDto.transDateFormatyyyyMMdd(userDto.getBirthdate())) //변환필요
     	        .joinDate(LocalDate.now())
     			.build();
-        // 나머지 매핑 작업
+        // 유저의 정보 저장
         userRepository.save(user);
+        
+        System.out.println("회원정보 저장 중");
+        
+        //저장된 회원의 user_no을 조회하여서
+        User savedUser = userRepository.findByUserId(user.getUserId());
+        //그 회원의 user_no를 반환해주기
+        return savedUser.getUserNo();
     }
     
+    //이메일을 가지고 아이디 구하기. 계정찾기페이지에서 사용하여 비밀번호 변경페이지에 넘겨줄 것.
     public String findUserIdByEmail(String email) {
         User user = userRepository.findUserByEmail(email);
         return user != null ? user.getUserId() : null;
     }
     
-    public LoginRes authenticate(String username, String password) {
+    //로그인 인증
+    public boolean authenticate(String username, String password) {
     	System.out.println(username + ", " + password);
-        
-    	LoginUser user = userRepository.login(username, password);
-        LoginRes result = new LoginRes();
-
-        if(user == null) {
-        	result.setLoginResult(false);
-        }else {
-        	result.setLoginResult(true);
-        	result.setLoginUser(user);
-        }
-        
-        return result;
+        User user = userRepository.login(username, password);
+        return user != null;
+    
 	}
+    
+    //유저 넘버 구하기
+    public int getUserNo(User user) {
+        //저장된 회원의 user_no을 조회하여서
+        User userforNumber = userRepository.findByUserId(user.getUserId());
+        //그 회원의 user_no를 반환해주기
+        return userforNumber.getUserNo();
+    }
 }

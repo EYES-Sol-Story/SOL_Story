@@ -1,6 +1,7 @@
 package com.eyes.solstory.domain.user.controller;
 
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,9 +77,10 @@ public class UserController {
     
     ////////////gabin
     @PostMapping("/signup")
-    public String signUp(@RequestBody UserDto userDto) {
-        userService.saveUser(userDto);
-        return "회원가입 성공";
+    public ResponseEntity<?> signUp(@RequestBody UserDto userDto) {
+    	System.out.println("signup controller 들어옴");
+        int userNo = userService.saveUser(userDto);
+        return ResponseEntity.ok().body(Map.of("user_no", userNo));
     }
     
     @GetMapping("/getUserIdByEmail")
@@ -90,20 +92,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
     }
+
     
-//    @PostMapping("/getUserId")
-//    public ResponseEntity<String> getUserId(@RequestParam String user_id) {
-//        String user_id = request.get("user_id");
-//        Optional<User> user = UserRepository.findByEmail(email);
-//
-//        if (user.isPresent()) {
-//            Map<String, String> response = new HashMap<>();
-//            response.put("userId", user.get().getUserId());
-//            return ResponseEntity.ok(response);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//        }
-//    }
     
 
     /**
@@ -119,17 +109,41 @@ public class UserController {
      * 					  }
      * } 
      */
-    @PostMapping("/login")
-    public ResponseEntity<LoginRes> login(@RequestBody User loginRequest) {
-    	System.out.println("들어옴");
-    	System.out.println(loginRequest.toString());
-        return ResponseEntity.ok(userService.authenticate(loginRequest.getUserId(), loginRequest.getPassword()));
-    }
-    
-    //아이디 중복확인 - 유저 아이디가 존재하는지 확인
-    @GetMapping("/check-userid")
-    public ResponseEntity<Boolean> checkUserid(@RequestParam("userid") String userId) {
-        return ResponseEntity.ok(userRepository.existsByUserId(userId));
-    }
+
+     @PostMapping("/login")
+     public ResponseEntity<?> login(@RequestBody User loginRequest) {
+         System.out.println("로그인컨트롤러에 들어옴");
+         System.out.println(loginRequest.toString());
+         boolean isAuthenticated = userService.authenticate(loginRequest.getUserId(), loginRequest.getPassword());
+         if (isAuthenticated) {
+             int userNo = userService.getUserNo(loginRequest);
+             System.out.println("로그인에서 userNo : " + userNo);
+             return ResponseEntity.ok().body(Map.of("user_no", userNo));
+         } else {
+             return ResponseEntity.ok().body("{\"userNo\": noUser}");
+         }
+     }
+     
+     //아이디 중복확인 - 유저 아이디가 존재하는지 확인
+     @GetMapping("/check-userid")
+     public ResponseEntity<Boolean> checkUserid(@RequestParam("userid") String userId) {
+         System.out.println("아이디 중복확인중");
+         return ResponseEntity.ok(userRepository.existsByUserId(userId));
+     }
+     
+     //이메일 중복확인 - 유저 이메일이 존재하는지 확인
+     @GetMapping("/check-email")
+     public ResponseEntity<Boolean> checkEmail(@RequestParam("email") String email) {
+         System.out.println("이메일검사중. email : " + email);
+         return ResponseEntity.ok(userRepository.existsByEmail(email));
+     }
+     
+     //비밀번호 변경
+     @PostMapping("/change-password")
+     public int changePassword(@RequestParam("userId") String userId, @RequestParam("password") String password) {
+ 
+         int result = userRepository.changePassword(userId, password);
+         return result;
+     }
     
 }
