@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7f49231d-3cff-4c34-9f65-cd4ad931c330" name="Changes" comment="test">
+    <list default="true" id="7f49231d-3cff-4c34-9f65-cd4ad931c330" name="Changes" comment="정상 작동">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/Sungjun/Scenario.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/Sungjun/Scenario.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,11 +109,28 @@
       <option name="project" value="LOCAL" />
       <updated>1724648407206</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="정상 작동">
+      <option name="closed" value="true" />
+      <created>1724649061651</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1724649061651</updated>
+    </task>
+    <task id="LOCAL-00006" summary="정상 작동">
+      <option name="closed" value="true" />
+      <created>1724649184630</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1724649184630</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test" />
-    <option name="LAST_COMMIT_MESSAGE" value="test" />
+    <MESSAGE value="정상 작동" />
+    <option name="LAST_COMMIT_MESSAGE" value="정상 작동" />
   </component>
 </project>

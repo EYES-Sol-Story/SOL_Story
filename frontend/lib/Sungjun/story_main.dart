@@ -6,7 +6,7 @@ import 'story_kard_own.dart';
 import 'story_kard_shop.dart';
 import 'story_own.dart';
 
-class ScenarioPage extends StatefulWidget {
+class StoryMain extends StatefulWidget {
   @override
   _StoryMainState createState() => _StoryMainState();
 }
