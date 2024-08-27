@@ -1,7 +1,8 @@
 import 'dart:convert'; // for jsonEncode
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:sol_story/login/user_main_screen.dart';
+import 'user_main_screen.dart';
+import '/Siwoo/MainPage.dart';
 
 //가빈의 로그인페이지
 class LoginScreen extends StatefulWidget {
@@ -75,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => user_main_screen(userNo: userNo), // user_no를 넘겨줌
+              builder: (context) => MainPage(), // user_no를 넘겨줌 main.dart나 config로 저장해뒀으면좋겠음 
             ),
           );
 

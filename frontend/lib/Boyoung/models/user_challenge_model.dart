@@ -44,4 +44,4 @@ class UserChallenge {
     }
   }
 }
-No newline at end of file
+

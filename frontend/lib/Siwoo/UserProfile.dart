@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sol_story/Jihee/FinancialAnaly.dart'; // FinancialAnaly 페이지 import
+import '/Jihee/FinancialAnaly.dart'; // FinancialAnaly 페이지 import
 
 class UserProfilePage extends StatelessWidget {
   @override
