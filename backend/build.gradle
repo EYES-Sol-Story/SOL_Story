@@ -44,6 +44,10 @@ dependencies {
 	// 롬복 어노테이션 처리기
 	annotationProcessor 'org.projectlombok:lombok:1.18.34'
 	
+	// gabin Hibernate 의존성 설정
+	implementation 'org.hibernate.orm:hibernate-core:6.5.2.Final'
+	
+	
 	// Spring 애플리케이션의 통합 테스트 지원
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	// MyBatis와 관련된 기능을 테스트할 수 있는 도구 및 유틸리티 제공

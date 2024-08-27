@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.eyes.solstory.domain.user.dto.LoginRes;
 import com.eyes.solstory.domain.user.dto.UserDto;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.entity.User;
@@ -68,7 +67,8 @@ public class UserController {
     //userkey 조회
     @GetMapping("/userkey")
     public ResponseEntity<String> searchUserkey(@RequestParam("email") String email) {
-        return userService.searchUserkey(email);
+        System.out.println("userKey()> email: " + email );
+    	return userService.searchUserkey(email);
     }
     
     

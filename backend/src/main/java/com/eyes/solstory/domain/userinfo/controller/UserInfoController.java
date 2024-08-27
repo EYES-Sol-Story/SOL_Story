@@ -11,15 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.eyes.solstory.domain.userinfo.entity.UserInfo;
+
 import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
 import com.eyes.solstory.domain.userinfo.entity.Hobby;
 import com.eyes.solstory.domain.userinfo.entity.Interest;
-import com.eyes.solstory.domain.userinfo.entity.MBTI;
 import com.eyes.solstory.domain.userinfo.repository.HobbyRepository;
 import com.eyes.solstory.domain.userinfo.repository.InterestRepository;
-import com.eyes.solstory.domain.userinfo.repository.MBTIRepository;
 import com.eyes.solstory.domain.userinfo.service.UserInfoService;
 
 @RestController
@@ -36,11 +34,10 @@ public class UserInfoController {
     private HobbyRepository hobbyRepository;
 
     @Autowired
-    private MBTIRepository mbtiRepository;
-    
-    @Autowired
     private UserInfoService userInfoService;
     
+
+
     // User 관련 API
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -59,18 +56,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/users/{userNo}")
-    public ResponseEntity<User> getUser(@PathVariable("userNo") int userNo) {
-        Optional<User> user = userRepository.findUserByUserNo(userNo);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
 
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    // Interest 관련 API
-    @PostMapping("/interests")
     public ResponseEntity<Interest> createInterest(@RequestBody Interest interest) {
         Interest savedInterest = interestRepository.save(interest);
         return ResponseEntity.ok(savedInterest);
@@ -105,6 +91,7 @@ public class UserInfoController {
         return hobbyRepository.findAll();
     }
 
+    /*
     // MBTI 관련 API
     @PostMapping("/mbti")
     public ResponseEntity<MBTI> createMBTI(@RequestBody MBTI mbti) {
@@ -128,4 +115,5 @@ public class UserInfoController {
     public List<MBTI> getAllMBTIUsers() {
         return mbtiRepository.findAll();
     }
+    */
 }

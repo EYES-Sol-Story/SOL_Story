@@ -19,8 +19,6 @@ import com.eyes.solstory.domain.challenge.repository.ChallengeRewardRepository;
 import com.eyes.solstory.domain.financial.entity.UserAccount;
 import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
 import com.eyes.solstory.domain.financial.service.DemandDepositCollector;
-import com.eyes.solstory.domain.user.dto.LoginRes;
-import com.eyes.solstory.domain.user.dto.LoginUser;
 import com.eyes.solstory.domain.user.dto.UserDto;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.entity.User;
@@ -275,6 +273,15 @@ public class UserService {
         User user = userRepository.login(username, password);
         return user != null;
     
+
+
+
+
+
+
+
+
+
 	}
     
     //유저 넘버 구하기
