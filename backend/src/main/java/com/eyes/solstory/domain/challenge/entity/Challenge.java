@@ -27,7 +27,7 @@ public class Challenge {
 
 	// 챌린지 일련번호
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "challenge_seq_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "challenge_seq")
     @Column(name = "challenge_no", precision = 10)
     private int challengeNo;
 

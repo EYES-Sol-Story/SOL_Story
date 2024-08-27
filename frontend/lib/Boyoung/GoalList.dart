@@ -8,8 +8,6 @@ class GoalListPage extends StatelessWidget {
   Future<String?> _checkUserKey() async {
     //SharedPreferences prefs = await SharedPreferences.getInstance();
    //String email = "userKey@ssafy.com"; // 이메일을 사용해 userkey를 확인
-    //지히 - 테스트용
-    String email = "240827_01@ssafy.com";
 
     if (email.isEmpty) {
       return null;
