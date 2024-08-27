@@ -54,7 +54,7 @@ public class UserInfoController {
     public ResponseEntity<Integer> updateUserInfo(@RequestBody User user) {
         return ResponseEntity.ok(userInfoService.updateUserInfo(user));
     }
-
+    
     @GetMapping("/users/{userNo}")
 
     public ResponseEntity<Interest> createInterest(@RequestBody Interest interest) {
