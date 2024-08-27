@@ -39,6 +39,14 @@ class _VerifyOneWonPageState extends State<VerifyOneWonPage> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('1원 인증이 완료되었습니다.'),
       ));
+      Navigator.pushReplacementNamed(
+        context,
+        '/challenges',
+        arguments: {
+          'accountNo': accountNo,
+          'email': email,
+        },
+      );
     } else {
       // 실패
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
