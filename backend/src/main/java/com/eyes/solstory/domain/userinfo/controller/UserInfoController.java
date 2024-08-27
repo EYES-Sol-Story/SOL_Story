@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.eyes.solstory.domain.userinfo.entity.UserInfo;
 import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
 import com.eyes.solstory.domain.userinfo.entity.Hobby;
