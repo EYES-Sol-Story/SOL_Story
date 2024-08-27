@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../models/user_challenge_model.dart';
+import '/../../../config/constants.dart';
 
 class ChallengeListPage extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _ChallengeListPageState extends State<ChallengeListPage> {
     try {
       // 서버 연동 시 이 부분에서 API 호출
       final response = await http.get(
-          Uri.parse('http://192.168.0.2:8090/api/challenge/list?email=$email'));
+          Uri.parse(REST_API_URL + '/api/challenge/list?email=$email'));
       print(response.body);
       if (response.statusCode == 200) {
         // 서버 응답 데이터 파싱 후 리스트 반환

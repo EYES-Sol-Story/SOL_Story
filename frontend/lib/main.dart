@@ -9,6 +9,9 @@ import 'Gabin/change_password_page.dart'; // 비밀번호 변경 페이지
 import 'Sungjun/models/key_model.dart';
 import 'Sungjun/models/owned_cards_model.dart';
 import 'Sungjun/models/story_data.dart'; // StoryDataModel 가져오기
+import 'Boyoung/pages/user_challenge_list.dart';
+import 'Boyoung/pages/create_useraccount.dart';
+import 'Siwoo/MainPage.dart';
 
 
 //이 페이지는, 앱을 실행시켰을 때 sol_story페이지를 2초간 띄우며 firebase(인증구현서비스)연동을 하고
@@ -46,6 +49,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      //home: MainPage(),
       home: EyesIconPage(), // 초기 로딩 페이지를 처음에 표시
       routes: {
         '/login': (context) => LoginScreen(),
@@ -57,6 +61,8 @@ class MyApp extends StatelessWidget {
             userId: args['userId']!,
           );
         },
+        '/challenges': (context) => ChallengeListPage(), // '/challenges' 경로 추가
+        '/create_user': (context) => CreateUserAccountPage(),
       },
     );
   }

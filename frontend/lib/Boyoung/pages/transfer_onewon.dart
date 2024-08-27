@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '/../../../config/constants.dart';
 
 class TransferOneWonPage extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class _TransferOneWonPageState extends State<TransferOneWonPage> {
     final String accountNo = _accountNoController.text;
     final String email = _userIdController.text;
 
-    final Uri uri = Uri.parse('http://192.168.0.2:8090/api/transfer/one_won').replace(
+    final Uri uri = Uri.parse(REST_API_URL + '/api/transfer/one_won').replace(
       queryParameters: {
         'accountNo': accountNo,
         'email': email,

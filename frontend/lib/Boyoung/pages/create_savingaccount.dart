@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '/../../../config/constants.dart';
 
 class CreateSavingAccountPage extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _CreateSavingAccountPageState extends State<CreateSavingAccountPage> {
     final String userId = _userIdController.text;
     final String targetAmount = _targetAmountController.text;
 
-    final Uri uri = Uri.parse('http://192.168.0.2:8090/api/savings/account').replace(
+    final Uri uri = Uri.parse(REST_API_URL + '/api/savings/account').replace(
       queryParameters: {
         'accountTypeUniqueNo': accountTypeUniqueNo,
         'withdrawalAccountNo': withdrawalAccountNo,

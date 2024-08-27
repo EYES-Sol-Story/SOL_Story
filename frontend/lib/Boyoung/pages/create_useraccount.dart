@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../models/user_account_model.dart';
+import '/../../../config/constants.dart';
 
 class CreateUserAccountPage extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class _CreateUserAccountPageState extends State<CreateUserAccountPage> {
       _responseMessage = null;
     });
 
-    final Uri uri = Uri.parse('http://172.20.10.7:8090/api/user/account').replace(
+    final Uri uri = Uri.parse(REST_API_URL + '/api/user/account').replace(
       queryParameters: {
         'userId': userId,
         'email': email,

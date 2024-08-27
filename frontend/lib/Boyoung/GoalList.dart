@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'pages/create_useraccount.dart';
+import '/../../../config/constants.dart';
 
 class GoalListPage extends StatelessWidget {
   Future<String?> _checkUserKey() async {
     //SharedPreferences prefs = await SharedPreferences.getInstance();
-    String email = "userKey@ssafy.com"; // 이메일을 사용해 userkey를 확인
+   //String email = "userKey@ssafy.com"; // 이메일을 사용해 userkey를 확인
+    //지히 - 테스트용
+    String email = "240827_01@ssafy.com";
 
     if (email.isEmpty) {
       return null;
     }
 
-    final Uri uri = Uri.parse('http://172.20.10.7:8090/api/userkey').replace(
+    // window 주소 uri
+    final Uri uri = Uri.parse(REST_API_URL + '/api/userkey').replace(
       queryParameters: {
         'email': email,
       },

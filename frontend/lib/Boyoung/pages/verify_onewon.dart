@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '/../../../config/constants.dart';
 
 class VerifyOneWonPage extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class _VerifyOneWonPageState extends State<VerifyOneWonPage> {
     final String authCode = _authCodeController.text;
     final String email = _emailController.text;
 
-    final Uri uri = Uri.parse('http://192.168.0.2:8090/api/verify/one_won').replace(
+    final Uri uri = Uri.parse(REST_API_URL + '/api/verify/one_won').replace(
       queryParameters: {
         'accountNo': accountNo,
         'authCode': authCode,
