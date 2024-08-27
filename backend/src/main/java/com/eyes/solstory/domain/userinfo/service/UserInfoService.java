@@ -14,18 +14,9 @@ public class UserInfoService {
     public int updateUserInfo(User user) {
     	int userNo = user.getUserNo();
     	String mbti = user.getMbti();
-    	String imgPath = user.getCharacterImgPath();
     	
-    	if(mbti == null && imgPath != null) {
-    		return userRepository.updateUserByCharacter(imgPath, userNo);
-    	}
-    	
-    	if(mbti != null && imgPath == null) {
-    		return userRepository.updateUserByCharacter(imgPath, userNo);
-    	}
-    	
-    	if(mbti != null && imgPath != null) {
-    		return userRepository.updateUserByMbti(imgPath, userNo);
+    	if(mbti != null) {
+    		return userRepository.updateUserByMbti(mbti, userNo);
     	}
     	
     	return 0;
