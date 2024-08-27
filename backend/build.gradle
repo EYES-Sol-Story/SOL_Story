@@ -57,8 +57,6 @@ dependencies {
 	// JUnit 플랫폼 런처를 통해 테스트 실행 및 리포팅 기능 제공
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	// gabin Hibernate 의존성 설정
-	implementation 'org.hibernate.orm:hibernate-core:6.5.2.Final'
 }
 
 tasks.named('test') {

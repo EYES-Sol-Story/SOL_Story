@@ -64,8 +64,8 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }
-
-        return ResponseEntity.ok(response.getBody());
+        
+        return ResponseEntity.ok(userRes);
     }
 
     // 1원 송금
