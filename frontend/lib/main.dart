@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: MainPage(),
-      home: EyesIconPage(), // 초기 로딩 페이지를 처음에 표시
+      home: MainPage(), // 초기 로딩 페이지를 처음에 표시
       routes: {
         '/login': (context) => LoginScreen(),
         '/forgot-account': (context) => ForgotAccountPage(),
