@@ -27,11 +27,13 @@ spring:
         "[format:sql]": true
 
 # 로깅 수준 지정
-# logging:
-#  level:
-#    "[org.hibernate.SQL]": debug
-#    "[org.hibernate.orm.jdbc.bind]": trace
-#    "[org.springframework.web.socket]": trace
-
+logging:
+  level:
+    "[org.hibernate.SQL]": debug
+    "[org.hibernate.orm.jdbc.bind]": trace
+    "[org.springframework.web.socket]": trace
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
+    
 api:
   key: 'cb6cca464d504a29a809ced072ba5aec'
