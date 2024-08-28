@@ -245,13 +245,12 @@ public class UserService {
     	// UserEntity로 변환 후 저장
     	System.out.println(userDto);
     	User user = User.builder()
-    			.userId(userDto.getId())
+    			.userId(userDto.getUserId())
     			.password(userDto.getPassword())
-    	        .userName(userDto.getName())
+    	        .userName(userDto.getUserName())
     	        .email(userDto.getEmail())
     	        .gender(userDto.getGender())
-//    	        .birth(userDto.getBirthdate())
-    	        .birth(userDto.transDateFormatyyyyMMdd(userDto.getBirthdate())) //변환필요
+    	        .birth(userDto.transDateFormatyyyyMMdd(userDto.getBirth())) //변환필요
     	        .joinDate(LocalDate.now())
     			.build();
         // 유저의 정보 저장
@@ -277,15 +276,6 @@ public class UserService {
         User user = userRepository.login(username, password);
         return user != null;
     
-
-
-
-
-
-
-
-
-
 	}
     
     //유저 넘버 구하기
