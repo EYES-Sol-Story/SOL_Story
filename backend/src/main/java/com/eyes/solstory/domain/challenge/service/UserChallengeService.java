@@ -102,4 +102,8 @@ public class UserChallengeService {
             return null;
         }
     }
+
+    public List<UserChallenge> getAllUserChallengeByCompleteDate(LocalDate completeDate) {
+        return userChallengeRepository.findAllByCompleteDate(LocalDate.now());
+    }
 }

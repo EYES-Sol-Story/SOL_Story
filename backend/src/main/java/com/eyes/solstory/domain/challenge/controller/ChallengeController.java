@@ -1,5 +1,7 @@
 package com.eyes.solstory.domain.challenge.controller;
 
+import com.eyes.solstory.domain.challenge.service.UserChallengeService;
+import com.eyes.solstory.domain.financial.service.FinancialSummaryAnalyzer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.eyes.solstory.domain.challenge.entity.Challenge;
 import com.eyes.solstory.domain.challenge.entity.UserChallenge;
 import com.eyes.solstory.domain.challenge.service.ChallengeService;
-import com.eyes.solstory.domain.challenge.service.UserChallengeService;
 import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
-import com.eyes.solstory.global.exception.UserNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -26,32 +26,31 @@ import lombok.AllArgsConstructor;
 public class ChallengeController {
 
     private ChallengeService challengeService;
-    private UserChallengeService userChallengeService;
     private UserRepository userRepository;
+    private UserChallengeService userChallengeService;
+    private FinancialSummaryAnalyzer financialSummaryAnalyzer;
 
     @GetMapping("/list")
     public ResponseEntity<List<UserChallenge>> getChallengeList(@RequestParam("email") String email) {
-        System.out.println(email);
         User user = userRepository.findUserByEmail(email);
-        System.out.println(user);
-        //저축 4개 지출 6개의 챌린지 반환
-        List<Challenge> savingChallenges = challengeService.getRandomSavingChallenges(4);
-        List<Challenge> spendingChallenges = challengeService.getRandomSpendingChallenges(6);
-
         List<Challenge> allChallenges = new ArrayList<>();
-        allChallenges.addAll(savingChallenges);
-        allChallenges.addAll(spendingChallenges);
+        List<UserChallenge> userChallenges = userChallengeService.getAllUserChallengeByCompleteDate(
+                LocalDate.now());
 
-        List<UserChallenge> userChallenges = challengeService.assignChallengesToUser(user, allChallenges);
+        if (userChallenges.isEmpty()) {
+            //저축 4개 지출 6개의 챌린지 반환
+            String[] top3Categories = financialSummaryAnalyzer.getTop3Categories(user.getUserNo());
+            List<Challenge> savingChallenges = challengeService.getRandomSavingChallenges(4);
+            List<Challenge> spendingChallenges = challengeService.getSpendingChallengesForTop3Category(
+                    top3Categories, 6);
+
+            //List<Challenge> spendingChallenges = challengeService.getRandomSpendingChallenges(6);
+
+            allChallenges.addAll(savingChallenges);
+            allChallenges.addAll(spendingChallenges);
+            userChallenges = challengeService.assignChallengesToUser(user, allChallenges);
+        }
+
         return ResponseEntity.ok(userChallenges);
-    }
-
-    //챌린지 조회
-    @GetMapping("/status")
-    public ResponseEntity<UserChallenge> getChallengeStatus(@RequestParam("userNo") int userNo,
-            @RequestParam("startDate") String startDate) {
-        LocalDate start = LocalDate.parse(startDate);
-        UserChallenge userChallenge = userChallengeService.getUserChallengesStatus(userNo);
-        return ResponseEntity.ok(userChallenge);
     }
 }
