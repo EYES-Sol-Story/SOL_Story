@@ -24,7 +24,7 @@ import 'Siwoo/MainPage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp(); // Firebase 초기화, 모바일용. 웹에서도 쓰려면 따로 옵션설정해줘야 함.
+    await Firebase.initializeApp(); // Firebase(이메일 인증서비스) 초기화, 모바일용. 웹에서도 쓰려면 따로 옵션설정해줘야 함.
   } catch (e) {
     print('Firebase 초기화 오류: $e');
   }
@@ -55,10 +55,10 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/forgot-account': (context) => ForgotAccountPage(),
         '/join': (context) => SignUpScreen(),
-        '/change-password': (context) {
+        '/change-password': (context) { //패스워드 변경 페이지로 갈 때
           final args = ModalRoute.of(context)!.settings.arguments as Map<String, String>;
           return ChangePasswordPage(
-            userId: args['userId']!,
+            userId: args['userId']!, //계정찾기 페이지에서 받은 user_id를 함께 넘겨주기
           );
         },
         '/challenges': (context) => ChallengeListPage(), // '/challenges' 경로 추가

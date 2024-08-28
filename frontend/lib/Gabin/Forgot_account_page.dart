@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:math';
+import '../config/constants.dart';
 
 import 'change_password_page.dart';
 
@@ -52,6 +53,8 @@ class _ForgotAccountPageState extends State<ForgotAccountPage> {
   }
 
   //테스트 이메일 : rkqls8522@naver.com
+  //저장할 아이디
+  String userId = "";
   Future<void> _checkEmail() async {
     final String email = _emailController.text;
 
@@ -63,13 +66,13 @@ class _ForgotAccountPageState extends State<ForgotAccountPage> {
     }
 
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8090/api/check-email?email=$email'),
+      Uri.parse(REST_API_URL+'/api/getUserIdByEmail?email=$email'),
     );
-
+    userId = response.body;
     if (response.statusCode == 200) {
-      final isExist = response.body == 'true';
+      final isExist = userId == 'User not found';
       setState(() {
-        if (!isExist) {
+        if (isExist) {
           _emailMessage = '이메일이 존재하지 않습니다.';
         } else {
           _emailMessage = '인증 링크를 이메일로 전송중입니다.';
@@ -139,6 +142,7 @@ class _ForgotAccountPageState extends State<ForgotAccountPage> {
         // 이메일 인증이 아직 완료되지 않음
         setState(() {
           _emailMessage = '이메일 인증을 완료해주세요.';
+          FocusScope.of(context).requestFocus(_emailFocusNode);
           _isVerificationCompleted = false;
         });
       }
@@ -158,9 +162,16 @@ class _ForgotAccountPageState extends State<ForgotAccountPage> {
       return;
     }
 
+    if (!_isVerificationCompleted) {
+      _checkEmailVerified();
+      return;
+    }
+
     setState(() {
       _showImage = true;
     });
+
+
   }
 
   void _handleChangePassword() {
@@ -201,7 +212,7 @@ class _ForgotAccountPageState extends State<ForgotAccountPage> {
       context,
       '/change-password',
       arguments: {
-        'userId': 'your_user_id', // 여기에 실제로 가져온 유저 아이디를 전달해야 함
+        'userId': userId, // 여기에 실제로 가져온 유저 아이디를 전달해야 함
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/constants.dart';
 
 //가빈이 임시로 만든 메인화면 페이지
 //이 페이지는, 로그인 후 이동할 메인화면에 user_no를 함께 넘겨줄 것인데,

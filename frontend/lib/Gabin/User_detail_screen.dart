@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/constants.dart';
 
 //가빈이 임시로 만든 user의 detail값 받을 페이지.
 //회원가입 후 유저 디테일 페이지로 이동. 이동되면서 user_no를 같이 넘겨줄 것임.

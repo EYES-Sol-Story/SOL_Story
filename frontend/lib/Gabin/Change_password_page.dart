@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../config/constants.dart';
 
 import 'login_screen.dart';
 //가빈의 비밀번호 변경 페이지. userId값을 받아서 띄울 것임!
@@ -43,7 +44,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     } else {
       try {
         final response = await http.post(
-          Uri.parse('http://10.0.2.2:8090/api/change-password'),
+          Uri.parse(REST_API_URL+'/api/change-password'),
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
             'userId': widget.userId,
