@@ -11,7 +11,10 @@ import 'Sungjun/models/owned_cards_model.dart';
 import 'Sungjun/models/story_data.dart'; // StoryDataModel 가져오기
 import 'Boyoung/pages/user_challenge_list.dart';
 import 'Boyoung/pages/create_useraccount.dart';
+import 'Boyoung/pages/transfer_onewon.dart';
+import 'Boyoung/pages/verify_onewon.dart';
 import 'Siwoo/MainPage.dart';
+
 
 
 //이 페이지는, 앱을 실행시켰을 때 sol_story페이지를 2초간 띄우며 firebase(인증구현서비스)연동을 하고
@@ -50,7 +53,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: MainPage(),
-      home: EyesIconPage(), // 초기 로딩 페이지를 처음에 표시
+      home: MainPage(), // 초기 로딩 페이지를 처음에 표시
       routes: {
         '/login': (context) => LoginScreen(),
         '/forgot-account': (context) => ForgotAccountPage(),
@@ -63,6 +66,8 @@ class MyApp extends StatelessWidget {
         },
         '/challenges': (context) => ChallengeListPage(), // '/challenges' 경로 추가
         '/create_user': (context) => CreateUserAccountPage(),
+        '/transfer/one-won': (context) => TransferOneWonPage(),
+        '/verify/one-won' : (context) => VerifyOneWonPage(),
       },
     );
   }

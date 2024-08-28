@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sol_story/Siwoo/UserProfile.dart'; // UserProfile 페이지 import
 import 'package:sol_story/Boyoung/GoalList.dart'; // GoalList 페이지 import
 import 'package:sol_story/Sungjun/Scenario.dart'; // Scenario 페이지 import
+import 'package:sol_story/Siwoo/user_info_form_screen.dart';
 
 class MainPage extends StatelessWidget {
   @override
@@ -19,7 +20,7 @@ class MainPage extends StatelessWidget {
                 // UserProfile 페이지로 이동
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UserProfilePage()),
+                  MaterialPageRoute(builder: (context) => UserInfoFormScreen()),
                 );
               },
               child: Text('User Profile'),

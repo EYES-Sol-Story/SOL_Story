@@ -32,7 +32,7 @@ class _CreateSavingAccountPageState extends State<CreateSavingAccountPage> {
     );
     final response = await http.post(uri);
     print(response.body);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200) { //
       // 성공적으로 계좌 생성
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('적금 계좌가 성공적으로 생성되었습니다.'),

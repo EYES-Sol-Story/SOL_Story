@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eyes.solstory.domain.user.entity.User;
+import com.eyes.solstory.domain.userinfo.dto.UserInfoDTO;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -18,6 +19,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	User findUserByEmail(@Param("email") String email);
 
 	Optional<User> findUserByUserNo(@Param("userNo") int userNo);
+	
+	
+	// siwoo
+	UserInfoDTO findByUserNo(int userNo);
 	
 	@Query("UPDATE User SET mbti = :mbti WHERE userNo = :userNo")
 	int updateUserByMbti(@Param("mbti") String mbti, @Param("userNo") int userNo);
