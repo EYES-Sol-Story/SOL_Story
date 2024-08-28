@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'login_screen.dart';
 import 'user_detail_screen.dart'; // 회원가입 후 이동할 화면
+import '../config/constants.dart';
 
 //가빈의 회원가입페이지
 class SignUpScreen extends StatefulWidget {
@@ -66,7 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8090/api/check-userid?userid=$userid'),
+      Uri.parse(REST_API_URL+'/api/check-userid?userid=$userid'),
     );
 
     if (response.statusCode == 200) {
@@ -100,7 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8090/api/check-email?email=$email'),
+      Uri.parse(REST_API_URL+'/api/check-email?email=$email'),
     );
 
     if (response.statusCode == 200) {
@@ -255,14 +256,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // 회원가입 처리 및 user_no 조회
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8090/api/signup'),
+        Uri.parse(REST_API_URL+'/api/signup'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': name,
-          'userid': userid,
+          'userId': userid,
           'password': password,
           'email': email,
-          'birthDate': birthDate,
+          'birth': birthDate,
           'gender': gender
         }),
       );

@@ -38,7 +38,7 @@ public class UserChallengeServiceTest {
         // given
         int userNo = 1;
         LocalDate assignedDate = LocalDate.of(2024, 8, 23);
-        Challenge challenge = new Challenge(1, "", 7, "이번 주 3만원 더 저축하기", 5);
+        Challenge challenge = new Challenge(1, "", 7, "이번 주 3만원 더 저축하기", 5,5);
         UserChallenge userChallenge = UserChallenge.builder()
                 .assignmentNo(1)
                 .user(new User()) // 적절한 User 객체를 설정
@@ -80,7 +80,7 @@ public class UserChallengeServiceTest {
         // given
         int userNo = 1;
         LocalDate assignedDate = LocalDate.of(2024, 5, 23);
-        Challenge challenge = new Challenge(1, "", 7, "이번 주 3만원 더 저축하기", 5);
+        Challenge challenge = new Challenge(1, "", 7, "이번 주 3만원 더 저축하기", 5,5);
          UserChallenge userChallenge = UserChallenge.builder()
                 .assignmentNo(1)
                 .user(new User())

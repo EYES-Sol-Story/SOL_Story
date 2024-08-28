@@ -76,13 +76,17 @@ public class UserController {
     
     
     ////////////gabin
+    
+    //회원가입 때 쓸 것. 유저의 정보를 테이블에 담은 후, user_no를 다시 받아서 그 값을 다음 페이지에 넘겨줄 것
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserDto userDto) {
     	System.out.println("signup controller 들어옴");
         int userNo = userService.saveUser(userDto);
+        System.out.println("userNo : " + userNo);
         return ResponseEntity.ok().body(Map.of("user_no", userNo));
     }
     
+    //이메일을 가지고 유저가 존재하는지 확인하는 용도
     @GetMapping("/getUserIdByEmail")
     public ResponseEntity<String> getUserIdByEmail(@RequestParam String email) {
         String user_id = userService.findUserIdByEmail(email);
@@ -110,6 +114,10 @@ public class UserController {
      * } 
      */
 
+    
+    //로그인페이지에서 쓸 것. userNo를 반환하거나 "noUser"를 반환.
+    //로그인페이지에서 "로그인"클릭 시, noUser를 반환받게 된다면 메인화면 페이지로 넘어가지 않음.
+    //로그인페이지에서 "로그인"클릭 시, user_no를 반환받게 된다면 그대로 메인화면 페이지에 넘겨줌.
      @PostMapping("/login")
      public ResponseEntity<?> login(@RequestBody User loginRequest) {
          System.out.println("로그인컨트롤러에 들어옴");
@@ -124,24 +132,23 @@ public class UserController {
          }
      }
      
-     //아이디 중복확인 - 유저 아이디가 존재하는지 확인
+     //아이디 중복확인 - 유저 아이디가 존재하는지 확인. 회원가입페이지에서 쓸 것
      @GetMapping("/check-userid")
      public ResponseEntity<Boolean> checkUserid(@RequestParam("userid") String userId) {
          System.out.println("아이디 중복확인중");
          return ResponseEntity.ok(userRepository.existsByUserId(userId));
      }
      
-     //이메일 중복확인 - 유저 이메일이 존재하는지 확인
+     //이메일 중복확인 - 유저 이메일이 존재하는지 확인. 회원가입 때 쓸 것
      @GetMapping("/check-email")
      public ResponseEntity<Boolean> checkEmail(@RequestParam("email") String email) {
          System.out.println("이메일검사중. email : " + email);
          return ResponseEntity.ok(userRepository.existsByEmail(email));
      }
      
-     //비밀번호 변경
-     @PostMapping("/change-password")
+     //비밀번호 변경 - 비밀번호 변경 페이지에서 쓸 것, 아이디를 가지고 해당 아이디를 가진 회원의 비밀번호를 바꾸기!
+     @PostMapping("/change-password") 
      public int changePassword(@RequestParam("userId") String userId, @RequestParam("password") String password) {
- 
          int result = userRepository.changePassword(userId, password);
          return result;
      }

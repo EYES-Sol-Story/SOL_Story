@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'user_main_screen.dart';
 import '/Siwoo/MainPage.dart';
+import '../config/constants.dart';
 
 //가빈의 로그인페이지
 class LoginScreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       // 서버로 요청 보낼 URI
-      final uri = Uri.parse('http://10.0.2.2:8090/api/login');
+      final uri = Uri.parse(REST_API_URL+'/api/login');
 
       // HTTP POST 요청
       final response = await http.post(
