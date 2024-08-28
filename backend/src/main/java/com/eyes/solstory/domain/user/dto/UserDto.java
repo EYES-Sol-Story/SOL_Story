@@ -3,46 +3,28 @@ package com.eyes.solstory.domain.user.dto;
 import java.time.LocalDate;
 
 import com.eyes.solstory.util.OpenApiUtil;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@ToString
-@Getter
-@Setter
+@Data
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-    private String id;
+    private String userId;
     private String password;
-    private String name;
+    private String userName;
     private String email;
-    private String phone;
-    private String birthdate;  //
+    private String birth;  //
     private String gender;
     private LocalDate joinDate;
-    private String accountName;   //
-    private String accountNumber; //
     
-    // 모든 필드를 포함하는 생성자
-    public UserDto(String id, String password, String name, String email, String phone, String birthdate, String accountName, String accountNumber, String gender) {
-    	setJoinDate();
-    	this.id = id;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.gender = gender;
-        this.birthdate = birthdate;
-        this.accountName = accountName;
-        this.accountNumber = accountNumber;
-    }
-
+   
     public void setJoinDate() {
     	this.joinDate = LocalDate.now();
     }
@@ -53,6 +35,19 @@ public class UserDto {
     	}
     	return this.joinDate;
     }
+
+    @JsonCreator
+    public UserDto(@JsonProperty("name") String name, @JsonProperty("userid") String userId
+    				,@JsonProperty("password") String password, @JsonProperty("email") String email
+    				,@JsonProperty("birthDate") String birthdate, @JsonProperty("gender") String gender) {
+    	this.userId = userId;
+        this.userName = name;
+        this.password = password;
+        this.email = email;
+        this.birth = birthdate;
+        this.gender = gender;
+    }
+    
     
     /*
     public void setBirthdate(String birthdate) {

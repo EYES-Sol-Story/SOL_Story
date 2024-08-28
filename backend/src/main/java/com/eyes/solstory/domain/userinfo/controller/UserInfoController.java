@@ -1,7 +1,7 @@
 package com.eyes.solstory.domain.userinfo.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,35 +37,33 @@ public class UserInfoController {
     private UserInfoService userInfoService;
     
 
-
     // User 관련 API
+    // 처음 정보 등록 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(savedUser);
-    }
-
-    /**
-     * 캐릭터filepath or mbti or 둘 다 update 
-     * @param user
-     * @return update 성공 시 1 반환, 실패 시 0 반환
-     */
-    @PostMapping("/users/update/info")
-    public ResponseEntity<Integer> updateUserInfo(@RequestBody User user) {
-        return ResponseEntity.ok(userInfoService.updateUserInfo(user));
+    public ResponseEntity<String> updateUserMbti(@RequestBody Map<String, Object> userInfo) {
+    	System.out.println(userInfo.toString());
+    	userRepository.updateUserByMbti((String)userInfo.get("mbti"), (int)userInfo.get("userNo"));
+        userInfoService.insertUserInfo(userInfo);
+        return ResponseEntity.ok("success");
     }
     
-    @GetMapping("/users/{userNo}")
-
+    @GetMapping("/user/{userNo}")
+    public ResponseEntity<User> findUserByUserNo(@PathVariable("userNo") int userNo){
+    	System.out.println("사용자 정보 받아오기 userNo : " + userNo);
+    	User user = userRepository.findUserByUserNo(userNo);
+    	return ResponseEntity.ok(user);
+    }
+    
+    @PostMapping("/users/{userNo}")
     public ResponseEntity<Interest> createInterest(@RequestBody Interest interest) {
-        Interest savedInterest = interestRepository.save(interest);
+    	Interest savedInterest = interestRepository.save(interest);
         return ResponseEntity.ok(savedInterest);
     }
 
     @GetMapping("/interests/{userNo}")
-    public ResponseEntity<Interest> getInterest(@PathVariable("userNo") int userNo) {
-        Optional<Interest> interest = interestRepository.findByUserNo(userNo);
-        return interest.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public List<String> getInterest(@PathVariable("userNo") int userNo) {
+    	System.out.println("사용자 관심사 받아오기 userNo : " + userNo);
+    	return interestRepository.findAllInterestByUserNo(userNo);
     }
 
     @GetMapping("/interests")
@@ -76,14 +74,14 @@ public class UserInfoController {
     // Hobby 관련 API
     @PostMapping("/hobbies")
     public ResponseEntity<Hobby> createHobby(@RequestBody Hobby hobby) {
-        Hobby savedHobby = hobbyRepository.save(hobby);
+    	Hobby savedHobby = hobbyRepository.save(hobby);
         return ResponseEntity.ok(savedHobby);
     }
 
     @GetMapping("/hobbies/{userNo}")
-    public ResponseEntity<Hobby> getHobby(@PathVariable("userNo") int userNo) {
-        Optional<Hobby> hobby = hobbyRepository.findByUserNo(userNo);
-        return hobby.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public List<String> getHobby(@PathVariable("userNo") int userNo) {
+    	System.out.println("사용자 취미 받아오기 userNo : " + userNo);
+    	return hobbyRepository.findAllHobbyByUserNo(userNo);
     }
 
     @GetMapping("/hobbies")
@@ -91,29 +89,4 @@ public class UserInfoController {
         return hobbyRepository.findAll();
     }
 
-    /*
-    // MBTI 관련 API
-    @PostMapping("/mbti")
-    public ResponseEntity<MBTI> createMBTI(@RequestBody MBTI mbti) {
-        MBTI savedMBTI = mbtiRepository.save(mbti);
-        return ResponseEntity.ok(savedMBTI);
-    }
-
-    @GetMapping("/mbti/{mbti}")
-    public ResponseEntity<List<MBTI>> getUserByMBTI(@PathVariable("mbti") String mbti) {
-        List<MBTI> mbtiUsers = mbtiRepository.findByMbti(mbti);
-        return ResponseEntity.ok(mbtiUsers);
-    }
-
-    @GetMapping("/mbti/user/{userNo}")
-    public ResponseEntity<MBTI> getMBTIByUserNo(@PathVariable("userNo") int userNo) {
-        Optional<MBTI> mbti = mbtiRepository.findByUserNo(userNo);
-        return mbti.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/mbti")
-    public List<MBTI> getAllMBTIUsers() {
-        return mbtiRepository.findAll();
-    }
-    */
 }
