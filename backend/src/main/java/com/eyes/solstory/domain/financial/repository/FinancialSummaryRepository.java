@@ -91,8 +91,8 @@ public interface FinancialSummaryRepository extends JpaRepository<DailyFinancial
 		            "		r.total_amount AS total_amount, " +
 		            "       n.total_amount_before, " +
 		            "       r.total_amount - n.total_amount_before AS difference, " +
-		            "       CASE WHEN n.total_amount_before = 0 THEN 999 " + 
-		            "            ELSE ROUND(((r.total_amount - n.total_amount_before)/n.total_amount_before) * 100, 2) " +
+		            "       CASE WHEN n.total_amount_before = 0 THEN 0 " + 
+		            "            ELSE ROUND(((r.total_amount - n.total_amount_before)/n.total_amount_before) * 100) " +
 		            "       END AS percent_change " +
 		            "FROM recent_top10_spending_category r, " +
 		            "     ("+

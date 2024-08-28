@@ -5,5 +5,5 @@ public interface FinancialTrendDTO {
     int getTotalAmount();
     int getTotalAmountBefore();
     int getDifference();
-    double getPercentChange();
+    int getPercentChange();
 }
