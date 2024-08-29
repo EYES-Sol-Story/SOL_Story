@@ -21,6 +21,7 @@ import com.eyes.solstory.domain.challenge.repository.ChallengeRewardRepository;
 import com.eyes.solstory.domain.financial.entity.UserAccount;
 import com.eyes.solstory.domain.financial.repository.UserAccountRepository;
 import com.eyes.solstory.domain.financial.service.DemandDepositCollector;
+import com.eyes.solstory.domain.user.dto.LoginUser;
 import com.eyes.solstory.domain.user.dto.UserDto;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.entity.User;
@@ -275,7 +276,7 @@ public class UserService {
     }
     
     //로그인 인증
-    public User authenticate(String username, String password) {
+    public LoginUser authenticate(String username, String password) {
     	logger.info("anthenticate()...username:{}, password:{}", username, password);
         return userRepository.login(username, password);
 	}

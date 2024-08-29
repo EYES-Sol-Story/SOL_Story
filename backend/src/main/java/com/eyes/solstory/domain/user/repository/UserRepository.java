@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.eyes.solstory.domain.user.dto.LoginUser;
 import com.eyes.solstory.domain.user.entity.User;
 
 @Repository
@@ -30,7 +31,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	//gabinId, 1234 로 테스트
 	//로그인하기 - 로그인할 때, user_no랑 user_name을 메인화면에 전달하기
 	@Query("SELECT u FROM User u WHERE u.userId = :userId AND u.password = :password")
-	User login(@Param("userId") String userId, @Param("password") String password); 
+	LoginUser login(@Param("userId") String userId, @Param("password") String password); 
 	
 	//아이디 중복확인
 	@Query("SELECT COUNT(u) > 0 FROM User u WHERE u.userId = :userId")

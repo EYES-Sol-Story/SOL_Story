@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eyes.solstory.domain.user.dto.LoginUser;
 import com.eyes.solstory.domain.user.dto.UserDto;
 import com.eyes.solstory.domain.user.dto.UserRes;
 import com.eyes.solstory.domain.user.entity.User;
@@ -121,16 +122,16 @@ public class UserController {
     //로그인페이지에서 "로그인"클릭 시, noUser를 반환받게 된다면 메인화면 페이지로 넘어가지 않음.
     //로그인페이지에서 "로그인"클릭 시, user_no를 반환받게 된다면 그대로 메인화면 페이지에 넘겨줌.
     @PostMapping("/login")
-	public ResponseEntity<User> login(@RequestBody User loginRequest) {
+	public ResponseEntity<LoginUser> login(@RequestBody User loginRequest) {
     	logger.info("signup()...{}", loginRequest.toString());
-	    User user = userService.authenticate(loginRequest.getUserId(), loginRequest.getPassword());
+    	LoginUser user = userService.authenticate(loginRequest.getUserId(), loginRequest.getPassword());
 	    if (user != null) {
             // 성공적으로 user를 반환
 	    	logger.error("loginUser : {}", user.toString());
             return ResponseEntity.ok(user);
         } else {
-            logger.error("user is not exists", loginRequest.getUserId());
-            return ResponseEntity.ok(user);
+            logger.error("user does not exist");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 	 }
      
