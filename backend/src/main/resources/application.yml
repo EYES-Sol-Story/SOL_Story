@@ -25,6 +25,8 @@ spring:
     properties:
       hibernate:
         "[format:sql]": true
+        dialect: org.hibernate.dialect.OracleDialect
+
 
 # 로깅 수준 지정
 logging:
