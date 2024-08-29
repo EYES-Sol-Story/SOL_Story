@@ -25,7 +25,7 @@ import lombok.Setter;
 	    sequenceName = "hobby_seq", 
 	    allocationSize = 1  
 	)
-public class UserHobby {
+public class Hobby {
     
 	@Id
     @Column(name="hobby_no")

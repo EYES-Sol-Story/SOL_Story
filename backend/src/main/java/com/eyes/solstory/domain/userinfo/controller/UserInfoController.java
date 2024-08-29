@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
-import com.eyes.solstory.domain.userinfo.entity.UserHobby;
-import com.eyes.solstory.domain.userinfo.entity.UserInterest;
+import com.eyes.solstory.domain.userinfo.entity.Hobby;
+import com.eyes.solstory.domain.userinfo.entity.Interest;
 import com.eyes.solstory.domain.userinfo.repository.HobbyRepository;
 import com.eyes.solstory.domain.userinfo.repository.InterestRepository;
 import com.eyes.solstory.domain.userinfo.service.UserInfoService;
@@ -67,44 +67,35 @@ public class UserInfoController {
     }
     
     @PostMapping("/users/{userNo}")
-    public ResponseEntity<UserInterest> createInterest(@RequestBody UserInterest interest) {
+    public ResponseEntity<Interest> createInterest(@RequestBody Interest interest) {
         logger.info("createInterest()...interest:{}", interest.toString());
-    	UserInterest savedInterest = interestRepository.save(interest);
+    	Interest savedInterest = interestRepository.save(interest);
         return ResponseEntity.ok(savedInterest);
     }
 
     @GetMapping(value = "/interests", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<String>> getInterestsByUserNo(@RequestParam("userNo") int userNo) {
+    public ResponseEntity<List<Interest>> getInterestsByUserNo(@RequestParam("userNo") int userNo) {
     	logger.info("getInterest()...{}", userNo);
     	List<String> list = interestRepository.getInterestByUserNo(userNo);
     	if(list.isEmpty()) ResponseEntity.ok(list);
     	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @GetMapping("/interests")
-    public List<UserInterest> getAllInterests() {
-        return interestRepository.findAll();
-    }
 
     // Hobby 관련 API
     @PostMapping("/hobbies")
-    public ResponseEntity<UserHobby> createHobby(@RequestBody UserHobby hobby) {
+    public ResponseEntity<Hobby> createHobby(@RequestBody Hobby hobby) {
         logger.info("createHobby()...hobby:{}", hobby.toString());
-    	UserHobby savedHobby = hobbyRepository.save(hobby);
+    	Hobby savedHobby = hobbyRepository.save(hobby);
         return ResponseEntity.ok(savedHobby);
     }
 
     @GetMapping(value = "/hobbies", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<String>> getHobbiesByUserNo(@RequestParam("userNo") int userNo) {
+    public ResponseEntity<List<Hobby>> getHobbiesByUserNo(@RequestParam("userNo") int userNo) {
     	logger.info("getHobby()...{}", userNo);
     	List<String> list = hobbyRepository.getHobbyUserNo(userNo);
     	if(list.isEmpty()) ResponseEntity.ok(list);
     	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    @GetMapping("/hobbies")
-    public List<UserHobby> getAllHobbies() {
-        return hobbyRepository.findAll();
     }
 
 }

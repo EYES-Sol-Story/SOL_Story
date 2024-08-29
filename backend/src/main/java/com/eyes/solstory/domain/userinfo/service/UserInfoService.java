@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.eyes.solstory.domain.userinfo.entity.UserHobby;
-import com.eyes.solstory.domain.userinfo.entity.UserInterest;
+import com.eyes.solstory.domain.userinfo.entity.Hobby;
+import com.eyes.solstory.domain.userinfo.entity.Interest;
 import com.eyes.solstory.domain.userinfo.repository.HobbyRepository;
 import com.eyes.solstory.domain.userinfo.repository.InterestRepository;
 
@@ -28,7 +28,7 @@ public class UserInfoService {
     	List<String> hobbies = (List<String>)userInfo.get("hobbies");
     	logger.error("hobbies:{}", hobbies);
     	for(String hobby : hobbies) {
-    		UserHobby h = new UserHobby();
+    		Hobby h = new Hobby();
     		h.setUserNo(userNo);
     		h.setHobbyCate(hobby);
     		hobbyRepository.save(h);
@@ -36,7 +36,7 @@ public class UserInfoService {
     	
     	List<String> interests = (List<String>)userInfo.get("interests");
     	for(String interest : interests) {
-    		UserInterest i = new UserInterest();
+    		Interest i = new Interest();
     		i.setUserNo(userNo);
     		i.setInterestCate(interest);
     		interestRepository.save(i);

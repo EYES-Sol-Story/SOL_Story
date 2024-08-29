@@ -25,7 +25,7 @@ import lombok.Setter;
 	    sequenceName = "interest_seq", 
 	    allocationSize = 1  
 	)
-public class UserInterest {
+public class Interest {
 	@Id
     @Column(name="interest_no")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "interest_seq_generator")

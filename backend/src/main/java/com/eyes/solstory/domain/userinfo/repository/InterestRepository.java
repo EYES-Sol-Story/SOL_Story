@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.eyes.solstory.domain.userinfo.entity.UserInterest;
+import com.eyes.solstory.domain.userinfo.entity.Interest;
 
 @Repository
-public interface InterestRepository extends JpaRepository<UserInterest, Integer> {
-	@Query(value = "SELECT i.interest_cate FROM Interest i WHERE user_o = :userNo", nativeQuery = true)
+public interface InterestRepository extends JpaRepository<Interest, Integer> {
+	@Query(value = "SELECT i.interest FROM Interest i WHERE user_o = :userNo", nativeQuery = true)
 	List<String> getInterestByUserNo(@Param("userNo") int userNo);
 	
 }

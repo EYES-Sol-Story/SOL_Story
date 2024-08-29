@@ -8,11 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.eyes.solstory.domain.userinfo.entity.UserHobby;
+import com.eyes.solstory.domain.userinfo.entity.Hobby;
 
 @Repository
-public interface HobbyRepository extends JpaRepository<UserHobby, Integer> {
-	@Query(value = "SELECT h.hobby_cate FROM Hobby h WHERE use_no = :userNo", nativeQuery=true)
+public interface HobbyRepository extends JpaRepository<Hobby, Integer> {
+	@Query(value = "SELECT h.hobby FROM Hobby h WHERE use_no = :userNo", nativeQuery=true)
 	List<String> getHobbyUserNo(@Param("userNo") int userNo);
-	
 }
