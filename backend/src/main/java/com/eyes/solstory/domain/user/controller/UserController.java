@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,15 +22,15 @@ import com.eyes.solstory.domain.user.repository.UserRepository;
 import com.eyes.solstory.domain.user.service.UserService;
 import com.eyes.solstory.global.bank.dto.SavingsAccountRes;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
-@AllArgsConstructor
 public class UserController {
    
-	private UserService userService;
-	private UserRepository userRepository;
+	private final UserService userService;
+	private final UserRepository userRepository;
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class.getSimpleName());	
 
@@ -77,12 +78,8 @@ public class UserController {
     
     
     
-    
-    
-    ////////////gabin
-    
-    //회원가입 때 쓸 것. 유저의 정보를 테이블에 담은 후, user_no를 다시 받아서 그 값을 다음 페이지에 넘겨줄 것
-    //회원가입해도 로그인해야하니까 
+    // 회원가입 - 결과반환
+    // 회원가입과 동시에 userKey 생성해서 바로 insert into User
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserDto userDto) {
     	logger.info("signup()...{}", userDto.toString());
@@ -121,7 +118,7 @@ public class UserController {
     //로그인페이지에서 쓸 것. userNo를 반환하거나 "noUser"를 반환.
     //로그인페이지에서 "로그인"클릭 시, noUser를 반환받게 된다면 메인화면 페이지로 넘어가지 않음.
     //로그인페이지에서 "로그인"클릭 시, user_no를 반환받게 된다면 그대로 메인화면 페이지에 넘겨줌.
-    @PostMapping("/login")
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<LoginUser> login(@RequestBody User loginRequest) {
     	logger.info("login()...{}", loginRequest.toString());
     	LoginUser user = userService.authenticate(loginRequest.getUserId(), loginRequest.getPassword());
@@ -136,14 +133,14 @@ public class UserController {
 	 }
      
      //아이디 중복확인 - 유저 아이디가 존재하는지 확인. 회원가입페이지에서 쓸 것
-     @GetMapping("/check-userid")
+     @GetMapping(value = "/check-userid")
      public ResponseEntity<Boolean> checkUserid(@RequestParam("userid") String userId) {
     	 logger.info("checkUserid()...userId : {}", userId);
          return ResponseEntity.ok(userRepository.existsByUserId(userId));
      }
      
      //이메일 중복확인 - 유저 이메일이 존재하는지 확인. 회원가입 때 쓸 것
-     @GetMapping("/check-email")
+     @GetMapping(value = "/check-email")
      public ResponseEntity<Boolean> checkEmail(@RequestParam("email") String email) {
     	 logger.info("checkEmail()...email : {}", email);
          return ResponseEntity.ok(userRepository.existsByEmail(email));
@@ -156,5 +153,12 @@ public class UserController {
          int result = userRepository.changePassword(userId, password);
          return result;
      }
-    
+     
+     @GetMapping(value = "/exist/userInfo", produces = MediaType.APPLICATION_JSON_VALUE)
+     public ResponseEntity<Boolean> checkExistUserInfo(@RequestParam("userNo") int userNo){
+    	 logger.info("checkEmail()...userNo: {}", userNo);
+    	 User user = userRepository.findUserByUserNo(userNo);
+    	 if(user != null) return ResponseEntity.ok(true);
+    	 return ResponseEntity.ok(false);
+     }
 }

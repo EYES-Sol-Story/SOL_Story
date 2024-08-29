@@ -35,8 +35,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@SuppressWarnings("unused")
 @RequiredArgsConstructor
+@Service
 public class UserService {
 
     @Value("${api.key}")
@@ -49,7 +50,7 @@ public class UserService {
     
     private static final Logger logger = LoggerFactory.getLogger(UserService.class.getSimpleName());
 
-    //사용자 계정 - 계 생성
+    //사용자 계정 - apiKey 생성
     public ResponseEntity<UserRes> createUserAccount(String userId, String email) {
         ResponseEntity<UserRes> response = webClientUtil.creatUserAccount(email)
                 .onErrorMap(e -> new RuntimeException("사용자 계정 생성 중 오류 발생", e))
@@ -81,51 +82,18 @@ public class UserService {
         User user = userRepository.findUserByEmail(email);
         System.out.println(user.getUserId());
 
-        System.out.println("1111");
-        
         String transmissionDate = LocalDate.now().format(OpenApiUtil.DATE_FORMATTER);
         String transmissionTime = LocalDateTime.now().format(OpenApiUtil.TIME_FORMATTER);
         
-        /*
-        TransferOneWonReq.Header header = TransferOneWonReq.Header.builder()
-                .apiName("openAccountAuth")
-                .transmissionDate(transmissionDate)
-                .transmissionTime(transmissionTime)
-                .institutionCode("00100")
-                .fintechAppNo("001")
-                .apiServiceCode("openAccountAuth")
-                .institutionTransactionUniqueNo("20240723152345666098")
-                .apiKey(apiKey)
-                .userKey(user.getUserKey())
-                .build();
-*/
         Map<String, String> header = OpenApiUtil.createHeaders("04e988f2-d086-495a-aa2f-67b0e911782f", OpenApiUrls.OPEN_ACCOUNT_AUTH);
-        System.out.println("2222");
         
         Map<String, Object> request = new HashMap<>();
         request.put("Header", header);
         request.put("accountNo", accountNo);
         request.put("authText", "SSAFY");
         
-        //TransferOneWonReq request = TransferOneWonReq.builder()
-        //        .header(header)
-        //        .accountNo(accountNo)
-        //        .authText("SSAFY")
-        //        .build();
-        System.out.println("333333");
-        
         ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.ACCOUNT_AUTH_URL + OpenApiUrls.OPEN_ACCOUNT_AUTH), request);
         ObjectMapper objectMapper = new ObjectMapper();
-        
-        //System.out.println(objectMapper.toString());
-        //ResponseEntity<TransferOneWonRes> response = webClientUtil.transferOneWon(request)
-        //        .onErrorMap(e -> new RuntimeException("1원 송금 요청 중 오류 발생", e))
-        //        .block();
-        System.out.println("44444");
-        //if (response == null || response.getStatusCode() != HttpStatus.OK) {
-         //   return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          //          .body(null);
-        //}
         
         String transactionUniqueNo = "";
         try {
@@ -137,7 +105,6 @@ public class UserService {
         }
         
         header = OpenApiUtil.createHeaders("04e988f2-d086-495a-aa2f-67b0e911782f", OpenApiUrls.INQUIRE_TRANSACTION_HISTORY);
-        System.out.println("2222");
         
         request = new HashMap<>();
         request.put("Header", header);
@@ -243,9 +210,7 @@ public class UserService {
     
     
     
-    /////////////gabin
-    
-    //회원가입 때 쓸 메소드
+    //회원가입 > 회원 정보 insert
     public User saveUser(UserDto userDto) {
     	logger.info("saveUser()...{}", userDto);
     	System.out.println(userDto);

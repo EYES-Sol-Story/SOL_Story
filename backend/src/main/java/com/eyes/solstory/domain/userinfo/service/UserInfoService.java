@@ -3,7 +3,8 @@ package com.eyes.solstory.domain.userinfo.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.eyes.solstory.domain.userinfo.entity.Hobby;
@@ -11,18 +12,22 @@ import com.eyes.solstory.domain.userinfo.entity.Interest;
 import com.eyes.solstory.domain.userinfo.repository.HobbyRepository;
 import com.eyes.solstory.domain.userinfo.repository.InterestRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @SuppressWarnings("unchecked")
+@RequiredArgsConstructor
 @Service
 public class UserInfoService {
-	@Autowired
-	private HobbyRepository hobbyRepository;
-	@Autowired
-	private InterestRepository interestRepository;
-    
+	private final HobbyRepository hobbyRepository;
+	private final InterestRepository interestRepository;
+	
+	private static final Logger logger = LoggerFactory.getLogger(UserInfoService.class.getSimpleName());
+	
     public void insertUserInfo(Map<String, Object> userInfo) {
+    	logger.info("insertUserInfo()...{}", userInfo.toString());
     	int userNo = (int)userInfo.get("userNo");
-    	List<String> hobbies = (List<String>)userInfo.get("hobbies");
     	
+    	List<String> hobbies = (List<String>)userInfo.get("hobbies");
     	for(String hobby : hobbies) {
     		Hobby h = new Hobby();
     		h.setUserNo(userNo);
@@ -37,6 +42,5 @@ public class UserInfoService {
     		i.setInterest(interest);
     		interestRepository.save(i);
     	}
-    	
     }
 }
