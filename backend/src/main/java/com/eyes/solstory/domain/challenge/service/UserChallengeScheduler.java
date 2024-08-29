@@ -14,7 +14,7 @@ public class UserChallengeScheduler {
 
     @Scheduled(cron = "30 43 0 * * ?")
     public void checkAndRewardExpiredChallengesForAllUsers() {
-        logger.info("checkAndRewardExpiredChallengesForAllUsers() 시작");
+        logger.info("Scheduler : checkAndRewardExpiredChallengesForAllUsers() 시작");
         userChallengeService.checkAndRewardExpiredChallenges();
     }
 }

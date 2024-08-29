@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class FinancialSummaryProcessor {
-	
+
 	static final DateTimeFormatter DATE_FORMATTER= DateTimeFormatter.ofPattern("yyyyMMdd");
     static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HHmmss");
     
@@ -34,6 +36,7 @@ public class FinancialSummaryProcessor {
     private DemandDepositCollector demandDepositCollector;
     private SavingsCollector savingsCollector;
     private FinancialSummaryRepository summaryRepository;
+	private static final Logger logger = LoggerFactory.getLogger(FinancialSummaryProcessor.class.getSimpleName());
     
 	/**
 	 * 자정마다 모든 활성화 된 계좌의 전날 지출/수익/저축 내역을 받아 summary
@@ -42,6 +45,7 @@ public class FinancialSummaryProcessor {
 	 */
     @Scheduled(cron = "0 5 0 * * *")
 	public void fetchAndStoreFinancialData() throws URISyntaxException {
+		logger.info("Scheduler : fetchAndStoreFinancialData() 시작");
 	    String yesterday = LocalDate.now().minusDays(1).format(OpenApiUtil.DATE_FORMATTER);//1일전
 	    
 	    List<ActiveAccountDTO> userAccounts = userAccountService.findActiveAccounts();
@@ -53,7 +57,6 @@ public class FinancialSummaryProcessor {
 	    		fetchTransactionData(userAccount, yesterday); // 입출금 계좌 지출/수익 계산
 	    	}
 	    }
-	    
 	}
 	
 	/**
@@ -64,9 +67,11 @@ public class FinancialSummaryProcessor {
 	 * @throws URISyntaxException
 	 */
 	private void fetchTransactionData(ActiveAccountDTO userAccount, String date) throws URISyntaxException {
+		logger.info("fetchTransactionData()...userAccount:{}, date:{}", userAccount.toString(), date);
     	int userNo = userAccount.getUserNo();
     	Map<String, List<TransactionDTO>> transactionMap = demandDepositCollector.fetchTransactions(userAccount, date);// 거래 내역 받아오기
-    	categorizeSpending(userNo,  transactionMap.get("spendingList")); // 지출 카테고리 분류
+    	logger.error("transactionMap:{}", transactionMap.toString());
+		categorizeSpending(userNo,  transactionMap.get("spendingList")); // 지출 카테고리 분류
     	categorizeIncome(userNo,  transactionMap.get("incomeList")); // 수입 카테고리
 	}
 	
@@ -78,6 +83,7 @@ public class FinancialSummaryProcessor {
 	 * @throws URISyntaxException
 	 */
 	private void fetchSavingsData(ActiveAccountDTO userAccount, String date) throws URISyntaxException {
+		logger.info("fetchSavingsData()...userAccount:{}, date:{}", userAccount.toString(), date);
 		int amount = savingsCollector.fetchSavings(userAccount, date);// 저축 금액 받기
 		if(amount != 0) {
 			createSummary(userAccount.getUserNo(), amount);
@@ -91,6 +97,7 @@ public class FinancialSummaryProcessor {
 	 * @param transactions 어제 지출 내역(상호명 포함)
 	 */
 	private void categorizeSpending(int userNo, List<TransactionDTO> transactions) {
+		logger.info("categorizeSpending()...userNo:{}, transactions:{}", userNo, transactions.toString());
 	    // 카테고리, 카테고리 지출 금액합
 		Map<String, Integer> categoryTotals = new HashMap<>();
 
@@ -112,6 +119,7 @@ public class FinancialSummaryProcessor {
 	 * @param transactions 어제 수익 내역
 	 */
 	private void categorizeIncome(int userNo, List<TransactionDTO> transactions) {
+		logger.info("categorizeIncome()...userNo:{}, transactions:{}", userNo, transactions.toString());
 		int income = 0;
 	    // 중고 수익만 체크
 	    for (TransactionDTO transaction : transactions) {
@@ -129,6 +137,7 @@ public class FinancialSummaryProcessor {
 	 * @param income
 	 */
 	private void createSummaries(int userNo, Map<String, Integer> spendingCategoryTotals, int income) {
+		logger.info("createSummaries()...userNo:{}, spendingCategoryTotals:{}, income:{}", userNo, spendingCategoryTotals.toString(), income);
 	    // 카테고리별 요약 정보를 DailyFinancialSummary 객체로 변환
 	    List<DailyFinancialSummary> summaries = new ArrayList<>();
 	    if(spendingCategoryTotals == null) { // income
@@ -150,6 +159,7 @@ public class FinancialSummaryProcessor {
 	 * @param income
 	 */
 	private void createSummary(int userNo, int amount) {
+		logger.info("createSummary()...userNo:{}, amount:{}", userNo, amount);
 		DailyFinancialSummary summary = DailyFinancialSummary.builder()
 				.userNo(userNo)
 				.financialDate(LocalDate.now().minusDays(1)) 
@@ -169,6 +179,7 @@ public class FinancialSummaryProcessor {
 	 * @param amount
 	 */
 	private void addSummary(List<DailyFinancialSummary> summaries, int userNo, int financialType, String category, int amount) {
+		logger.info("addSummary()...summaries:{}, userNo:{}, financialType:{}, category:{}, amount:{}", summaries.toString(), userNo, financialType, category, amount);
 		DailyFinancialSummary summary = DailyFinancialSummary.builder()
 				.userNo(userNo)
 				.financialDate(LocalDate.now().minusDays(1)) 
@@ -182,6 +193,7 @@ public class FinancialSummaryProcessor {
 
 	// add summaries data to daily_financial_summary
 	private void storeSummaries(List<DailyFinancialSummary> summaries) {
+		logger.info("storeSummaries()...summaries:{}", summaries.toArray());
         summaryRepository.saveAll(summaries);
     }
 	
@@ -189,5 +201,4 @@ public class FinancialSummaryProcessor {
 	private void storeSummary(DailyFinancialSummary summary) {
         summaryRepository.save(summary);
     }
-	
 }
