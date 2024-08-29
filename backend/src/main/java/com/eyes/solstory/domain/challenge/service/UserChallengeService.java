@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.eyes.solstory.domain.challenge.entity.Challenge;
 import com.eyes.solstory.domain.challenge.entity.ChallengeReward;
 import com.eyes.solstory.domain.challenge.entity.UserChallenge;
+import com.eyes.solstory.domain.challenge.repository.ChallengeRepository;
 import com.eyes.solstory.domain.challenge.repository.ChallengeRewardRepository;
 import com.eyes.solstory.domain.challenge.repository.UserChallengeRepository;
 import com.eyes.solstory.domain.financial.repository.FinancialSummaryRepository;
@@ -22,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserChallengeService {
 
+	@Autowired
+    private ChallengeRepository ChallengeRepository;
 	@Autowired
     private UserChallengeRepository userChallengeRepository;
 	@Autowired
@@ -41,7 +44,10 @@ public class UserChallengeService {
             boolean isCompleted = checkChallengeCompletion(userChallenge);
 
             if (isCompleted) {
-                rewardUser(userChallenge.getUser().getUserNo(), userChallenge.getChallenge().getRewardKeys());
+            	
+            	Challenge challenge = ChallengeRepository.findByChallengeNo(userChallenge.getChallenge().getChallengeNo());
+            	
+                rewardUser(userChallenge.getUser().getUserNo(), challenge.getRewardKeys());
             }
             userChallengeRepository.delete(userChallenge);
         }
@@ -50,6 +56,8 @@ public class UserChallengeService {
     // 챌린지 달성 여부 확인
     private boolean checkChallengeCompletion(UserChallenge userChallenge) {
         logger.info("checkChallengeCompletion()...userChallenge:{}", userChallenge);
+        
+        
         Challenge challenge = userChallenge.getChallenge();
         String category = challenge.getCategory();
         int userNo = userChallenge.getUser().getUserNo();
@@ -96,6 +104,7 @@ public class UserChallengeService {
         }
     }
 
+    /////////////////////////////// 수정
     public UserChallenge getUserChallengesStatus(int userNo) {
         logger.info("getUserChallengesStatus()...userNo:{}", userNo);
         UserChallenge userChallenge = userChallengeRepository.findByUser_UserNo(userNo);
@@ -105,7 +114,8 @@ public class UserChallengeService {
         }
         // 오늘 날짜와 도전 과제의 할당 날짜 및 종료 날짜를 비교
         LocalDate today = LocalDate.now();
-        LocalDate endDate = userChallenge.getAssignedDate().plusDays(userChallenge.getChallenge().getDays() - 1);
+        //LocalDate endDate = userChallenge.getAssignedDate().plusDays(userChallenge.getChallenge().getDays() - 1);
+        LocalDate endDate = userChallenge.getCompleteDate();
 
         if (!today.isBefore(userChallenge.getAssignedDate()) && !today.isAfter(endDate)) {
             return userChallenge;

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.eyes.solstory.domain.challenge.ChallengeDataInitializer;
 import com.eyes.solstory.domain.challenge.entity.Challenge;
 import com.eyes.solstory.domain.challenge.entity.UserChallenge;
-import com.eyes.solstory.domain.challenge.repository.ChallengeRepository;
 import com.eyes.solstory.domain.challenge.repository.UserChallengeRepository;
 import com.eyes.solstory.domain.user.entity.User;
 
@@ -25,7 +24,7 @@ import lombok.AllArgsConstructor;
 public class ChallengeService {
     private ChallengeDataInitializer challengeDataInitializer;
     private final UserChallengeRepository userChallengeRepository;
-    private final ChallengeRepository challengeRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(ChallengeRewardService.class.getSimpleName());
 
     public List<Challenge> getSpendingChallengesForTop3Category(String[] top3Category, int count) {
@@ -85,7 +84,7 @@ public class ChallengeService {
         logger.info("assignChallengesToUser()...user:{}, challenges:{}", user, challenges);
         List<UserChallenge> userChallenges = new ArrayList<>();
         LocalDate today = LocalDate.now();
-
+        
         for (Challenge challenge : challenges) {
             LocalDate completeDate = today.plusDays(challenge.getDays());
             UserChallenge userChallenge = UserChallenge.builder()

@@ -121,7 +121,8 @@ public class UserController {
      * {	"loginResult"  : true,  // false
      * 		"loginUser" : {  //null
      * 						"userNo" 	: 1,
-     * 						"userName"  : "지히"
+     * 						"userName"  : "지히",
+     * 						"email"		: "chaehee13@naver.com"
      * 					  }
      * } 
      */

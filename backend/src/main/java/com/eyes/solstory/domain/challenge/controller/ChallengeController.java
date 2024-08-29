@@ -49,8 +49,6 @@ public class ChallengeController {
             List<Challenge> spendingChallenges = challengeService.getSpendingChallengesForTop3Category(
                     top3Categories, 6);
 
-            //List<Challenge> spendingChallenges = challengeService.getRandomSpendingChallenges(6);
-
             allChallenges.addAll(savingChallenges);
             allChallenges.addAll(spendingChallenges);
             userChallenges = challengeService.assignChallengesToUser(user, allChallenges);
