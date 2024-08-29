@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,8 +26,9 @@ public class OpenApiUtil {
 	
 	public static final DateTimeFormatter DATE_FORMATTER= DateTimeFormatter.ofPattern("yyyyMMdd");
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HHmmss");
-    
-    /**
+	private static final Logger logger = LoggerFactory.getLogger(OpenApiUtil.class.getSimpleName());
+
+	/**
      * OpenApi 사용 시 Header 생성
      * 날짜와 랜덤을 메서드 내에서 생성 
      * 
@@ -33,6 +36,7 @@ public class OpenApiUtil {
      * @return header
      */
 	public static Map<String, String> createHeaders(String user_key, String apiName) {
+		logger.info("createHeaders()...user_key:{}, apiName:{}", user_key, apiName);
 		Random random = new Random();
 		String sysdate = LocalDate.now().format(DATE_FORMATTER);
         return createHeaders(user_key, apiName, sysdate, random);
@@ -46,6 +50,7 @@ public class OpenApiUtil {
      * @return header
      */
 	public static Map<String, String> createHeaders(String user_key, String apiName, String sysdate, Random random) {
+		logger.info("createHeaders()...user_key:{}, apiName:{}, sysdate:{}, random:{}", user_key, apiName, sysdate, random);
         String systime = LocalDateTime.now().format(TIME_FORMATTER);
 		
 		Map<String, String> headerMap = new HashMap<>();
@@ -69,6 +74,7 @@ public class OpenApiUtil {
 	 * @return String 타입의 응답entity 반환
 	 */
 	public static ResponseEntity<String> callApi(URI uri, Map<String, Object> requestMap) {
+		logger.info("callApi()...uri:{}, requestMap:{}", uri, requestMap);
 		String jsonRequest = convertToJson(requestMap);
 		HttpEntity<String> request = createHttpEntity(jsonRequest);
 		RestTemplate restTemplate = new RestTemplate();
@@ -110,7 +116,8 @@ public class OpenApiUtil {
      * @return 요청 데이터 Map
      */
     public static Map<String, Object> createTransactionHistoryRequestData(String accountNo, String date, String transactionType, Map<String, String> headerMap) {
-        Map<String, Object> requestMap = new HashMap<>();
+		logger.info("createTransactionHistoryRequestData()...accountNo:{}, date:{}, transactionType:{}, headerMap:{}", accountNo, date, transactionType, headerMap);
+		Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("Header", headerMap);
         requestMap.put("accountNo", accountNo);
         requestMap.put("startDate", date);
@@ -130,7 +137,8 @@ public class OpenApiUtil {
      * @return 요청 데이터 Map
      */
     public static Map<String, Object> createTransactionHistoryRequestDataForMonth(String accountNo, String startDate, String endDate, String transactionType, Map<String, String> headerMap) {
-        Map<String, Object> requestMap = new HashMap<>();
+		logger.info("createTransactionHistoryRequestData()...accountNo:{}, startDate:{}, endDate:{}, transactionType:{}, headerMap:{}", accountNo, startDate, endDate, transactionType, headerMap);
+		Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("Header", headerMap);
         requestMap.put("accountNo", accountNo);
         requestMap.put("startDate", startDate);
@@ -142,6 +150,7 @@ public class OpenApiUtil {
     
     
     public static Map<String, Object> createAccountBalanceRequestData(String accountNo, Map<String, String> headerMap){
+		logger.info("createTransactionHistoryRequestData()...accountNo:{}, headerMap:{}", accountNo, headerMap);
     	Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("Header", headerMap);
         requestMap.put("accountNo", accountNo);

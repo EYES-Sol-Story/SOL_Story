@@ -35,14 +35,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
-@SuppressWarnings("unused")
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     @Value("${api.key}")
     private String apiKey;
-
     private final WebClientUtil webClientUtil;
     private final UserRepository userRepository;
     private final UserAccountRepository userAccountRepository;
@@ -50,20 +48,23 @@ public class UserService {
     
     private static final Logger logger = LoggerFactory.getLogger(UserService.class.getSimpleName());
 
-    //사용자 계정 - apiKey 생성
+    //사용자 계정 생성
     public ResponseEntity<UserRes> createUserAccount(String userId, String email) {
+        logger.info("createUserAccount()...userId:{}, email:{}", userId, email);
         ResponseEntity<UserRes> response = webClientUtil.creatUserAccount(email)
                 .onErrorMap(e -> new RuntimeException("사용자 계정 생성 중 오류 발생", e))
                 .block();
 
         User user = userRepository.findUserByEmail(email);
         if (user == null) {
+            logger.error("signupUser : {}", user.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(null);
         }
 
         UserRes userRes = response.getBody();
         if (userRes != null && userRes.getUserKey() != null) {
+            logger.error("userResponse : {}, userKey:{}", userRes, userRes.getUserKey());
             user.updateUserKey(userRes.getUserKey());
             userRepository.save(user);
         } else {
@@ -77,21 +78,21 @@ public class UserService {
     // 1원 송금
     public ResponseEntity<String> transferOneWon(
             String accountNo, String email) throws URISyntaxException {
+        logger.info("transferOneWon()...accountNo:{}, email:{}", accountNo, email);
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(email);
         User user = userRepository.findUserByEmail(email);
-        System.out.println(user.getUserId());
-
+        logger.error("user:{}", user.toString());
+        
         String transmissionDate = LocalDate.now().format(OpenApiUtil.DATE_FORMATTER);
         String transmissionTime = LocalDateTime.now().format(OpenApiUtil.TIME_FORMATTER);
-        
+
         Map<String, String> header = OpenApiUtil.createHeaders("04e988f2-d086-495a-aa2f-67b0e911782f", OpenApiUrls.OPEN_ACCOUNT_AUTH);
-        
+
         Map<String, Object> request = new HashMap<>();
         request.put("Header", header);
         request.put("accountNo", accountNo);
         request.put("authText", "SSAFY");
-        
+
         ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.ACCOUNT_AUTH_URL + OpenApiUrls.OPEN_ACCOUNT_AUTH), request);
         ObjectMapper objectMapper = new ObjectMapper();
         
@@ -99,20 +100,19 @@ public class UserService {
         try {
             JsonNode rootNode = objectMapper.readTree(response.getBody());
             transactionUniqueNo = rootNode.path("REC").path("transactionUniqueNo").asText();
-            System.out.println("transactionUniqueNo :"+transactionUniqueNo);
         } catch (Exception e) {
             throw new RuntimeException("err", e);
         }
         
         header = OpenApiUtil.createHeaders("04e988f2-d086-495a-aa2f-67b0e911782f", OpenApiUrls.INQUIRE_TRANSACTION_HISTORY);
-        
+
         request = new HashMap<>();
         request.put("Header", header);
         request.put("accountNo", accountNo);
         request.put("transactionUniqueNo", transactionUniqueNo);
         
         response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_TRANSACTION_HISTORY), request);
-        
+        logger.error("response:{}", response);
         try {
             JsonNode rootNode = objectMapper.readTree(response.getBody());
             String summary = rootNode.path("REC").path("transactionSummary").asText();
@@ -130,7 +130,9 @@ public class UserService {
     DemandDepositCollector demandDepositCollector;
     // 1원 검증
     public ResponseEntity<String> verifyOneWon(String accountNo, String authCode, String email) throws URISyntaxException {
+        logger.info("verifyOneWon()...accountNo:{}, authCode:{}, email:{}", accountNo, authCode, email);
         User user = userRepository.findUserByEmail(email);
+        logger.error("user:{}", user.toString());
         Map<String, String> header = OpenApiUtil.createHeaders(user.getUserKey(), OpenApiUrls.CHECK_ACCOUNT_AUTH);
         
         Map<String, Object> request = new HashMap<>();
@@ -140,6 +142,7 @@ public class UserService {
         request.put("authCode", authCode);
         
         ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.ACCOUNT_AUTH_URL + OpenApiUrls.CHECK_ACCOUNT_AUTH), request);
+        logger.error("verifyOneWonApiResponse:{}", response);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode rootNode = objectMapper.readTree(response.getBody());
@@ -153,10 +156,12 @@ public class UserService {
     // 적금 계좌 생성
     public ResponseEntity<SavingsAccountRes> createSavingAccount(String accountTypeUniqueNo, String withdrawalAccountNo, 
     		long depositBalance, String userId, int targetAmount) {
+        logger.info("createSavingAccount()...accountTypeUniqueNo:{}, withdrawalAccountNo:{}, depositBalance:{}, userId:{}, targetAmount:{}", accountTypeUniqueNo, withdrawalAccountNo, depositBalance, userId, targetAmount);
         User user = userRepository.findUserByUserId(userId);
+        logger.error("user:{}", user.toString());
         String transmissionDate = LocalDate.now().format(OpenApiUtil.DATE_FORMATTER);
         String transmissionTime = LocalDateTime.now().format(OpenApiUtil.TIME_FORMATTER);
-        
+
         SavingsAccountReq.Header header = SavingsAccountReq.Header.builder()
                 .apiName("createAccount")
                 .transmissionDate(transmissionDate)
@@ -179,6 +184,7 @@ public class UserService {
                 .onErrorMap(e -> new RuntimeException("적금 계좌 생성 중 오류 발생", e))
                 .block();
 
+        logger.error("createSavingAccountApiResponse : {}", response.toString());
         if (response == null || response.getStatusCode() != HttpStatus.OK) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
@@ -204,15 +210,18 @@ public class UserService {
     }
 
     public ResponseEntity<String> searchUserkey(String email) {
+        logger.info("searchUserkey()...email:{}", email);
         return ResponseEntity.ok(userRepository.findUserByEmail(email).getUserKey());
     }
     
     
     
     
-    //회원가입 > 회원 정보 insert
+    /////////////gabin
+    
+    //회원가입 때 쓸 메소드
     public User saveUser(UserDto userDto) {
-    	logger.info("saveUser()...{}", userDto);
+    	logger.info("saveUser()...{}", userDto.toString());
     	System.out.println(userDto);
     	User user = User.builder()
     			.userId(userDto.getUserId())
@@ -229,6 +238,7 @@ public class UserService {
     
     //이메일을 가지고 아이디 구하기. 계정찾기페이지에서 사용하여 비밀번호 변경페이지에 넘겨줄 것.
     public String findUserIdByEmail(String email) {
+        logger.info("findUserIdByEmail()...email:{}", email);
         User user = userRepository.findUserByEmail(email);
         return user != null ? user.getUserId() : null;
     }
@@ -241,6 +251,7 @@ public class UserService {
     
     //유저 넘버 구하기
     public int getUserNo(User user) {
+        logger.info("getUserNo()...user:{}", user.toString());
         //저장된 회원의 user_no을 조회하여서
         User userforNumber = userRepository.findByUserId(user.getUserId());
         //그 회원의 user_no를 반환해주기

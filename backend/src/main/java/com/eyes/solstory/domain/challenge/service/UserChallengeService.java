@@ -3,6 +3,8 @@ package com.eyes.solstory.domain.challenge.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +28,15 @@ public class UserChallengeService {
     private ChallengeRewardRepository challengeRewardRepository;
 	@Autowired
     private FinancialSummaryRepository financialSummaryRepository;
+    private static final Logger logger = LoggerFactory.getLogger(UserChallengeScheduler.class.getSimpleName());
     
 
     // 매일 자정에 전달이 만료일인 챌린지 달성 여부 확인
     public void checkAndRewardExpiredChallenges() {
+        logger.info("checkAndRewardExpiredChallenges()");
         LocalDate yesterday = LocalDate.now().minusDays(1);
         List<UserChallenge> expiredChallenges = userChallengeRepository.findAllByCompleteDate(yesterday);
-
+        logger.error("expiredChallenges:{}", expiredChallenges);
         for (UserChallenge userChallenge : expiredChallenges) {
             boolean isCompleted = checkChallengeCompletion(userChallenge);
 
@@ -45,6 +49,7 @@ public class UserChallengeService {
 
     // 챌린지 달성 여부 확인
     private boolean checkChallengeCompletion(UserChallenge userChallenge) {
+        logger.info("checkChallengeCompletion()...userChallenge:{}", userChallenge);
         Challenge challenge = userChallenge.getChallenge();
         String category = challenge.getCategory();
         int userNo = userChallenge.getUser().getUserNo();
@@ -67,6 +72,8 @@ public class UserChallengeService {
 
         totalAmountCurrent = totalAmountCurrent != null ? totalAmountCurrent : 0;
         totalAmountPrevious = totalAmountPrevious != null ? totalAmountPrevious : 0;
+        logger.error("totalAmountCurrent:{}", totalAmountCurrent);
+        logger.error("totalAmountCurrent:{}", totalAmountCurrent);
 
         // 저축 챌린지: 현재 달이 목표 금액 이상 저축했는지 확인
         if (challenge.getChallengeType() == 1) {
@@ -80,7 +87,9 @@ public class UserChallengeService {
     }
 
     private void rewardUser(int userNo, int rewardKeys) {
+        logger.info("rewardUser()...userNo:{}, rewardKeys:{}", userNo, rewardKeys);
         ChallengeReward challengeReward = challengeRewardRepository.findChallengeRewardByUserNo(userNo);
+        logger.error("challengeReward:{}", challengeReward);
         if (challengeReward != null) {
             challengeReward.updateKeys(challengeReward.getKeys() + rewardKeys);
             challengeRewardRepository.save(challengeReward);
@@ -88,7 +97,9 @@ public class UserChallengeService {
     }
 
     public UserChallenge getUserChallengesStatus(int userNo) {
+        logger.info("getUserChallengesStatus()...userNo:{}", userNo);
         UserChallenge userChallenge = userChallengeRepository.findByUser_UserNo(userNo);
+        logger.error("userChallenge:{}", userChallenge);
         if(userChallenge == null) {
             throw new UserChallengeNotFoundException("해당하는 챌린지가 없습니다.");
         }
@@ -104,6 +115,7 @@ public class UserChallengeService {
     }
 
     public List<UserChallenge> getAllUserChallengeByCompleteDate(LocalDate completeDate) {
+        logger.info("getAllUserChallengeByCompleteDat()...completeDate:{}", completeDate);
         return userChallengeRepository.findAllByCompleteDate(LocalDate.now());
     }
 }
