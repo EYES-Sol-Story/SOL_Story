@@ -19,23 +19,22 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "hobbies")
+@Table(name = "interests")
 @SequenceGenerator(
-	    name = "hobby_seq_generator",
-	    sequenceName = "hobby_seq", 
+	    name = "interest_seq_generator",
+	    sequenceName = "interest_seq", 
 	    allocationSize = 1  
 	)
-public class Hobby {
-    
+public class UserInterest {
 	@Id
-    @Column(name="hobby_no")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hobby_seq_generator")
-    private int hobbyNo;
-    
-    @Column(name = "user_no", nullable = false, precision = 10)
-    private int userNo;
+    @Column(name="interest_no")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "interest_seq_generator")
+	private int interestNo;
 
-    @Column(name = "hobby", nullable = false, length = 50)
-    private String hobby;
+	@Column(name = "user_no", nullable = false, precision = 10)
+    private int userNo;
+	
+	@Column(name="interest_cate", nullable = false, length = 50)
+    private String interestCate;
 
 }

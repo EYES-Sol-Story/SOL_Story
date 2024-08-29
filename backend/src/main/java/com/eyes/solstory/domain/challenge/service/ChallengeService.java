@@ -1,12 +1,11 @@
 package com.eyes.solstory.domain.challenge.service;
 
-import com.eyes.solstory.domain.challenge.repository.ChallengeRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.Comparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.eyes.solstory.domain.challenge.ChallengeDataInitializer;
 import com.eyes.solstory.domain.challenge.entity.Challenge;
 import com.eyes.solstory.domain.challenge.entity.UserChallenge;
+import com.eyes.solstory.domain.challenge.repository.ChallengeRepository;
 import com.eyes.solstory.domain.challenge.repository.UserChallengeRepository;
 import com.eyes.solstory.domain.user.entity.User;
 

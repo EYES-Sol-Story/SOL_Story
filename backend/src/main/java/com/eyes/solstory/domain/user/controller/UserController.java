@@ -167,9 +167,10 @@ public class UserController {
      public ResponseEntity<Boolean> checkExistUserInfo(@RequestParam("userNo") int userNo){
     	 logger.info("checkEmail()...userNo: {}", userNo);
     	 User user = userRepository.findUserByUserNo(userNo);
+    	 logger.info("mbti: {}", user.getMbti());
     	 if(user.getMbti() == null || user.getMbti().isEmpty()) {
     		 return ResponseEntity.ok(false);
     	 }
-    	 return ResponseEntity.ok(true);
+    	 return ResponseEntity.ok(true);//있을 때 true
      }
 }

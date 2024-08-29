@@ -7,12 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.eyes.solstory.domain.userinfo.entity.Interest;
+import com.eyes.solstory.domain.userinfo.entity.UserInterest;
 
 @Repository
-public interface InterestRepository extends JpaRepository<Interest, Integer> {
-	@Query("SELECT interest FROM Interest WHERE userNo = :userNo")
-	List<String> findAllInterestByUserNo(@Param("userNo") int userNo);
+public interface InterestRepository extends JpaRepository<UserInterest, Integer> {
+	@Query(value = "SELECT i.interest_cate FROM Interest i WHERE user_o = :userNo", nativeQuery = true)
+	List<String> getInterestByUserNo(@Param("userNo") int userNo);
 	
 }
     // JpaRepository<EntityClass, ID타입>을 상속받음

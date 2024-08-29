@@ -1,8 +1,5 @@
 package com.eyes.solstory.domain.challenge.controller;
 
-import com.eyes.solstory.domain.challenge.service.UserChallengeService;
-import com.eyes.solstory.domain.financial.service.FinancialSummaryAnalyzer;
-import com.eyes.solstory.domain.userinfo.controller.UserInfoController;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.eyes.solstory.domain.challenge.entity.Challenge;
 import com.eyes.solstory.domain.challenge.entity.UserChallenge;
 import com.eyes.solstory.domain.challenge.service.ChallengeService;
+import com.eyes.solstory.domain.challenge.service.UserChallengeService;
+import com.eyes.solstory.domain.financial.service.FinancialSummaryAnalyzer;
 import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
 

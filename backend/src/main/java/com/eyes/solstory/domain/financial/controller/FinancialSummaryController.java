@@ -18,6 +18,7 @@ import com.eyes.solstory.domain.financial.dto.CategorySpendingSummaryDTO;
 import com.eyes.solstory.domain.financial.dto.FinancialTrendDTO;
 import com.eyes.solstory.domain.financial.dto.StoreSpendingSummary;
 import com.eyes.solstory.domain.financial.service.FinancialSummaryAnalyzer;
+import com.eyes.solstory.util.generator.DataGenerator;
 
 import lombok.AllArgsConstructor;
 
@@ -82,7 +83,8 @@ public class FinancialSummaryController {
     @GetMapping(value = "/highest-spending-details", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StoreSpendingSummary>> getCategoryDetails(@RequestParam("userNo") int userNo) throws URISyntaxException{
         logger.info("getCategoryDetails()...userNo:{}", userNo);
-        return ResponseEntity.ok(summaryAnalyzer.getCategoryDetails(userNo));
+        //return ResponseEntity.ok(summaryAnalyzer.getCategoryDetails(userNo));
+        return ResponseEntity.ok(DataGenerator.cafesIn());
     }
     
     /** 미사용 - 
@@ -129,7 +131,9 @@ public class FinancialSummaryController {
     @GetMapping(value = "/total-savings-amount", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> getTotalSavingsAmount(@RequestParam("userNo") int userNo) throws URISyntaxException{
         logger.info("getTotalSavingsAmount()...userNo:{}", userNo);
-    	return ResponseEntity.ok(summaryAnalyzer.getTotalSavingsAmount(userNo));
+    	//return ResponseEntity.ok(summaryAnalyzer.getTotalSavingsAmount(userNo));
+        int order = userNo%10;
+    	return ResponseEntity.ok(DataGenerator.getSavingsBalane(order));
     }
     
     

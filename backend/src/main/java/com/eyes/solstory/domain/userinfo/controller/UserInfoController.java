@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
-import com.eyes.solstory.domain.userinfo.entity.Hobby;
-import com.eyes.solstory.domain.userinfo.entity.Interest;
+import com.eyes.solstory.domain.userinfo.entity.UserHobby;
+import com.eyes.solstory.domain.userinfo.entity.UserInterest;
 import com.eyes.solstory.domain.userinfo.repository.HobbyRepository;
 import com.eyes.solstory.domain.userinfo.repository.InterestRepository;
 import com.eyes.solstory.domain.userinfo.service.UserInfoService;
@@ -43,7 +43,7 @@ public class UserInfoController {
 
     // User 관련 API
     // 처음 정보 등록 
-    @PostMapping("/users")
+    @PostMapping("/saveInfo")
     public ResponseEntity<String> updateUserMbti(@RequestBody Map<String, Object> userInfo) {
         logger.info("updateUserMbti()...userInfo:{}", userInfo.toString());
     	userRepository.updateUserByMbti((String)userInfo.get("mbti"), (int)userInfo.get("userNo"));
@@ -67,43 +67,43 @@ public class UserInfoController {
     }
     
     @PostMapping("/users/{userNo}")
-    public ResponseEntity<Interest> createInterest(@RequestBody Interest interest) {
+    public ResponseEntity<UserInterest> createInterest(@RequestBody UserInterest interest) {
         logger.info("createInterest()...interest:{}", interest.toString());
-    	Interest savedInterest = interestRepository.save(interest);
+    	UserInterest savedInterest = interestRepository.save(interest);
         return ResponseEntity.ok(savedInterest);
     }
 
     @GetMapping(value = "/interests", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getInterestsByUserNo(@RequestParam("userNo") int userNo) {
     	logger.info("getInterest()...{}", userNo);
-    	List<String> list = interestRepository.findAllInterestByUserNo(userNo);
+    	List<String> list = interestRepository.getInterestByUserNo(userNo);
     	if(list.isEmpty()) ResponseEntity.ok(list);
     	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping("/interests")
-    public List<Interest> getAllInterests() {
+    public List<UserInterest> getAllInterests() {
         return interestRepository.findAll();
     }
 
     // Hobby 관련 API
     @PostMapping("/hobbies")
-    public ResponseEntity<Hobby> createHobby(@RequestBody Hobby hobby) {
+    public ResponseEntity<UserHobby> createHobby(@RequestBody UserHobby hobby) {
         logger.info("createHobby()...hobby:{}", hobby.toString());
-    	Hobby savedHobby = hobbyRepository.save(hobby);
+    	UserHobby savedHobby = hobbyRepository.save(hobby);
         return ResponseEntity.ok(savedHobby);
     }
 
     @GetMapping(value = "/hobbies", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getHobbiesByUserNo(@RequestParam("userNo") int userNo) {
     	logger.info("getHobby()...{}", userNo);
-    	List<String> list = hobbyRepository.findAllHobbyByUserNo(userNo);
+    	List<String> list = hobbyRepository.getHobbyUserNo(userNo);
     	if(list.isEmpty()) ResponseEntity.ok(list);
     	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping("/hobbies")
-    public List<Hobby> getAllHobbies() {
+    public List<UserHobby> getAllHobbies() {
         return hobbyRepository.findAll();
     }
 
