@@ -38,11 +38,12 @@ public class DemandDepositCollector {
 	 * @throws URISyntaxException
 	 */
 	public Map<String, List<TransactionDTO>> fetchTransactions(ActiveAccountDTO userAccount, String date) throws URISyntaxException {
+        logger.info("fetchTransactions()...userAccount:{}, date:{}", userAccount, date);
         Map<String, String> headerMap = OpenApiUtil.createHeaders(userAccount.getUserKey(), OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST);
         Map<String, Object> requestMap = OpenApiUtil.createTransactionHistoryRequestData(userAccount.getAccountNo(), date, "A", headerMap);
 
         ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST), requestMap);
-
+        logger.error("inquireTransactionHistoryList:{}", response.toString());
         ObjectMapper objectMapper = new ObjectMapper();
         
         try {
@@ -63,6 +64,7 @@ public class DemandDepositCollector {
 	 * @return
 	 */
     private Map<String, List<TransactionDTO>> parseTransactionList(JsonNode listNode) {
+        logger.info("parseTransactionList()...JsonNode:{}", listNode);
     	Map<String, List<TransactionDTO>> transactionMap = new HashMap<>();
         List<TransactionDTO> spendingList = new ArrayList<>();
         List<TransactionDTO> incomeList = new ArrayList<>();
@@ -76,7 +78,7 @@ public class DemandDepositCollector {
                         .transactionBalance(transactionBalance)
                         .transactionSummary(transactionSummary)
                         .build();
-
+                logger.error("TransactionDTO:{}", transaction.toString());
                 if(transactionType.equals("1")) spendingList.add(transaction);
                 else incomeList.add(transaction);
             }
@@ -95,6 +97,7 @@ public class DemandDepositCollector {
 	 * @throws URISyntaxException
 	 */
 	public List<TransactionDTO> fetchTransactionsForMonth(UserCategoryDTO categoryDTO) throws URISyntaxException  {
+        logger.info("fetchTransactionsForMonth()...UserCategoryDTO:{}", categoryDTO.toString());
 		String startDate = LocalDate.now().minusDays(30).format(OpenApiUtil.DATE_FORMATTER); //30일전부터
 		String endDate = LocalDate.now().minusDays(1).format(OpenApiUtil.DATE_FORMATTER); //어제까지
 		
@@ -102,7 +105,7 @@ public class DemandDepositCollector {
         Map<String, Object> requestMap = OpenApiUtil.createTransactionHistoryRequestDataForMonth(categoryDTO.getAccountNo(), startDate, endDate, "D", headerMap);
 
         ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST), requestMap);
-
+        logger.error("inquireTransactionHistoryList:{}", response.toString());
         ObjectMapper objectMapper = new ObjectMapper();
         
         try {
@@ -121,6 +124,7 @@ public class DemandDepositCollector {
 	 * @return
 	 */
     private List<TransactionDTO> parseTransactionListForMonth(JsonNode listNode) {
+        logger.info("parseTransactionListForMonth()...JsonNode:{}", listNode);
         List<TransactionDTO> transactions = new ArrayList<>();
         
         if (listNode.isArray()) {

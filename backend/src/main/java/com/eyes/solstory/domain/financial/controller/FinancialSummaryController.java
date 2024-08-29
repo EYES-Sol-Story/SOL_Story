@@ -25,11 +25,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FinancialSummaryController {
 
-	private static final Logger logger = LoggerFactory.getLogger(FinancialSummaryController.class);	
-
     private FinancialSummaryAnalyzer summaryAnalyzer;
-    
- 
+    private static final Logger logger = LoggerFactory.getLogger(FinancialSummaryController.class.getSimpleName());
+
     /**
      * 최근 30일 지출 상위 카테고리 5개의 지출 합계
      * @param userNo
@@ -37,6 +35,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/top5-categories-amount")
     public ResponseEntity<List<CategorySpendingSummaryDTO>> getTop5Categories(@RequestParam("userNo") int userNo) {
+        logger.info("getTop5Categories()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getTop5Categories(userNo));
     }
     
@@ -47,6 +46,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/top5-categories-with-avg")
     public ResponseEntity<Map<String, CategorySpendingAvgDTO>> getTop5CategoriesWithAvg(@RequestParam("userNo") int userNo) {
+        logger.info("getTop5CategoriesWithAvg()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getTop5CategoriesWithAvg(userNo));
     }
     
@@ -57,6 +57,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/spending-trends")
     public ResponseEntity<List<FinancialTrendDTO>> getSpendingTrends(@RequestParam("userNo") int userNo) {
+        logger.info("getSpendingTrends()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getSpendingTrends(userNo));
     }
     
@@ -67,6 +68,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/last7-days-spending")
     public ResponseEntity<List<CategorySpendingSummaryDTO>> getLast7DaysSpending(@RequestParam("userNo") int userNo) {
+        logger.info("getLast7DaysSpending()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getLast7DaysSpending(userNo));
     }
     
@@ -78,7 +80,8 @@ public class FinancialSummaryController {
      */
     @GetMapping("/highest-spending-details")
     public ResponseEntity<List<StoreSpendingSummary>> getCategoryDetails(@RequestParam("userNo") int userNo) throws URISyntaxException{
-    	return ResponseEntity.ok(summaryAnalyzer.getCategoryDetails(userNo));
+        logger.info("getCategoryDetails()...userNo:{}", userNo);
+        return ResponseEntity.ok(summaryAnalyzer.getCategoryDetails(userNo));
     }
     
     /** 미사용 - 
@@ -89,7 +92,8 @@ public class FinancialSummaryController {
      */
     @GetMapping("/highest-spending-growth-keyword")
     public ResponseEntity<String> getKeywordWithHighestSpendingGrowth(@RequestParam("userNo") int userNo) throws URISyntaxException{
-    	return ResponseEntity.ok(summaryAnalyzer.getKeywordWithHighestSpendingGrowth(userNo));
+        logger.info("getKeywordWithHighestSpendingGrowth()...userNo:{}", userNo);
+        return ResponseEntity.ok(summaryAnalyzer.getKeywordWithHighestSpendingGrowth(userNo));
     }
     
     /**
@@ -100,7 +104,8 @@ public class FinancialSummaryController {
      */
     @GetMapping("highest-spending-growth-category")
     public ResponseEntity<String> getCategoryWithHighestSpendingGrowth(@RequestParam("userNo") int userNo) throws URISyntaxException{
-    	return ResponseEntity.ok(summaryAnalyzer.getCategoryWithHighestSpendingGrowth(userNo));
+        logger.info("getCategoryWithHighestSpendingGrowth()...userNo:{}", userNo);
+        return ResponseEntity.ok(summaryAnalyzer.getCategoryWithHighestSpendingGrowth(userNo));
     }
     
     /**
@@ -110,6 +115,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/total-spending")
     public ResponseEntity<Integer> getTotalSpendingForMonth(@RequestParam("userNo") int userNo){
+        logger.info("getTotalSpendingForMonth()...userNo:{}", userNo);
     	return ResponseEntity.ok(summaryAnalyzer.getTotalSpendingForMonth(userNo));
     }
     
@@ -121,7 +127,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/total-savings-amount")
     public ResponseEntity<Integer> getTotalSavingsAmount(@RequestParam("userNo") int userNo) throws URISyntaxException{
-    	logger.info("getTotalSavingsAmount(userNo : "+ userNo+")");
+        logger.info("getTotalSavingsAmount()...userNo:{}", userNo);
     	return ResponseEntity.ok(summaryAnalyzer.getTotalSavingsAmount(userNo));
     }
     
@@ -137,6 +143,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/financial-score")
     public ResponseEntity<Integer> getFinancialScore(@RequestParam("userNo") int userNo) {
+        logger.info("getFinancialScore()...userNo:{}", userNo);
     	return ResponseEntity.ok(summaryAnalyzer.getFinancialScore(userNo));
     }
     
@@ -148,7 +155,7 @@ public class FinancialSummaryController {
      */
     @GetMapping("/top3-categories")
     public ResponseEntity<String[]> getTop3Categories(@RequestParam("userNo") int userNo){
+        logger.info("getTop3Categories()...userNo:{}", userNo);
     	return ResponseEntity.ok(summaryAnalyzer.getTop3Categories(userNo));
     }
-    
 }

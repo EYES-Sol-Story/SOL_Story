@@ -33,11 +33,12 @@ public class SavingsCollector {
 	 * @throws URISyntaxException
 	 */
 	public int fetchSavings(ActiveAccountDTO userAccount, String date) throws URISyntaxException {
+        logger.info("fetchSavings()...userAccount:{}, date:{}", userAccount, date);
         Map<String, String> headerMap = OpenApiUtil.createHeaders(userAccount.getUserKey(), OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST);
         Map<String, Object> requestMap = OpenApiUtil.createTransactionHistoryRequestData(userAccount.getAccountNo(), date, "M", headerMap);
 
         ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_TRANSACTION_HISTORY_LIST), requestMap);
-
+        logger.error("response:{}", response);
         ObjectMapper objectMapper = new ObjectMapper();
         
         try {
@@ -57,6 +58,7 @@ public class SavingsCollector {
 	 * @return
 	 */
     private int parseTransactionList(JsonNode listNode) {
+        logger.info("parseTransactionList()...listNode:{}", listNode);
         int savings = 0;
         if (listNode.isArray()) {
             for (JsonNode item : listNode) {
@@ -75,12 +77,13 @@ public class SavingsCollector {
      * @throws URISyntaxException 
      */
     public int fetchSavingsTotal(AccountKeyDTO userAccount) throws URISyntaxException {
+        logger.info("fetchSavingsTotal()...userAccount:{}", userAccount);
     	//계좌 잔액 조회
     	Map<String, String> headerMap = OpenApiUtil.createHeaders(userAccount.getUserKey(), OpenApiUrls.INQUIRE_DEMAND_DEPOSIT_ACCOUNT_BALANCE);
         Map<String, Object> requestMap = OpenApiUtil.createAccountBalanceRequestData(userAccount.getAccountNo(), headerMap);
 
         ResponseEntity<String> response = OpenApiUtil.callApi(new URI(OpenApiUrls.DEMAND_DEPOSIT_URL + OpenApiUrls.INQUIRE_DEMAND_DEPOSIT_ACCOUNT_BALANCE), requestMap);
-
+        logger.error("response:{}", response);
         ObjectMapper objectMapper = new ObjectMapper();
         
         try {

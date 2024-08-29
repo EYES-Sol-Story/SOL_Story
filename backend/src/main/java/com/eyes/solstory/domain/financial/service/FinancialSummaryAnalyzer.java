@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.eyes.solstory.domain.financial.dto.AccountKeyDTO;
@@ -30,6 +32,7 @@ public class FinancialSummaryAnalyzer {
 	private SavingsCollector savingsCollector;
     private FinancialSummaryRepository summaryRepository;
 	private UserAccountRepository accountRepository;
+    private static final Logger logger = LoggerFactory.getLogger(FinancialSummaryAnalyzer.class.getSimpleName());
 
 	/**
 	 * 최근 한달 지출 상위 5개 카테고리
@@ -37,6 +40,7 @@ public class FinancialSummaryAnalyzer {
 	 * @return
 	 */
     public List<CategorySpendingSummaryDTO> getTop5Categories(int userNo) {
+        logger.info("getTop5Categories()...userNo:{}", userNo);
     	return summaryRepository.findTop5Categories(userNo);
     }
     
@@ -46,6 +50,7 @@ public class FinancialSummaryAnalyzer {
      * @return
      */
     public Map<String, CategorySpendingAvgDTO> getTop5CategoriesWithAvg(int userNo) {
+        logger.info("getTop5CategoriesWithAvg()...userNo:{}", userNo);
     	List<CategorySpendingAvgDTO> list = summaryRepository.findTop5CategoriesWithAvg(userNo);
     	Map<String, CategorySpendingAvgDTO> map = new HashMap<>();
     	for(CategorySpendingAvgDTO others : list) {
@@ -60,6 +65,7 @@ public class FinancialSummaryAnalyzer {
      * @return
      */
     public List<FinancialTrendDTO> getSpendingTrends(int userNo) {
+        logger.info("getSpendingTrends()...userNo:{}", userNo);
     	return summaryRepository.getSpendingTrends(userNo);
     }
     
@@ -69,6 +75,7 @@ public class FinancialSummaryAnalyzer {
      * @return
      */
     public List<CategorySpendingSummaryDTO> getLast7DaysSpending(int userNo) {
+        logger.info("getLast7DaysSpending()...userNo:{}", userNo);
     	return summaryRepository.getLast7DaysSpending(userNo);
     }
     
@@ -79,6 +86,7 @@ public class FinancialSummaryAnalyzer {
      * @throws URISyntaxException 
      */
     public List<StoreSpendingSummary> getCategoryDetails(int userNo) throws URISyntaxException {
+        logger.info("getCategoryDetails()...userNo:{}", userNo);
     	// 최근 7일간 가장 지출이 많은 카테고리와, 입출금 계좌번호, user_key 받아오기
     	UserCategoryDTO categoryDTO = summaryRepository.getMostSpendingCategory(userNo);
     	// 최근 30일간 지출처별 지출 내역 요약 정보
@@ -93,6 +101,7 @@ public class FinancialSummaryAnalyzer {
      * @throws URISyntaxException
      */
     public String getKeywordWithHighestSpendingGrowth(int userNo) throws URISyntaxException {
+        logger.info("getKeywordWithHighestSpendingGrowth()...userNo:{}", userNo);
     	// 최근 한달, 전월 대비 소비 증가율이 가장 높은 카테고리, 입출금 계좌번호, user_key 받아오기
     	UserCategoryDTO categoryDTO = summaryRepository.getCategoryWithHighestSpendingGrowth(userNo);
     	// 최근 30일간 지출처별 지출 내역 요약 정보
@@ -106,6 +115,7 @@ public class FinancialSummaryAnalyzer {
      * @throws URISyntaxException
      */
     public String getCategoryWithHighestSpendingGrowth(int userNo) throws URISyntaxException {
+        logger.info("getCategoryWithHighestSpendingGrowth()...userNo:{}", userNo);
     	return  summaryRepository.findTopCategoryForMonth(userNo);
     }
     /**
@@ -114,6 +124,7 @@ public class FinancialSummaryAnalyzer {
      * @return 최근 한달 지출 총액
      */
     public int getTotalSpendingForMonth(int userNo) {
+        logger.info("getTotalSpendingForMonth()...userNo:{}", userNo);
     	return summaryRepository.deriveTotalSpendingForMonth(userNo);
     }
     
@@ -124,6 +135,7 @@ public class FinancialSummaryAnalyzer {
      * @throws URISyntaxException 
      */
     public int getTotalSavingsAmount(int userNo) throws URISyntaxException {
+        logger.info("getTotalSavingsAmount()...userNo:{}", userNo);
     	// 저축 계좌 번호, user_key를 받아옴
     	AccountKeyDTO userAccount = summaryRepository.findActiveSavingsAccounts(userNo);
     	return savingsCollector.fetchSavingsTotal(userAccount);
@@ -135,6 +147,7 @@ public class FinancialSummaryAnalyzer {
      * @return
      */
     public int getFinancialScore(int userNo) {
+        logger.info("getFinancialScore()...userNo:{}", userNo);
     	return summaryRepository.deriveFinancialScore(userNo);
     }
     
@@ -146,6 +159,7 @@ public class FinancialSummaryAnalyzer {
      * @return
      */
     public String[] getTop3Categories(int userNo) {
+        logger.info("getTop3Categories()...userNo:{}", userNo);
     	return summaryRepository.findTop3Categories(userNo);
     }
 }

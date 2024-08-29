@@ -2,6 +2,8 @@ package com.eyes.solstory.global.bank;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,7 @@ public class WebClientUtil {
     @Value("${api.key}")
     private String apiKey;
     private final WebClient webClient;
+    private static final Logger logger = LoggerFactory.getLogger(WebClientUtil.class.getSimpleName());
 
     public WebClientUtil(WebClient webClient) {
         this.webClient = webClient;
@@ -36,7 +39,7 @@ public class WebClientUtil {
 
     //1원 송금
     public Mono<ResponseEntity<TransferOneWonRes>> transferOneWon(Map<String, Object> request) {
-    	System.out.println("정상: "+request.toString());
+        logger.info("transferOneWon()...request:{}", request.toString());
         String url = "/edu/accountAuth/openAccountAuth";
         Mono<ResponseEntity<TransferOneWonRes>> result = webClient.post()
                 .uri(url)
@@ -58,7 +61,9 @@ public class WebClientUtil {
     //1원 검증
     public Mono<ResponseEntity<OneWonVerificationRes>> authenticateTransferOneWon(
             OneWonVerificationReq request) {
+        logger.info("authenticateTransferOneWon()...request:{}", request.toString());
         String url = "/edu/accountAuth/checkAuthCode";
+
         return webClient.post()
                 .uri(url)
                 .bodyValue(request)
@@ -74,6 +79,7 @@ public class WebClientUtil {
 
     //사용자 계정 생성
     public Mono<ResponseEntity<UserRes>> creatUserAccount(String userId) {
+        logger.info("creatUserAccount()...userId:{}", userId);
         String url = "/member";
         UserReq request = new UserReq(apiKey, userId);
 
@@ -89,6 +95,7 @@ public class WebClientUtil {
 
     //사용자 계정 조회
     public Mono<ResponseEntity<UserRes>> findUserAccount(String userId) {
+        logger.info("findUserAccount()...userId:{}", userId);
         String url = "/member/search";
         UserReq request = new UserReq(apiKey, userId);
         return webClient.post()
@@ -103,6 +110,7 @@ public class WebClientUtil {
 
     //수시입출금 - 계좌 입금
     public Mono<ResponseEntity<UpdateSavingsAccountRes>> updateSavingAccountDeposit(UpdateSavingsAccountReq request) {
+        logger.info("updateSavingAccountDeposit()...request:{}", request.toString());
         String url = "/edu/demandDeposit/updateDemandDepositAccountDeposit";
         return webClient.post()
                 .uri(url)
@@ -116,6 +124,7 @@ public class WebClientUtil {
 
     //적금 상품 조회
     public Mono<ResponseEntity<SearchSavingsProductRes>> searchSavingsProduct(Header header) {
+        logger.info("searchSavingsProduct()...header:{}", header.toString());
         String url = "/edu/savings/inquireSavingsProducts";
         return webClient.post()
                 .uri(url)
@@ -132,6 +141,7 @@ public class WebClientUtil {
 
     //적금 계좌 생성
     public Mono<ResponseEntity<SavingsAccountRes>> createSavingAccount(SavingsAccountReq request) {
+        logger.info("createSavingAccount()...request:{}", request.toString());
         String url = "/edu/savings/createAccount";
 
         return webClient.post()
@@ -146,6 +156,7 @@ public class WebClientUtil {
 
     //적금 계좌 조회 - 단건
     public Mono<ResponseEntity<SearchSavingsAccountRes>> searchSavingAccount(SearchSavingsAccountReq request) {
+        logger.info("searchSavingAccount()...request:{}", request.toString());
         String url = "/edu/savings/inquireAccount";
 
         return webClient.post()
