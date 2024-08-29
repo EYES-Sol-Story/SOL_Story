@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -43,6 +45,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserAccountRepository userAccountRepository;
     private final ChallengeRewardRepository challengeRewardRepository;
+    
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class.getSimpleName());
 
     //사용자 계정 - 계 생성
     public ResponseEntity<UserRes> createUserAccount(String userId, String email) {
@@ -271,11 +275,9 @@ public class UserService {
     }
     
     //로그인 인증
-    public boolean authenticate(String username, String password) {
-    	System.out.println(username + ", " + password);
-        User user = userRepository.login(username, password);
-        return user != null;
-    
+    public User authenticate(String username, String password) {
+    	logger.info("anthenticate()...username:{}, password:{}", username, password);
+        return userRepository.login(username, password);
 	}
     
     //유저 넘버 구하기

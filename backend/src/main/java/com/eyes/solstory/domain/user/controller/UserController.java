@@ -121,17 +121,17 @@ public class UserController {
     //로그인페이지에서 "로그인"클릭 시, noUser를 반환받게 된다면 메인화면 페이지로 넘어가지 않음.
     //로그인페이지에서 "로그인"클릭 시, user_no를 반환받게 된다면 그대로 메인화면 페이지에 넘겨줌.
     @PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody User loginRequest) {
-	    System.out.println("로그인컨트롤러에 들어옴");
-	    System.out.println(loginRequest.toString());
-	    boolean isAuthenticated = userService.authenticate(loginRequest.getUserId(), loginRequest.getPassword());
-		if (isAuthenticated) {
-		    int userNo = userService.getUserNo(loginRequest);
-		    System.out.println("로그인에서 userNo : " + userNo);
-		    return ResponseEntity.ok().body(Map.of("userNo", userNo));  // 성공 시 "userNo" 반환
-		} else {
-		    return ResponseEntity.ok().body(Map.of("userNo", null));  // 실패 시 null 반환
-		    }
+	public ResponseEntity<User> login(@RequestBody User loginRequest) {
+    	logger.info("signup()...{}", loginRequest.toString());
+	    User user = userService.authenticate(loginRequest.getUserId(), loginRequest.getPassword());
+	    if (user != null) {
+            // 성공적으로 user를 반환
+	    	logger.error("loginUser : {}", user.toString());
+            return ResponseEntity.ok(user);
+        } else {
+            logger.error("user is not exists", loginRequest.getUserId());
+            return ResponseEntity.ok(user);
+        }
 	 }
      
      //아이디 중복확인 - 유저 아이디가 존재하는지 확인. 회원가입페이지에서 쓸 것
