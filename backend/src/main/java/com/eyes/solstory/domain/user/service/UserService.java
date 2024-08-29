@@ -246,8 +246,8 @@ public class UserService {
     /////////////gabin
     
     //회원가입 때 쓸 메소드
-    public int saveUser(UserDto userDto) {
-    	// UserEntity로 변환 후 저장
+    public User saveUser(UserDto userDto) {
+    	logger.info("saveUser()...{}", userDto);
     	System.out.println(userDto);
     	User user = User.builder()
     			.userId(userDto.getUserId())
@@ -258,15 +258,8 @@ public class UserService {
     	        .birth(userDto.transDateFormatyyyyMMdd(userDto.getBirth())) //변환필요
     	        .joinDate(LocalDate.now())
     			.build();
-        // 유저의 정보 저장
-    	System.out.println(user);
-        userRepository.save(user);
-        System.out.println("회원정보 저장 중");
-        
-        //그리고 나서, 저장된 회원의 user_no을 조회하여서
-        User savedUser = userRepository.findByUserId(user.getUserId());
-        //그 회원의 user_no를 반환해주기. 이것을 다음 페이지의 인수값으로 넘겨줄 것.
-        return savedUser.getUserNo();
+    	logger.info("user ...{}", user.toString());
+        return userRepository.save(user);
     }
     
     //이메일을 가지고 아이디 구하기. 계정찾기페이지에서 사용하여 비밀번호 변경페이지에 넘겨줄 것.

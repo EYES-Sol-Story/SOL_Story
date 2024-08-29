@@ -1,7 +1,6 @@
 package com.eyes.solstory.domain.user.controller;
 
 import java.net.URISyntaxException;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,8 +86,9 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserDto userDto) {
     	logger.info("signup()...{}", userDto.toString());
-		int userNo = userService.saveUser(userDto);
-		return ResponseEntity.ok().body(Map.of("user_no", userNo));
+		User user = userService.saveUser(userDto);
+		if(user != null) ResponseEntity.ok().build();
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     
     //이메일을 가지고 유저가 존재하는지 확인하는 용도
@@ -123,7 +123,7 @@ public class UserController {
     //로그인페이지에서 "로그인"클릭 시, user_no를 반환받게 된다면 그대로 메인화면 페이지에 넘겨줌.
     @PostMapping("/login")
 	public ResponseEntity<LoginUser> login(@RequestBody User loginRequest) {
-    	logger.info("signup()...{}", loginRequest.toString());
+    	logger.info("login()...{}", loginRequest.toString());
     	LoginUser user = userService.authenticate(loginRequest.getUserId(), loginRequest.getPassword());
 	    if (user != null) {
             // 성공적으로 user를 반환
@@ -138,20 +138,21 @@ public class UserController {
      //아이디 중복확인 - 유저 아이디가 존재하는지 확인. 회원가입페이지에서 쓸 것
      @GetMapping("/check-userid")
      public ResponseEntity<Boolean> checkUserid(@RequestParam("userid") String userId) {
-         System.out.println("아이디 중복확인중");
+    	 logger.info("checkUserid()...userId : {}", userId);
          return ResponseEntity.ok(userRepository.existsByUserId(userId));
      }
      
      //이메일 중복확인 - 유저 이메일이 존재하는지 확인. 회원가입 때 쓸 것
      @GetMapping("/check-email")
      public ResponseEntity<Boolean> checkEmail(@RequestParam("email") String email) {
-         System.out.println("이메일검사중. email : " + email);
+    	 logger.info("checkEmail()...email : {}", email);
          return ResponseEntity.ok(userRepository.existsByEmail(email));
      }
      
      //비밀번호 변경 - 비밀번호 변경 페이지에서 쓸 것, 아이디를 가지고 해당 아이디를 가진 회원의 비밀번호를 바꾸기!
      @PostMapping("/change-password") 
      public int changePassword(@RequestParam("userId") String userId, @RequestParam("password") String password) {
+    	 logger.info("checkEmail()...userId: {}, password: {}", password);
          int result = userRepository.changePassword(userId, password);
          return result;
      }
