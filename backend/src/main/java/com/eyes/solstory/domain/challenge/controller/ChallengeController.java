@@ -2,10 +2,13 @@ package com.eyes.solstory.domain.challenge.controller;
 
 import com.eyes.solstory.domain.challenge.service.UserChallengeService;
 import com.eyes.solstory.domain.financial.service.FinancialSummaryAnalyzer;
+import com.eyes.solstory.domain.userinfo.controller.UserInfoController;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +32,13 @@ public class ChallengeController {
     private UserRepository userRepository;
     private UserChallengeService userChallengeService;
     private FinancialSummaryAnalyzer financialSummaryAnalyzer;
+    private static final Logger logger = LoggerFactory.getLogger(ChallengeController.class.getSimpleName());
 
     @GetMapping("/list")
     public ResponseEntity<List<UserChallenge>> getChallengeList(@RequestParam("email") String email) {
+        logger.info("getChallengeList()...email:{}", email);
         User user = userRepository.findUserByEmail(email);
+        logger.error("foundUser: {}", user.toString());
         List<Challenge> allChallenges = new ArrayList<>();
         List<UserChallenge> userChallenges = userChallengeService.getAllUserChallengeByCompleteDate(
                 LocalDate.now());
@@ -50,7 +56,7 @@ public class ChallengeController {
             allChallenges.addAll(spendingChallenges);
             userChallenges = challengeService.assignChallengesToUser(user, allChallenges);
         }
-
+        logger.error("userChallenges: {}", userChallenges);
         return ResponseEntity.ok(userChallenges);
     }
 }

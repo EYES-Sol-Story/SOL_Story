@@ -37,6 +37,7 @@ public class UserController {
     // 사용자 계정 생성
     @PostMapping("/user/account")
     public ResponseEntity<UserRes> createUserAccount(@RequestParam("userId") String userId, @RequestParam("email") String email) {
+        logger.info("createUserAccount()...userId:{}, email:{}", userId, email);
         return userService.createUserAccount(userId, email);
     }
 
@@ -46,6 +47,7 @@ public class UserController {
     public ResponseEntity<String> transferOneWon(
             @RequestParam("accountNo") String accountNo,
             @RequestParam("email") String email) throws URISyntaxException {
+        logger.info("transferOneWon()...accountNo:{}, email:{}", accountNo, email);
         return userService.transferOneWon(accountNo, email);
     }
 
@@ -55,6 +57,7 @@ public class UserController {
             @RequestParam("accountNo") String accountNo,
             @RequestParam("authCode") String authCode,
             @RequestParam("email") String email) throws URISyntaxException {
+        logger.info("verifyOneWon()...accountNo: {}, authCode: {}, email:{}", accountNo, authCode, email);
         return userService.verifyOneWon(accountNo, authCode, email);
     }
 
@@ -66,12 +69,15 @@ public class UserController {
             @RequestParam("depositBalance") long depositBalance,
             @RequestParam("userId") String userId,
             @RequestParam("targetAmount") int targetAmount) {
+        logger.info("createSavingAccount()...accountTypeUniqueNo: {}, withdrawalAccountNo: {}, depositBalance: {}, userId: {}, targetAmount: {}",
+                accountTypeUniqueNo, withdrawalAccountNo, depositBalance, userId, targetAmount);
         return userService.createSavingAccount(accountTypeUniqueNo, withdrawalAccountNo, depositBalance, userId, targetAmount);
     }
 
     //userkey 조회
     @GetMapping("/userkey")
     public ResponseEntity<String> searchUserkey(@RequestParam("email") String email) {
+        logger.info("userkey()...{}", email);
         System.out.println("userKey()> email: " + email );
     	return userService.searchUserkey(email);
     }
@@ -84,15 +90,20 @@ public class UserController {
     public ResponseEntity<?> signUp(@RequestBody UserDto userDto) {
     	logger.info("signup()...{}", userDto.toString());
 		User user = userService.saveUser(userDto);
-		if(user != null) ResponseEntity.ok().build();
+		if(user != null) {
+            logger.error("signupUser : {}", user.toString());
+            ResponseEntity.ok().build();
+        }
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     
     //이메일을 가지고 유저가 존재하는지 확인하는 용도
     @GetMapping("/getUserIdByEmail")
     public ResponseEntity<String> getUserIdByEmail(@RequestParam String email) {
+        logger.info("getUserIdByEmail()...{}", email);
         String user_id = userService.findUserIdByEmail(email);
         if (user_id != null) {
+            logger.error("foundUserId: {}", user_id);
             return ResponseEntity.ok(user_id);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
@@ -149,8 +160,9 @@ public class UserController {
      //비밀번호 변경 - 비밀번호 변경 페이지에서 쓸 것, 아이디를 가지고 해당 아이디를 가진 회원의 비밀번호를 바꾸기!
      @PostMapping("/change-password") 
      public int changePassword(@RequestParam("userId") String userId, @RequestParam("password") String password) {
-    	 logger.info("checkEmail()...userId: {}, password: {}", password);
+    	 logger.info("checkEmail()...userId: {}, password: {}", userId, password);
          int result = userRepository.changePassword(userId, password);
+         logger.error("changedPasswordCount : {}", result);
          return result;
      }
      
