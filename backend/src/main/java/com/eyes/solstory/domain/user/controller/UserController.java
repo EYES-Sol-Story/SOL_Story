@@ -77,8 +77,7 @@ public class UserController {
     //userkey 조회
     @GetMapping("/userkey")
     public ResponseEntity<String> searchUserkey(@RequestParam("email") String email) {
-        logger.info("userkey()...{}", email);
-        System.out.println("userKey()> email: " + email );
+        logger.info("searchUserkey()...{}", email);
     	return userService.searchUserkey(email);
     }
     
@@ -126,9 +125,7 @@ public class UserController {
      * 					  }
      * } 
      */
-    //로그인페이지에서 쓸 것. userNo를 반환하거나 "noUser"를 반환.
-    //로그인페이지에서 "로그인"클릭 시, noUser를 반환받게 된다면 메인화면 페이지로 넘어가지 않음.
-    //로그인페이지에서 "로그인"클릭 시, user_no를 반환받게 된다면 그대로 메인화면 페이지에 넘겨줌.
+    //로그인페이지에서 "로그인"클릭 시, no 그대로 메인화면 페이지에 넘겨줌.
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<LoginUser> login(@RequestBody User loginRequest) {
     	logger.info("login()...{}", loginRequest.toString());
@@ -170,7 +167,9 @@ public class UserController {
      public ResponseEntity<Boolean> checkExistUserInfo(@RequestParam("userNo") int userNo){
     	 logger.info("checkEmail()...userNo: {}", userNo);
     	 User user = userRepository.findUserByUserNo(userNo);
-    	 if(user != null) return ResponseEntity.ok(true);
-    	 return ResponseEntity.ok(false);
+    	 if(user.getMbti() == null || user.getMbti().isEmpty()) {
+    		 return ResponseEntity.ok(false);
+    	 }
+    	 return ResponseEntity.ok(true);
      }
 }

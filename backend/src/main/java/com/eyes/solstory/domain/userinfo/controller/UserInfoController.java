@@ -6,12 +6,14 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eyes.solstory.domain.user.entity.User;
@@ -23,7 +25,7 @@ import com.eyes.solstory.domain.userinfo.repository.InterestRepository;
 import com.eyes.solstory.domain.userinfo.service.UserInfoService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/userInfo")
 public class UserInfoController {
 
     @Autowired
@@ -49,10 +51,18 @@ public class UserInfoController {
         return ResponseEntity.ok("success");
     }
     
-    @GetMapping("/user/{userNo}")
-    public ResponseEntity<User> findUserByUserNo(@PathVariable("userNo") int userNo){
-        logger.info("findUserByUserNo()...userNo:{}", userNo);
+    @GetMapping(value="/mbti", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String findMbtiByUserNo(@RequestParam("userNo") int userNo){
+    	logger.info("findMbtiByUserNo()...{}", userNo);
     	User user = userRepository.findUserByUserNo(userNo);
+    	return user.getMbti();
+    }
+    
+    @GetMapping(value = "/detail", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> findUserByUserNo(@RequestParam("userNo") int userNo){
+    	logger.info("findUserByUserNo()...{}", userNo);
+    	User user = userRepository.findUserByUserNo(userNo);
+    	logger.info("user: {}", user);
     	return ResponseEntity.ok(user);
     }
     
@@ -63,10 +73,12 @@ public class UserInfoController {
         return ResponseEntity.ok(savedInterest);
     }
 
-    @GetMapping("/interests/{userNo}")
-    public List<String> getInterest(@PathVariable("userNo") int userNo) {
-        logger.info("getInterest()...userNo:{}", userNo);
-    	return interestRepository.findAllInterestByUserNo(userNo);
+    @GetMapping(value = "/interests", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<String>> getInterestsByUserNo(@RequestParam("userNo") int userNo) {
+    	logger.info("getInterest()...{}", userNo);
+    	List<String> list = interestRepository.findAllInterestByUserNo(userNo);
+    	if(list.isEmpty()) ResponseEntity.ok(list);
+    	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping("/interests")
@@ -82,10 +94,12 @@ public class UserInfoController {
         return ResponseEntity.ok(savedHobby);
     }
 
-    @GetMapping("/hobbies/{userNo}")
-    public List<String> getHobby(@PathVariable("userNo") int userNo) {
-        logger.info("getHobby()...userNo:{}", userNo);
-    	return hobbyRepository.findAllHobbyByUserNo(userNo);
+    @GetMapping(value = "/hobbies", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<String>> getHobbiesByUserNo(@RequestParam("userNo") int userNo) {
+    	logger.info("getHobby()...{}", userNo);
+    	List<String> list = hobbyRepository.findAllHobbyByUserNo(userNo);
+    	if(list.isEmpty()) ResponseEntity.ok(list);
+    	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping("/hobbies")

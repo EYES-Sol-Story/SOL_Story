@@ -233,7 +233,8 @@ public class UserService {
     	        .joinDate(LocalDate.now())
     			.build();
     	logger.info("user ...{}", user.toString());
-        return userRepository.save(user);
+    	userRepository.save(user);
+        return user;
     }
     
     //이메일을 가지고 아이디 구하기. 계정찾기페이지에서 사용하여 비밀번호 변경페이지에 넘겨줄 것.

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class FinancialSummaryController {
      * @param userNo
      * @return
      */
-    @GetMapping("/top5-categories-amount")
+    @GetMapping(value = "/top5-categories-amount", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CategorySpendingSummaryDTO>> getTop5Categories(@RequestParam("userNo") int userNo) {
         logger.info("getTop5Categories()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getTop5Categories(userNo));
@@ -44,7 +45,7 @@ public class FinancialSummaryController {
      * @param userNo
      * @return
      */
-    @GetMapping("/top5-categories-with-avg")
+    @GetMapping(value = "/top5-categories-with-avg", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, CategorySpendingAvgDTO>> getTop5CategoriesWithAvg(@RequestParam("userNo") int userNo) {
         logger.info("getTop5CategoriesWithAvg()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getTop5CategoriesWithAvg(userNo));
@@ -55,7 +56,7 @@ public class FinancialSummaryController {
      * @param userNo
      * @return
      */
-    @GetMapping("/spending-trends")
+    @GetMapping(value = "/spending-trends", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FinancialTrendDTO>> getSpendingTrends(@RequestParam("userNo") int userNo) {
         logger.info("getSpendingTrends()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getSpendingTrends(userNo));
@@ -66,7 +67,7 @@ public class FinancialSummaryController {
      * @param userNo
      * @return
      */
-    @GetMapping("/last7-days-spending")
+    @GetMapping(value = "/last7-days-spending", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CategorySpendingSummaryDTO>> getLast7DaysSpending(@RequestParam("userNo") int userNo) {
         logger.info("getLast7DaysSpending()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getLast7DaysSpending(userNo));
@@ -78,7 +79,7 @@ public class FinancialSummaryController {
      * @return
      * @throws URISyntaxException
      */
-    @GetMapping("/highest-spending-details")
+    @GetMapping(value = "/highest-spending-details", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StoreSpendingSummary>> getCategoryDetails(@RequestParam("userNo") int userNo) throws URISyntaxException{
         logger.info("getCategoryDetails()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getCategoryDetails(userNo));
@@ -90,7 +91,7 @@ public class FinancialSummaryController {
      * @return
      * @throws URISyntaxException
      */
-    @GetMapping("/highest-spending-growth-keyword")
+    @GetMapping(value = "/highest-spending-growth-keyword", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getKeywordWithHighestSpendingGrowth(@RequestParam("userNo") int userNo) throws URISyntaxException{
         logger.info("getKeywordWithHighestSpendingGrowth()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getKeywordWithHighestSpendingGrowth(userNo));
@@ -102,7 +103,7 @@ public class FinancialSummaryController {
      * @return
      * @throws URISyntaxException
      */
-    @GetMapping("highest-spending-growth-category")
+    @GetMapping(value = "highest-spending-growth-category", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getCategoryWithHighestSpendingGrowth(@RequestParam("userNo") int userNo) throws URISyntaxException{
         logger.info("getCategoryWithHighestSpendingGrowth()...userNo:{}", userNo);
         return ResponseEntity.ok(summaryAnalyzer.getCategoryWithHighestSpendingGrowth(userNo));
@@ -113,7 +114,7 @@ public class FinancialSummaryController {
      * @param userNo
      * @return
      */
-    @GetMapping("/total-spending")
+    @GetMapping(value = "/total-spending", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> getTotalSpendingForMonth(@RequestParam("userNo") int userNo){
         logger.info("getTotalSpendingForMonth()...userNo:{}", userNo);
     	return ResponseEntity.ok(summaryAnalyzer.getTotalSpendingForMonth(userNo));
@@ -125,7 +126,7 @@ public class FinancialSummaryController {
      * @return
      * @throws URISyntaxException
      */
-    @GetMapping("/total-savings-amount")
+    @GetMapping(value = "/total-savings-amount", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> getTotalSavingsAmount(@RequestParam("userNo") int userNo) throws URISyntaxException{
         logger.info("getTotalSavingsAmount()...userNo:{}", userNo);
     	return ResponseEntity.ok(summaryAnalyzer.getTotalSavingsAmount(userNo));
@@ -141,7 +142,7 @@ public class FinancialSummaryController {
      * @param userNo
      * @return
      */
-    @GetMapping("/financial-score")
+    @GetMapping(value = "/financial-score", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> getFinancialScore(@RequestParam("userNo") int userNo) {
         logger.info("getFinancialScore()...userNo:{}", userNo);
     	return ResponseEntity.ok(summaryAnalyzer.getFinancialScore(userNo));
@@ -153,7 +154,7 @@ public class FinancialSummaryController {
      * @param userNo
      * @return
      */
-    @GetMapping("/top3-categories")
+    @GetMapping(value = "/top3-categories", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String[]> getTop3Categories(@RequestParam("userNo") int userNo){
         logger.info("getTop3Categories()...userNo:{}", userNo);
     	return ResponseEntity.ok(summaryAnalyzer.getTop3Categories(userNo));
