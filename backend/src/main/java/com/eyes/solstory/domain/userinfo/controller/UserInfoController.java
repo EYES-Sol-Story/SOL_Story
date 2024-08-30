@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eyes.solstory.domain.user.entity.User;
 import com.eyes.solstory.domain.user.repository.UserRepository;
+import com.eyes.solstory.domain.userinfo.dto.HobbyDTO;
+import com.eyes.solstory.domain.userinfo.dto.InterestDTO;
 import com.eyes.solstory.domain.userinfo.entity.Hobby;
 import com.eyes.solstory.domain.userinfo.entity.Interest;
 import com.eyes.solstory.domain.userinfo.repository.HobbyRepository;
@@ -74,13 +76,21 @@ public class UserInfoController {
     }
 
     @GetMapping(value = "/interests", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Interest>> getInterestsByUserNo(@RequestParam("userNo") int userNo) {
-    	logger.info("getInterest()...{}", userNo);
-    	List<String> list = interestRepository.getInterestByUserNo(userNo);
-    	if(list.isEmpty()) ResponseEntity.ok(list);
+    public ResponseEntity<List<InterestDTO>> getInterestsByUserNo(@RequestParam("userNo") int userNo) {
+    	logger.info("getHobbiesByUserNo()...{}", userNo);
+    	List<InterestDTO> list = interestRepository.getInterestByUserNo(userNo);
+    	for(InterestDTO i : list) {
+    		System.out.println(i.getInterestCate());
+    		System.out.println(i.getInterestNo());
+    		System.out.println(i.getUserNo());
+    	}
+    	if(!list.isEmpty()) {
+    		System.out.println("not empty");
+    		return ResponseEntity.ok(list);
+    	}
+    	System.out.println("empty");
     	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
 
     // Hobby 관련 API
     @PostMapping("/hobbies")
@@ -91,10 +101,18 @@ public class UserInfoController {
     }
 
     @GetMapping(value = "/hobbies", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Hobby>> getHobbiesByUserNo(@RequestParam("userNo") int userNo) {
-    	logger.info("getHobby()...{}", userNo);
-    	List<String> list = hobbyRepository.getHobbyUserNo(userNo);
-    	if(list.isEmpty()) ResponseEntity.ok(list);
+    public ResponseEntity<List<HobbyDTO>> getHobbiesByUserNo(@RequestParam("userNo") int userNo) {
+    	logger.info("getHobbiesByUserNo()...{}", userNo);
+    	List<HobbyDTO> list = hobbyRepository.getHobbyUserNo(userNo);
+    	for(HobbyDTO h : list) {
+    		System.out.println(h.getHobbyCate());
+    		System.out.println(h.getHobbyNo());
+    		System.out.println(h.getUserNo());
+    	}
+    	if(!list.isEmpty()) {
+    		System.out.println("not empty");
+    		return ResponseEntity.ok(list);
+    	}
     	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
