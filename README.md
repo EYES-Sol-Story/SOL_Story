@@ -17,6 +17,9 @@ SOL Story(쏠스토리)는 현실의 금융 상황에 기반하여 나만의 시
 - **Java, SpringBoot**
 - **Oracle**
 
+## ERD
+![SOL_STORY_ERD](https://github.com/user-attachments/assets/d83068b1-ce8c-4c9e-80a1-bd123c44a2d0)
+
 ## 주요 기능
 
 ### 회원 기능
