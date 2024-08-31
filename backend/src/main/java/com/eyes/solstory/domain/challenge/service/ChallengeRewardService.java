@@ -17,17 +17,17 @@ public class ChallengeRewardService {
     private static final Logger logger = LoggerFactory.getLogger(ChallengeRewardService.class.getSimpleName());
 
     //현재 수집한 열쇠 조회
-    public int findChallengeKey(String userId) {
-        logger.info("findChallengeKey()...userId:{}", userId);
-        User user = userRepository.findUserByUserId(userId);
+    public int findChallengeKey(String email) {
+        logger.info("findChallengeKey()...email:{}", email);
+        User user = userRepository.findUserByEmail(email);
         return challengeRewardRepository.
                 findChallengeRewardByUserNo(user.getUserNo())
                 .getKeys();
     }
     //챌린지 점수 조회
-    public int calScore(String userId) {
-        logger.info("calScore()...userId:{}", userId);
-        User user = userRepository.findUserByUserId(userId);
+    public int calScore(String email) {
+        logger.info("calScore()...email:{}", email);
+        User user = userRepository.findUserByEmail(email);
         logger.error("foundUser:{}", user.toString());
         int key = challengeRewardRepository.findChallengeRewardByUserNo(user.getUserNo()).getKeys();
         logger.error("foundKey:{}", key);

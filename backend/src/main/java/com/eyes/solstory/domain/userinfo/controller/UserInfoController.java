@@ -79,13 +79,7 @@ public class UserInfoController {
     public ResponseEntity<List<InterestDTO>> getInterestsByUserNo(@RequestParam("userNo") int userNo) {
     	logger.info("getHobbiesByUserNo()...{}", userNo);
     	List<InterestDTO> list = interestRepository.getInterestByUserNo(userNo);
-    	for(InterestDTO i : list) {
-    		System.out.println(i.getInterestCate());
-    		System.out.println(i.getInterestNo());
-    		System.out.println(i.getUserNo());
-    	}
     	if(!list.isEmpty()) {
-    		System.out.println("not empty");
     		return ResponseEntity.ok(list);
     	}
     	System.out.println("empty");
@@ -104,13 +98,7 @@ public class UserInfoController {
     public ResponseEntity<List<HobbyDTO>> getHobbiesByUserNo(@RequestParam("userNo") int userNo) {
     	logger.info("getHobbiesByUserNo()...{}", userNo);
     	List<HobbyDTO> list = hobbyRepository.getHobbyUserNo(userNo);
-    	for(HobbyDTO h : list) {
-    		System.out.println(h.getHobbyCate());
-    		System.out.println(h.getHobbyNo());
-    		System.out.println(h.getUserNo());
-    	}
     	if(!list.isEmpty()) {
-    		System.out.println("not empty");
     		return ResponseEntity.ok(list);
     	}
     	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

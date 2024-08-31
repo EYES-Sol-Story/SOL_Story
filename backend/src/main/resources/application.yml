@@ -1,42 +1,39 @@
-server : 
-  port : 8090
+server: 
+  port: 8090
   servlet:
     encoding:
       charset: UTF-8
       enabled: true
-      force : true
-
+      force: true
+  address: 0.0.0.0
 
 spring:
-  application:
-    name: solstory # 어플리케이션 이름
-
-  # DB:oracle 계정
-  datasource: 
+  datasource:
     url: jdbc:oracle:thin:@//localhost:1521/xe?ssl=false
     username: solstory
     password: eyessolstory
+    #url: jdbc:oracle:thin:@solstory.c1e666eai6lh.us-east-1.rds.amazonaws.com:1521:ORCL
+    #username: admin
+    #password: eyessolstory12
     driver-class-name: oracle.jdbc.OracleDriver
-  
-  # JPA
+    hikari:
+      maximum-pool-size: 10
+
   jpa:
     hibernate:
-      ddl-auto: update # create, update, none - 애플리케이션 가동시 스키마 관리 타입
-    show-sql: true # sql문 출력
+      ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
-        "[format:sql]": true
-        dialect: org.hibernate.dialect.OracleDialect
+        '[format_sql]': true
 
 
-# 로깅 수준 지정
 logging:
   level:
-    "[org.hibernate.SQL]": debug
-    "[org.hibernate.orm.jdbc.bind]": trace
-    "[org.springframework.web.socket]": trace
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
-    
+    '[com.zaxxer.hikari]': TRACE
+    '[org.springframework.jdbc.datasource]': TRACE
+    '[org.hibernate.SQL]': TRACE
+    '[org.hibernate.type.descriptor.sql]': TRACE
+
 api:
   key: 'cb6cca464d504a29a809ced072ba5aec'

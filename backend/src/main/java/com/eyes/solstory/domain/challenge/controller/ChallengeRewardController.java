@@ -19,17 +19,17 @@ public class ChallengeRewardController {
     private static final Logger logger = LoggerFactory.getLogger(ChallengeRewardController.class.getSimpleName());
 
     @GetMapping("/key")
-    public ResponseEntity<Integer> getChallengeKey(@RequestParam String userId) {
-        logger.info("getChallengeKey()...userId:{}", userId);
-        int keys = challengeRewardService.findChallengeKey(userId);
+    public ResponseEntity<Integer> getChallengeKey(@RequestParam String email) {
+        logger.info("getChallengeKey()...email:{}", email);
+        int keys = challengeRewardService.findChallengeKey(email);
         logger.error("foundKeys : {}", keys);
         return ResponseEntity.ok(keys);
     }
 
     @GetMapping("/score")
-    public ResponseEntity<Integer> getScore(@RequestParam String userId) {
-        logger.info("getScore()...userId:{}", userId);
-        int score = challengeRewardService.calScore(userId);
+    public ResponseEntity<Integer> getScore(@RequestParam String email) {
+        logger.info("getScore()...email:{}", email);
+        int score = challengeRewardService.calScore(email);
         logger.error("foundScore : {}", score);
         return ResponseEntity.ok(score);
     }

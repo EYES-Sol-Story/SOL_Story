@@ -26,6 +26,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	// MyBatis가 JDBC API를 통해 데이터베이스와 연동되므로, MyBatis 사용을 위해 JDBC를 추가
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.oracle.database.jdbc:ojdbc8:19.8.0.0'
+    implementation 'org.hibernate:hibernate-core:6.5.2.Final'
+	
 	// 애플리케이션에서 이메일을 쉽게 전송할 수 있도록 지원 (SMTP 설정, 메일 전송 기능 포함)
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	// 사용자 입력 데이터의 유효성을 검사하여 잘못된 데이터를 방지하는 기능 제공

@@ -38,7 +38,16 @@ public class FinancialSummaryController {
     @GetMapping(value = "/top5-categories-amount", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CategorySpendingSummaryDTO>> getTop5Categories(@RequestParam("userNo") int userNo) {
         logger.info("getTop5Categories()...userNo:{}", userNo);
-        return ResponseEntity.ok(summaryAnalyzer.getTop5Categories(userNo));
+        List<CategorySpendingSummaryDTO> list = summaryAnalyzer.getTop5Categories(userNo);
+        if(!list.isEmpty()) {
+        	for (CategorySpendingSummaryDTO categorySpendingSummaryDTO : list) {
+        		System.out.println(categorySpendingSummaryDTO.getCategory());
+			}
+        }else {
+        	System.out.println("empty");
+        }
+        
+        return ResponseEntity.ok(list);
     }
     
     /**

@@ -2,6 +2,7 @@ package com.eyes.solstory.domain.challenge.controller;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eyes.solstory.domain.challenge.dto.UserChallengeRes;
 import com.eyes.solstory.domain.challenge.entity.Challenge;
 import com.eyes.solstory.domain.challenge.entity.UserChallenge;
 import com.eyes.solstory.domain.challenge.service.ChallengeService;
@@ -34,7 +36,7 @@ public class ChallengeController {
     private static final Logger logger = LoggerFactory.getLogger(ChallengeController.class.getSimpleName());
 
     @GetMapping("/list")
-    public ResponseEntity<List<UserChallenge>> getChallengeList(@RequestParam("email") String email) {
+    public ResponseEntity<List<UserChallengeRes>> getChallengeList(@RequestParam("email") String email) {
         logger.info("getChallengeList()...email:{}", email);
         User user = userRepository.findUserByEmail(email);
         logger.error("foundUser: {}", user.toString());
@@ -42,18 +44,41 @@ public class ChallengeController {
         List<UserChallenge> userChallenges = userChallengeService.getAllUserChallengeByCompleteDate(
                 LocalDate.now());
 
+        //지출 제일 많은 카테고리 3개
+        String[] top3CategoriesArr= financialSummaryAnalyzer.getTop3Categories(user.getUserNo());
+        
+        List<String> top3Categories = Arrays.asList(top3CategoriesArr);
+
         if (userChallenges.isEmpty()) {
-            //저축 4개 지출 6개의 챌린지 반환
-            String[] top3Categories = financialSummaryAnalyzer.getTop3Categories(user.getUserNo());
-            List<Challenge> savingChallenges = challengeService.getRandomSavingChallenges(4);
+            //기본 챌린지
+            List<Challenge> savingChallenges = challengeService.getRandomSavingChallenges(2);
+
+            //지출 챌린지
             List<Challenge> spendingChallenges = challengeService.getSpendingChallengesForTop3Category(
-                    top3Categories, 6);
+            		top3CategoriesArr, 3);
+
+            //List<Challenge> spendingChallenges = challengeService.getRandomSpendingChallenges(6);
 
             allChallenges.addAll(savingChallenges);
             allChallenges.addAll(spendingChallenges);
             userChallenges = challengeService.assignChallengesToUser(user, allChallenges);
         }
         logger.error("userChallenges: {}", userChallenges);
-        return ResponseEntity.ok(userChallenges);
+
+        List<UserChallengeRes> response = new ArrayList<>();
+        for (UserChallenge u : userChallenges) {
+            UserChallengeRes userChallengeRes = UserChallengeRes.builder()
+                    .challengeType(u.getChallenge().getChallengeType())
+                    .category(u.getChallenge().getCategory())
+                    .days(u.getChallenge().getDays())
+                    .challengeName(u.getChallenge().getChallengeName())
+                    .rewardKeys(u.getChallenge().getRewardKeys())
+                    .assignedDate(u.getAssignedDate())
+                    .completeDate(u.getCompleteDate())
+                    .top3Category(top3Categories)
+                    .build();
+            response.add(userChallengeRes);
+        }
+        return ResponseEntity.ok(response);
     }
 }
