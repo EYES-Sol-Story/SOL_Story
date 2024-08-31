@@ -1,2 +1,0 @@
-CREATE USER solstory IDENTIFIED BY eyessolstory;
-GRANT RESOURCE, CONNECT TO solstory;
